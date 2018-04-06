@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: sqlserver
+  labels:
+    app: sqlserver
 spec:
     containers:
     - name: sqlserver
@@ -20,7 +22,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mssql
+  name: mssqlsvc
 spec:
   selector:
     app: sqlserver
