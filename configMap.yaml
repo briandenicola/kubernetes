@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: docdb
+type: Opaque 
+data:
+  DOCDB_ENDPOINT: aHR0cHM6Ly9iamRkYjAwMi5kb2N1bWVudHMuYXp1cmUuY29t 
+  DOCDB_KEY: ....zhwOE1peVJhZzhyeXBObFRoMk5WNm5ZYW44cXlBMzJReE0yRmR4aFUyRGYzT1U3VDFUak9XNVZnUXc9PQ==

@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: coreserverdeployment
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: coreserver
+    spec:
+      containers:
+      - name: core-server
+        image: bjd145.azurecr.io/docker-dotnetcore:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+        - name: registrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coreserversvc
+  labels:
+    version: test
+spec:
+  selector:
+    app: coreserver
+  ports:
+  - port: 8080
+  type: LoadBalancer
