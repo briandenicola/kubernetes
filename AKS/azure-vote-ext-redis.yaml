@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: azure-vote-front
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: azure-vote-front
+
+    spec:
+      containers:
+      - name: azure-vote-front
+        image: bjd145.azurecr.io/azure-vote-front:latest 
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: REDIS
+          value: "bjdcache.redis.cache.windows.net"
+        - name: REDIS_PWD
+          value: ""
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-front
+  #annotations:
+    #service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+    #service.beta.kubernetes.io/azure-load-balancer-internal-subnet: "aks-subnet"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: azure-vote-front
+
+#Internal Load Balancr Creation Error - 
+#Warning  CreatingLoadBalancerFailed  59s (x7 over 4m)  service-controller  Error creating load balancer (will retry): failed to ensure load balancer for service default/azure-vote-front: ensure(default/azure-vote-front): lb(kubernetes-internal) - failed to get subnet: aks-vnet-68115718/aks-subnet
+#Normal   EnsuringLoadBalancer        0s (x8 over 4m)   service-controller  Ensuring load balancer
+#Warning  CreatingLoadBalancerFailed  0s                service-controller  Error creating load balancer (will retry): failed to ensure load balancer for service default/azure-vote-front: ensure(default/azure-vote-front): lb(kubernetes-internal) - failed to ensure host in pool: "network.InterfacesClient#CreateOrUpdate: Failure responding to request: StatusCode=400 -- Original Error: autorest/azure: Service returned an error. Status=400 Code=\"NetworkInterfaceAndInternalLoadBalancerMustUseSameVnet\" Message=\"Network interface /subscriptions/2deb88fe-eca8-499a-adb9-6e0ea8b6c1d2/resourceGroups/MC_DevSub02_PaaSApp05_RG_bjdk8s02_centralus/providers/Microsoft.Network/networkInterfaces/aks-agentpool-68115718-nic-0 uses internal load balancer /subscriptions/2deb88fe-eca8-499a-adb9-6e0ea8b6c1d2/resourceGroups/MC_DevSub02_PaaSApp05_RG_bjdk8s02_centralus/providers/Microsoft.Network/loadBalancers/kubernetes-internal but does not use the same VNET (/subscriptions/2deb88fe-eca8-499a-adb9-6e0ea8b6c1d2/resourceGroups/MC_DEVSUB02_PAASAPP05_RG_BJDK8S02_CENTRALUS/providers/Microsoft.Network/virtualNetworks/AKS-VNET-68115718) as the load balancer.\" Details=[]"
