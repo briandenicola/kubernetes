@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: party-clippy
+  name: party-clippy
+  namespace: nginx-ingress
+spec:
+  containers:
+  - command:
+    - party-clippy
+    image: r.j3ss.co/party-clippy
+    imagePullPolicy: Always
+    name: party-clippy
+    ports:
+    - containerPort: 8080
+      protocol: TCP

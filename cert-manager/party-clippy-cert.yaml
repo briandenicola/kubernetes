@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: clippy-example-guru
+  namespace: nginx-ingress
+spec:
+  secretName: clippy-example-guru-tls
+  issuerRef:
+    name: letsencrypt-prod
+  commonName: clippy.example.guru
+  dnsNames:
+  -  clippy.example.guru
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+      - clippy.example.guru
