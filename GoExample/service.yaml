@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: golangsvc
+  labels:
+    version: goalng
+spec:
+  selector:
+    app: golangexample
+  ports:
+  - port: 8080
+  type: LoadBalancer
