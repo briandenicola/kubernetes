@@ -20,6 +20,6 @@ spec:
         image: bjd145.azurecr.io/golangrestapi:latest 
         imagePullPolicy: Always
         ports:
-        - containerPort: 8080
+        - containerPort: 5000
       imagePullSecrets:
         - name: registrykey
