@@ -4,7 +4,7 @@ metadata:
   labels:
     app: party-clippy
   name: party-clippy
-  namespace: nginx-ingress
+  namespace: ingress-nginx
 spec:
   containers:
   - command:

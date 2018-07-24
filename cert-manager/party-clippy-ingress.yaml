@@ -1,18 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: example-ingress
-  namespace: nginx-ingress
+  name: ancientrome-ingress
+  namespace: ingress-nginx
   annotations:
    nginx.ingress.kubernetes.io/rewrite-target: /
    kubernetes.io/ingress.class: nginx
 spec:
   tls:
   - hosts:
-    - clippy.example.guru
-    secretName: clippy-example-guru-tls
+    - clippy.ancientrome.guru
+    secretName: clippy-ancientrome-guru-tls
   rules:
-  - host: clippy.example.guru
+  - host: clippy.ancientrome.guru
     http:
      paths:
      - backend:
