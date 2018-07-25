@@ -3,5 +3,5 @@ kind: Secret
 metadata: 
  name: acr-auth
 data:
- .dockerconfigjson: .....FpbCI6ImJyZGVuaWNvQG1pY3Jvc29mdC5jb20iLCJhdXRoIjoiWW1wa01UUTFPbEFyT1haNlBWRnVRa1FyYm1GblIyRlpZMjlyZEZKVFZGWmhjREoxVmxaTiJ9fX0= 
+ .dockerconfigjson: ....3b3JkIjoiUCs5dno9UW5CRCtuYWdHYVljb2t0UlNUVmFwMnVWVm0iLCJlbWFpbCI6ImJyaWFuQGRlbmljb2xhZmFtaWx5LmNvbSIsImF1dGgiOiJZbXBrTVRRMU9sQXJPWFo2UFZGdVFrUXJibUZuUjJGWlkyOXJkRkpUVkZaaGNESjFWbFp0In19fQ==
 type: kubernetes.io/dockerconfigjson

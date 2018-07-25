@@ -1,0 +1,15 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: acr-auth-example
+spec:
+  template:
+    metadata:
+      labels:
+        app: acr-auth-example
+    spec:
+      containers:
+      - name: acr-auth-example
+        image: bjd145.azurecr.io/busybox
+      imagePullSecrets:
+      - name: acr-auth
