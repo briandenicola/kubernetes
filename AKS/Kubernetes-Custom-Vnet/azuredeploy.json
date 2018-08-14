@@ -86,9 +86,9 @@
         "osType": "Linux",
         "networkPlugin": "azure",
         "enableRBAC": true,
-        "vnetName": "KubeServiceDemo-Network",
-        "vnetResourceGroupName": "KubeServiceDemo-Network",
-        "subnetName": "default",
+        "vnetName": "DevSub02-VNet-001",
+        "vnetResourceGroupName": "DevSub02_Network_RG",
+        "subnetName": "KubeAgents",
         "vnetSubnetID": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', variables('vnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', variables('vnetName'), '/subnets/', variables('subnetName'))]"
     },
     "resources": [
@@ -147,7 +147,7 @@
             "type": "Microsoft.Resources/deployments",
             "name": "RoleAssignmentDeployment",
             "apiVersion": "2017-05-10",
-            "resourceGroup": "KubeServiceDemo-Network",
+            "resourceGroup": "[variables('vnetResourceGroupName')]",
             "subscriptionId": "2deb88fe-eca8-499a-adb9-6e0ea8b6c1d2",
             "properties": {
                 "mode": "Incremental",
@@ -160,7 +160,7 @@
                         {
                             "type": "Microsoft.Network/virtualNetworks/subnets/providers/roleAssignments",
                             "apiVersion": "2017-05-01",
-                            "name": "KubeServiceDemo-Network/default/Microsoft.Authorization/cb976549-688a-4d97-a57c-8e2556f21bfb",
+                            "name": "[concat(variables('vnetName'),'/', variables('subnetName'), '/Microsoft.Authorization/cb976549-688a-4d97-a57c-8e2556f21bfb')]",
                             "properties": {
                                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                                 "principalId": "[parameters('servicePrincipalObjectId')]",

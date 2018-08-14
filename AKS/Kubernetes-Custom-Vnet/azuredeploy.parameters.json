@@ -3,10 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceName": {
-            "value": "bjdk8s003"
+            "value": "bjdk8s"
         },
         "dnsPrefix": {
-            "value": "bjdk8s003"
+            "value": "bjdk8s"
         },
         "agentCount": {
             "value": 1
