@@ -1,0 +1,49 @@
+# kubectl create secret generic azure-files-secret --from-literal=azurestorageaccountname=STORAGE_ACCOUNT_NAME --from-literal=azurestorageaccountkey=STORAGE_ACCOUNT_KEY
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: azure-files-pv
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  azureFile:
+    secretName: azure-files-secret
+    shareName: k8sshare
+    readOnly: false
+  mountOptions:
+  - dir_mode=0777
+  - file_mode=0777
+  - uid=1000
+  - gid=1000
+  - mfsymlinks
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: azure-files-pvc
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: azure-files-pv
+  storageClassName: ""
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: azure-volumes
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      volumeMounts:
+      - mountPath: "/mnt/azure-files"
+        name: azure-files
+  volumes:
+    - name: azure-files
+      persistentVolumeClaim:
+        claimName: azure-files-pvc
