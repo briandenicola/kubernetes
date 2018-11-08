@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: nginx-flex-kv-podid
+    aadpodidbinding: demo
+  name: nginx-flex-kv-podid
+spec:
+  containers:
+  - name: nginx-flex-kv-podid
+    image: nginx
+    volumeMounts:
+    - name: test
+      mountPath: /kvmnt
+      readOnly: true
+  volumes:
+  - name: test
+    flexVolume:
+      driver: "azure/kv"
+      options:
+        usepodidentity: "true" 
+        keyvaultname: ""
+        keyvaultobjectname: "Test"
+        keyvaultobjecttype: secret 
+        resourcegroup: "Core_Infra_KeyVault_RG"
+        subscriptionid: ""
+        tenantid: ""
