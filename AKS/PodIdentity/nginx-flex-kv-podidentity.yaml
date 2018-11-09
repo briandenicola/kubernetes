@@ -19,9 +19,9 @@ spec:
       driver: "azure/kv"
       options:
         usepodidentity: "true" 
-        keyvaultname: ""
+        keyvaultname: "<Key Vault Name>"
         keyvaultobjectname: "Test"
         keyvaultobjecttype: secret 
-        resourcegroup: "Core_Infra_KeyVault_RG"
-        subscriptionid: ""
-        tenantid: ""
+        resourcegroup: "<Key Vault Resource Group>"
+        subscriptionid: "<sub.id>"
+        tenantid: "<tenant.id>"
