@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: greetingshelm
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: greetingshelm
+    spec:
+      containers:
+      - name: greetingshelm
+        image: bjd145/golangrestapi:{{.Values.buildid}} 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: VERSION
+          valueFrom:
+            configMapKeyRef:
+                name: greetingshelm
+                key: release.version
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: greetingshelmsvc
+  labels:
+    version: golang
+spec:
+  selector:
+    app: greetingshelm
+  ports:
+  - port: 8080
+    targetPort: 5000
+  type: LoadBalancer
