@@ -2,7 +2,7 @@
 
 export k8s=$1
 export rg=$2
-export storageacct=$
+export storageacct=$3
 
 az login
 
