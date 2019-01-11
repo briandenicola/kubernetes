@@ -1,18 +1,19 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ancientrome-ingress
+  name: bjdcsa-ingress
   namespace: ingress-nginx
   annotations:
    nginx.ingress.kubernetes.io/rewrite-target: /
    kubernetes.io/ingress.class: nginx
+   kubernetes.io/tls-acme: "true"
 spec:
   tls:
   - hosts:
-    - clippy.ancientrome.guru
-    secretName: clippy-ancientrome-guru-tls
+    - clippy.bjdcsa.cloud
+    secretName: clippy-bjdcsa-cloud-tls
   rules:
-  - host: clippy.ancientrome.guru
+  - host: clippy.bjdcsa.cloud
     http:
      paths:
      - backend:
