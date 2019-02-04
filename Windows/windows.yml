@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iis3
+  namespace: default
+  labels: 
+   name: iis3
+   os: windows
+spec:
+  containers:
+  - image: microsoft/iis:latest
+    name: iis3
+    ports:
+    -  containerPort: 80
+  nodeSelector:
+   beta.kubernetes.io/os: windows
