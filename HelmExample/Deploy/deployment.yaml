@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: greetings
+spec:
+  paused: true
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: greetings
+    spec:
+      containers:
+      - name: greetings
+        image: $acrName.azurecr.io/golangrestapi:latest 
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: VERSION
+          valueFrom:
+            configMapKeyRef:
+                name: greetingsconfig
+                key: build.version
+      imagePullSecrets:
+        - name: registrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: greetingssvc
+  labels:
+    version: golang
+spec:
+  selector:
+    app: greetings
+  ports:
+  - port: 8080
+    targetPort: 5000
+  type: LoadBalancer

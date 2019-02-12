@@ -1,0 +1,37 @@
+resources:
+- repo: self
+
+pool:
+  name: Default
+
+steps:
+- task: Docker@0
+  displayName: 'Build an image'
+  inputs:
+    azureSubscription: ''
+    azureContainerRegistry: '{"loginServer":"", "id" : ""}'
+    dockerFile: Source/dockerfile
+    imageName: golangrestapi
+    additionalImageTags: '$(Build.BuildId)'
+    includeLatestTag: true
+
+- task: Docker@0
+  displayName: 'Push an image'
+  inputs:
+    azureSubscription: ''
+    azureContainerRegistry: '{"loginServer":"", "id" : ""}'
+    action: 'Push an image'
+    imageName: golangrestapi
+    additionalImageTags: '$(Build.BuildId)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Kubernetes Artifacts'
+  inputs:
+    PathtoPublish: Deploy
+    ArtifactName: yaml
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Helm Artifacts'
+  inputs:
+    PathtoPublish: Chart
+    ArtifactName: goexamplechart
