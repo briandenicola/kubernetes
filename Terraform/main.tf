@@ -1,9 +1,39 @@
 provider "azurerm" {
   version = "=1.5.0"
 }
+
+terraform {
+  backend "azurerm" {
+    storage_account_name = "tfstatestorage001"
+    container_name       = "plans"
+    key                  = "prod.terraform.tfstate"
+  }
+}
+
 resource "azurerm_resource_group" "k8s" {
   name     = "${var.resource_group_name}"
   location = "${var.location}"
+}
+
+
+resource "azurerm_log_analytics_workspace" "k8s" {
+    name                = "${var.log_analytics_workspace_name}"
+    location            = "eastus"
+    resource_group_name = "${azurerm_resource_group.k8s.name}"
+    sku                 = "PerGB2018"
+}
+
+resource "azurerm_log_analytics_solution" "k8s" {
+    solution_name         = "ContainerInsights"
+    location              = "eastus"
+    resource_group_name   = "${azurerm_resource_group.k8s.name}"
+    workspace_resource_id = "${azurerm_log_analytics_workspace.k8s.id}"
+    workspace_name        = "${azurerm_log_analytics_workspace.k8s.name}"
+
+    plan {
+        publisher = "Microsoft"
+        product   = "OMSGallery/ContainerInsights"
+    }
 }
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                = "${var.cluster_name}"
@@ -30,5 +60,16 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   service_principal {
     client_id     = "${var.client_id}"
     client_secret = "${var.client_secret}"
+  }
+
+  addon_profile {
+      oms_agent {
+        enabled                    = true
+        log_analytics_workspace_id = "${azurerm_log_analytics_workspace.k8s.id}"
+      }
+  }
+
+  tags {
+    Environment = "Production"
   }
 }

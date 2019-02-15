@@ -37,3 +37,8 @@ variable "admin_user" {
 variable "ssh_public_key" {
   description = "The public key for the local administrator" 
 }
+
+variable "log_analytics_workspace_name" {
+  description = "The name for the Log Analytics Workspace"
+  default = "sampleworkspace001"
+}
