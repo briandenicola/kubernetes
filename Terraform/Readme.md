@@ -23,7 +23,8 @@ The tfstate and plan files will be stored in Azure Blob Storage
   terraform init  -backend=true -backend-config="access_key=$(access_key)"
   ```
 ### Notes
-* Init file stored in plans container on bjdterraform001 account in DevSub02_Storage_RG
+* Init file stored in plans container on storage account in DevSub02_Storage_RG
+* Addtional parameters for Init file - -backend-config="key=$(env).terraform.tfstate" 
 
 ## Terraform Plan
 ### Source:  
@@ -35,7 +36,8 @@ The tfstate and plan files will be stored in Azure Blob Storage
   terraform plan -out="$(plan_file)" -var "resource_group_name=$(ResourceGroupName)" -var "client_secret=$(client_secret)" 
   ```
 ### Notes:
-* Init file stored in plans container on bjdterraform001 account in DevSub02_Storage_RG
+* Init file stored in plans container on storage account in DevSub02_Storage_RG
+* Addtional parameters for Init file - -backend-config="key=$(env).terraform.tfstate" 
 
 ## Terraform Apply
 ### Source:  
@@ -50,11 +52,12 @@ The tfstate and plan files will be stored in Azure Blob Storage
 * $(plan_file)
 
 ### Notes:
-* Init file stored in plans container on bjdterraform001 account in DevSub02_Storage_RG
+* Init file stored in plans container on storage account in DevSub02_Storage_RG
+* Addtional parameters for Init file - -backend-config="key=$(env).terraform.tfstate" 
 
 - Azure Blob Copy
 Source: $(System.DefaultWorkingDirectory)/_Kubernetes - Terraforms Build/drop/$(plan_file)
-Destination: plans container in bjdterraform001 account in DevSub02_Storage_RG
+Destination: plans container in storage account in DevSub02_Storage_RG
 
 # Variables
 * access_key - For blob storage account
