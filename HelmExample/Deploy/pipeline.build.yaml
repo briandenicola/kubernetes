@@ -9,7 +9,7 @@ steps:
   displayName: 'Build an image'
   inputs:
     azureSubscription: 'BJD_APP02_Subscription'
-    azureContainerRegistry: '{"loginServer":"bjd145.azurecr.io", "id" : "/subscriptions/<id>/resourceGroups/Core_Infra_ContainerRepo/providers/Microsoft.ContainerRegistry/registries/bjd145"}'
+    azureContainerRegistry: ''
     dockerFile: Source/dockerfile
     imageName: golangrestapi
     additionalImageTags: '$(Build.BuildId)'
@@ -19,7 +19,7 @@ steps:
   displayName: 'Push an image'
   inputs:
     azureSubscription: 'BJD_APP02_Subscription'
-    azureContainerRegistry: '{"loginServer":"bjd145.azurecr.io", "id" : "/subscriptions/<id>/resourceGroups/Core_Infra_ContainerRepo/providers/Microsoft.ContainerRegistry/registries/bjd145"}'
+    azureContainerRegistry: ''
     action: 'Push an image'
     imageName: golangrestapi
     additionalImageTags: '$(Build.BuildId)'
