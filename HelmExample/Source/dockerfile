@@ -5,6 +5,7 @@ COPY . ./
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o /main .
 
 FROM scratch
-COPY --from=builder /main ./
+COPY --from=builder /main /bin/main
+COPY --from=busybox:1.28 /bin/busybox /bin/busybox
 EXPOSE 5000
-ENTRYPOINT ["./main" ]
+ENTRYPOINT ["/bin/main" ]

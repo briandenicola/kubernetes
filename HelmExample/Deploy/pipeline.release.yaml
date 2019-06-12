@@ -1,0 +1,19 @@
+resources:
+- repo: self
+
+pool:
+  name: Hosted Ubuntu 1604
+  
+steps:
+- task: HelmInstaller@0
+  displayName: 'Install Helm 2.9.1'
+
+- task: HelmDeploy@0
+  displayName: 'helm upgrade'
+  inputs:
+    connectionType: 'Kubernetes Service Connection'
+    kubernetesServiceConnection: AKS
+    command: upgrade
+    chartName: '"$(System.DefaultWorkingDirectory)/_Go Build Pipeline/goexamplechart"'
+    releaseName: 'fun-flee'
+    overrideValues: 'build_version="1.0.$(Release.ReleaseId)",buildid=$(Build.BuildNumber)'

@@ -18,16 +18,28 @@ spec:
     spec:
       containers:
       - name: greetings
-        image: $acrName.azurecr.io/golangrestapi:latest 
+        image: bjd145.azurecr.io/golangrestapi:latest 
         imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
         ports:
         - containerPort: 5000
         env:
         - name: VERSION
           valueFrom:
             configMapKeyRef:
-                name: greetingsconfig
+                name: greetingshelm
                 key: build.version
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+          requests:
+            memory: "128Mi"
+            cpu: "0.5"
       imagePullSecrets:
         - name: registrykey
 ---

@@ -17,8 +17,13 @@ spec:
     spec:
       containers:
       - name: greetingshelm
-        image: bjd145/golangrestapi:{{.Values.buildid}} 
+        image: bjd145.azurecr.io/golangrestapi:{{.Values.buildid}} 
         imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsUser: 1000
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
         ports:
         - containerPort: 5000
         env:
@@ -26,7 +31,16 @@ spec:
           valueFrom:
             configMapKeyRef:
                 name: greetingshelm
-                key: release.version
+                key: build.version
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+          requests:
+            memory: "128Mi"
+            cpu: "0.5"
+      imagePullSecrets:
+        - name: registrykey
 ---
 apiVersion: v1
 kind: Service
