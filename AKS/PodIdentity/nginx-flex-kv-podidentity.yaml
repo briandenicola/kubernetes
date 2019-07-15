@@ -1,3 +1,4 @@
+#Requires - https://raw.githubusercontent.com/Azure/kubernetes-keyvault-flexvol/master/deployment/kv-flexvol-installer.yaml
 apiVersion: v1
 kind: Pod
 metadata:
