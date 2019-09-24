@@ -1,5 +1,5 @@
 "cluster_name" = ""
-"cluster_version" = "1.12.7"
+"cluster_version" = "1.14.6"
 "agent_count" = 1
 "client_id" = ""
 "environment" = "development"
