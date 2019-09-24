@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.prodName }}
+  labels:
+    app: {{ .Values.image.name }}
+    service: {{ .Values.image.name }}
+    slot: prod
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    name: http
+  type: ClusterIP 
+  selector:
+    app: {{ .Values.image.name }}
+    version: {{ .Values.service.prodVersion }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.stageName }}
+  labels:
+    app: {{ .Values.image.name }}
+    service: {{ .Values.image.name }}
+    slot: stage
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    name: http
+  type: ClusterIP 
+  selector:
+    app: {{ .Values.image.name }}
+    version: {{ .Values.service.stageVersion }}

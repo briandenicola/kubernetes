@@ -1,0 +1,21 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/service-weights: | 
+      {{ .Values.service.prodName }}: {{ .Values.service.prodWeight }}
+      {{ .Values.service.stageName }}: {{ .Values.service.stageWeight }}
+  name: {{ .Values.service.prodName }}
+spec:
+  rules:
+  - http: 
+      paths: 
+      - backend:
+          serviceName: {{ .Values.service.prodName }}
+          servicePort: {{ .Values.service.port }}
+        path: /
+      - backend:
+          serviceName: {{ .Values.service.stageName }} 
+          servicePort: {{ .Values.service.port }}
+        path: /
