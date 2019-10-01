@@ -1,0 +1,61 @@
+trigger:
+  branches:
+    include:
+    - dev
+  paths:
+    exclude:
+    - Deploy/*
+
+stages:
+- stage: build
+  jobs: 
+  - job: 'Publish_Files'
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: Code
+        TargetFolder: '$(build.artifactstagingdirectory)'
+    - task: PublishBuildArtifacts@1
+   
+- stage: deploy
+  jobs:
+  - deployment: 'Build_AKS'
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    environment: 'AKS'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              buildType: 'current'
+              targetPath: '$(System.ArtifactsDirectory)/'
+
+          - bash: |
+              today=`date +"%y%m%d"`
+              uuid=`uuidgen | sed 's/-//g'`
+
+              export ARM_CLIENT_ID="$(client_id)"
+              export ARM_CLIENT_SECRET="$(client_secret)"
+              export ARM_SUBSCRIPTION_ID="$(subscription_id)"
+              export ARM_TENANT_ID="$(tenant_id)"
+              export STORAGE_ACCOUNT="$(storage_account)"
+              export RESOURCE_GROUP_NAME="$(resource_group)"
+              export PLAN_FILE="aks.sandbox.plan.${today}-${uuid}"
+
+              cd '$(System.ArtifactsDirectory)/drop'
+
+              wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip    
+              unzip terraform_0.11.14_linux_amd64.zip
+              
+              ./terraform init -backend=true -backend-config="access_key=$(access_key)" -backend-config="key=sandbox.terraform.tfstate"
+              ./terraform plan -out="${PLAN_FILE}" -var "resource_group_name=${RESOURCE_GROUP_NAME}" -var "client_secret=$(client_secret)" -var-file="sandbox.tfvars"
+              ./terraform apply -auto-approve ${PLAN_FILE}
+
+              az login --service-principal -u ${ARM_CLIENT_ID} -p ${ARM_CLIENT_SECRET} --tenant ${ARM_TENANT_ID}
+              az account set -s ${ARM_SUBSCRIPTION_ID}
+              az storage copy --source-local-path "./${PLAN_FILE}" --destination-account-name ${STORAGE_ACCOUNT} --destination-container plans
+              
