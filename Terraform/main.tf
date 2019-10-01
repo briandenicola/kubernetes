@@ -1,4 +1,5 @@
 provider "azurerm" {
+  version = "~> 1.32.0"
 }
 
 terraform {
@@ -44,7 +45,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   resource_group_name = "${azurerm_resource_group.k8s.name}"
   dns_prefix          = "${var.cluster_name}"
   kubernetes_version  = "${var.cluster_version}"
-
+  
   linux_profile {
     admin_username = "${var.admin_user}"
 
@@ -60,6 +61,10 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     os_type         = "Linux"
     os_disk_size_gb = 30
     vnet_subnet_id  = "${data.azurerm_subnet.k8s_subnet.id}"
+    type            = "VirtualMachineScaleSets"
+    enable_auto_scaling = "true"
+    min_count       = 1 
+    max_count       = 3
   }
 
   role_based_access_control {
@@ -71,6 +76,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     service_cidr = "${var.service_cidr}"
     docker_bridge_cidr = "172.17.0.1/16"
     network_plugin = "azure"
+    load_balancer_sku   = "${var.load_balancer_sku}"
   }
 
   service_principal {
