@@ -1,0 +1,11 @@
+"cluster_name" = "bjdk8s01"
+"agent_count" = 3
+"cluster_version" = "1.14.8"
+"client_id" = ""
+"environment" = "production"
+"log_analytics_workspace_name" = "bjdlogsprd001"
+"k8s_vnet_resource_group_name" = "DevSub02_Network_RG"
+"k8s_vnet" = "DevSub02-VNet-002"
+"k8s_subnet" = "KubernetesPrd"
+"dns_service_ip" = "10.191.0.10"
+"service_cidr" = "10.191.0.0/16"

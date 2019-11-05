@@ -1,0 +1,11 @@
+"cluster_name" = "bjdk8s04sb"
+"cluster_version" = "1.14.8"
+"agent_count" = 1
+"client_id" = ""
+"environment" = "sandbox"
+"log_analytics_workspace_name" = "bjdlogssb001"
+"k8s_vnet_resource_group_name" = "DevSub02_Network_RG"
+"k8s_vnet" = "DevSub02-Vnet-Sandbox-001"
+"k8s_subnet" = "kubernetesdev"
+"dns_service_ip" = "10.189.0.10"
+"service_cidr" = "10.189.0.0/16"

@@ -4,7 +4,7 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    storage_account_name = "terraform001"
+    storage_account_name = "bjdterraform001"
     container_name       = "plans"
   }
 }
@@ -43,6 +43,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   name                = "${var.cluster_name}"
   location            = "${azurerm_resource_group.k8s.location}"
   resource_group_name = "${azurerm_resource_group.k8s.name}"
+  node_resource_group = "${azurerm_resource_group.k8s.name}_nodes"
   dns_prefix          = "${var.cluster_name}"
   kubernetes_version  = "${var.cluster_version}"
   

@@ -28,7 +28,7 @@ variable "cluster_name" {
 
 variable "cluster_version" {
   description = "The cluster version"
-  default = "1.14.6"
+  default = "1.14.8"
 }
 
 variable "resource_group_name" {
@@ -65,7 +65,7 @@ variable "ssh_public_key" {
 
 variable "log_analytics_workspace_name" {
   description = "The name for the Log Analytics Workspace"
-  default = ""
+  default = "bjdloganalytics003"
 }
 
 variable "environment" {

@@ -1,9 +1,9 @@
-"cluster_name" = ""
-"cluster_version" = "1.14.6"
+"cluster_name" = "bjdk8s04dev"
+"cluster_version" = "1.14.8"
 "agent_count" = 1
 "client_id" = ""
 "environment" = "development"
-"log_analytics_workspace_name" = ""
+"log_analytics_workspace_name" = "bjdlogsdev002"
 "k8s_vnet_resource_group_name" = "DevSub02_Network_RG"
 "k8s_vnet" = "DevSub02-VNet-002"
 "k8s_subnet" = "KubernetesDev"
