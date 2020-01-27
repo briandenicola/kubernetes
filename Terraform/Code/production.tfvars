@@ -1,6 +1,5 @@
-"cluster_name" = "bjdk8s01"
+"cluster_name" = "bjdk8s02"
 "agent_count" = 3
-"cluster_version" = "1.14.8"
 "client_id" = ""
 "environment" = "production"
 "log_analytics_workspace_name" = "bjdlogsprd001"

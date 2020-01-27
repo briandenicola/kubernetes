@@ -28,7 +28,7 @@ variable "cluster_name" {
 
 variable "cluster_version" {
   description = "The cluster version"
-  default = "1.14.8"
+  default = "1.15.7"
 }
 
 variable "resource_group_name" {

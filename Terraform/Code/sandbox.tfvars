@@ -1,5 +1,4 @@
-"cluster_name" = "bjdk8s04sb"
-"cluster_version" = "1.14.8"
+"cluster_name" = "bjdk8ssb"
 "agent_count" = 1
 "client_id" = ""
 "environment" = "sandbox"
