@@ -9,8 +9,8 @@ trigger:
 variables:
   STORAGE_ACCOUNT:    "bjdterraform001"
   PLAN_FILE:          "aks.sandbox.plan.${today}-${uuid}"              
-  AKS_RG_NAME:        "DevSub02_K8SSandbox_RG"
-  ACR_NAME:           "bjd145"
+  AKS_RG_NAME:        ""
+  ACR_NAME:           ""
 
 stages:
 - stage: build
@@ -52,8 +52,8 @@ stages:
 
               cd '$(System.ArtifactsDirectory)/drop'
 
-              wget https://releases.hashicorp.com/terraform/0.11.14/terraform_0.11.14_linux_amd64.zip    
-              unzip terraform_0.11.14_linux_amd64.zip
+              wget https://releases.hashicorp.com/terraform/0.12.20/terraform_0.12.20_linux_amd64.zip    
+              unzip terraform_0.12.20_linux_amd64.zip
               
               ./terraform init -backend=true -backend-config="access_key=$(access_key)" -backend-config="key=sandbox.terraform.tfstate"
               ./terraform plan -out="$(PLAN_FILE)" -var "resource_group_name=$(AKS_RG_NAME)" -var "client_secret=$(client_secret)" -var-file="sandbox.tfvars"
@@ -64,40 +64,28 @@ stages:
               az storage copy --source-local-path "./$(PLAN_FILE)" --destination-account-name $(STORAGE_ACCOUNT) --destination-container plans
             displayName: Build Cluster
 
-          - bash: | 
-              export ARM_CLIENT_ID="$(client_id)"
-              export ARM_CLIENT_SECRET="$(client_secret)"
-              export ARM_SUBSCRIPTION_ID="$(subscription_id)"
-              export ARM_TENANT_ID="$(tenant_id)"
-              export ACR_SUBSCRIPTION="BJD_CORE_Subscription"
-
-              az login --service-principal -u ${ARM_CLIENT_ID} -p ${ARM_CLIENT_SECRET} --tenant ${ARM_TENANT_ID}
-              az account set -s ${ARM_SUBSCRIPTION_ID}
-
-              aks=`az aks list -g $(AKS_RG_NAME) --query "[0].name" -o tsv`
-              az aks get-credentials -n ${aks} -g $(AKS_RG_NAME)
-
-              acrid=`az acr show -n $ACR_NAME --subscription $ACR_SUBSCRIPTION --query 'id' -o tsv`
-              az aks update -n ${aks} -g $(AKS_RG_NAME) --attach-acr ${acrid}   
-            displayName: Update ACR Access 
+          - bash: |
+              export RG="$(AKS_RG_NAME)"
+              aks=`az aks list -g ${RG} --query "[0].name" -o tsv`
+              az aks get-credentials -n $aks -g ${RG}
+            displayName: Get Kube Credentials 
 
           - bash: |
-              #kubectl create serviceaccount --namespace kube-system tiller
-              #kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
-
               wget https://get.helm.sh/helm-v3.0.2-linux-amd64.tar.gz
-                
               tar zxvf helm-v3.0.2-linux-amd64.tar.gz  
+            displayName: Download Helm 
+
+          - bash: |
               cd linux-amd64
               ./helm repo add stable https://kubernetes-charts.storage.googleapis.com/
               ./helm repo update
-              ./helm install traefik stable/traefik --set rbac.enabled=true
-              
-            displayName: Install Helm
+              ./helm upgrade  traefik stable/traefik --install --set rbac.enabled=true
+            displayName: Install Ingress Controller 
 
           - bash: |
-              kubectl apply -f https://raw.githubusercontent.com/Azure/kubernetes-keyvault-flexvol/master/deployment/kv-flexvol-installer.yaml
-              kubectl apply -f https://raw.githubusercontent.com/Azure/aad-pod-identity/master/deploy/infra/deployment-rbac.yaml
-            displayName: Install Pod Identity and FlexVol
-
+              cd linux-amd64
+              ./helm repo add aad-pod-identity https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts
+              ./helm repo update
+              ./helm upgrade aad-pod-identity aad-pod-identity/aad-pod-identity --install 
+            displayName: Install Pod Identity
               
