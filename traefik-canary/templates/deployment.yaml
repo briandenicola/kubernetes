@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.image.name }}-{{ .Values.image.prodTag }}
   labels: 
     app: {{ .Values.image.name }}
-    version: {{ .Values.image.prodVersion }}
+    version: {{ .Values.service.prodVersion }}
 spec:
   replicas: {{ .Values.replicaCount }}
   strategy:
