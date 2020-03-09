@@ -5,11 +5,14 @@ metadata:
 spec:
   containers:
   - name: app
-    image: bjd145/whatos:1.4
+    image: bjd145/whatos:1.6
     command: ['/bin/busybox', 'sh', '-c', 'source /env/metadata; ./main']
     volumeMounts:
     - name: config-data
       mountPath: /env
+    env:
+      - name: API_VERSION
+        value: "3.0"
   initContainers:
   - name: init-region
     image: bjd145/utils:latest
