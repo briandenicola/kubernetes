@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-sample-v1
+spec:
+  containers:
+  - name: app
+    image: bjd145/whatos:1.4
+    command: ['/bin/busybox', 'sh', '-c', 'source /env/metadata; ./main']
+    volumeMounts:
+    - name: config-data
+      mountPath: /env
+  initContainers:
+  - name: init-region
+    image: bjd145/utils:latest
+    command: ['sh', '-c', 'REGION=`curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/location?api-version=2017-08-01&format=text"`; echo export REGION=${REGION} >> /env/metadata']
+    volumeMounts:
+    - name: config-data
+      mountPath: /env
+  - name: init-hostname
+    image: bjd145/utils:latest
+    command: ['sh', '-c', 'AKSHOST=`curl -H Metadata:true "http://169.254.169.254/metadata/instance/compute/name?api-version=2017-08-01&format=text"`; echo export AKSHOST=${AKSHOST} >> /env/metadata']
+    volumeMounts:
+    - name: config-data
+      mountPath: /env
+  volumes:
+  - name: config-data
+    emptyDir: {}
