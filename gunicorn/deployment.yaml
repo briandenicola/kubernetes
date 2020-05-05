@@ -34,9 +34,9 @@ spec:
           requests:
             memory: "128Mi"
             cpu: "0.5"
-          volumeMounts:
-          - mountPath: /usr/tmp
-            name: tmp-volume
+        volumeMounts:
+        - mountPath: /usr/tmp
+          name: tmp-volume
       volumes:
       - name: tmp-volume
         emptyDir: {}
