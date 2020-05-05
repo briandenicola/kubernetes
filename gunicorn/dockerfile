@@ -14,11 +14,11 @@ RUN pip3 install -U pip
 RUN pip3 install gunicorn httpbin 
 
 RUN echo '#!/bin/sh' > run.sh \
-  && echo 'gunicorn --bind=0.0.0.0:80 httpbin:app' >> run.sh \
+  && echo 'gunicorn --bind=0.0.0.0:8080 httpbin:app' >> run.sh \
   && chmod +x run.sh 
 
 RUN rm -rf /var/cache/apk/* \
     && apk del python3-dev 
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["./run.sh"]
