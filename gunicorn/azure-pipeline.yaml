@@ -7,12 +7,11 @@ variables:
 
 steps:
 - bash: |
+    cd gunicorn
     docker build -t $(imageName) .
     echo $(dockerPassword) | docker login -u $(dockerId) --password-stdin
     docker push $(imageName)
   displayName: Build Container 
-  env:
-    pswd: $(dockerPassword)
 
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
