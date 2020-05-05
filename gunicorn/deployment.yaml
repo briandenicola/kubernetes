@@ -37,9 +37,9 @@ spec:
           volumeMounts:
           - mountPath: /usr/tmp
             name: tmp-volume
-        volumes:
-        - name: tmp-volume
-          emptyDir: {}
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
