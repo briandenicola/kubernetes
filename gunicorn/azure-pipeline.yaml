@@ -1,0 +1,25 @@
+pool:
+    vmImage: 'Ubuntu 16.04'
+
+variables:
+    dockerid:   'bjd145'
+    imageName:  'bjd145/httpbin:$(Build.BuildId)'
+
+steps:
+- bash: |
+    docker build -t $(imageName) .
+    echo $pswd | docker login -u $(dockerId) --password-stdin
+    docker push $(imageName)
+  displayName: Build Container 
+  env:
+    pswd: $(dockerPassword)
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+  inputs:
+    SourceFolder: Deploy
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+
