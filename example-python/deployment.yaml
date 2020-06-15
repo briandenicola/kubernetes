@@ -1,10 +1,13 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: httpbin
 spec:
   paused: true
   replicas: 2
+  selector:
+    matchLabels:
+      app: httpbin
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,19 +24,16 @@ spec:
         image: bjd145/httpbin:latest
         imagePullPolicy: Always
         securityContext:
-          allowPrivilegeEscalation: false
-          runAsUser: 1000
-          runAsNonRoot: true
           readOnlyRootFilesystem: true
         ports:
-        - containerPort: 8080
+        - containerPort: 80
         resources:
           limits:
             memory: "512Mi"
             cpu: "2"
           requests:
-            memory: "128Mi"
-            cpu: "0.5"
+            memory: "64Mi"
+            cpu: "0.25"
         volumeMounts:
         - mountPath: /usr/tmp
           name: tmp-volume
@@ -50,5 +50,5 @@ spec:
     app: httpbin
   ports:
   - port: 80
-    targetPort: 8080
+    targetPort: 80
   type: LoadBalancer
