@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-env
+data:
+  config.service.endpoint: "https://bjdapim002.management.azure-api.net/..../bjdapim002?api-version=2019-12-01"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: demo
+        image: mcr.microsoft.com/azure-api-management/gateway:latest
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8081
+        env:
+        - name: config.service.auth
+          valueFrom:
+            secretKeyRef:
+              name: demo-token
+              key: value
+        envFrom:
+        - configMapRef:
+            name: demo-env
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8081
+  selector:
+    app: demo
