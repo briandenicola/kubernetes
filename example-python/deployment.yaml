@@ -24,9 +24,12 @@ spec:
         image: bjd145/httpbin:latest
         imagePullPolicy: Always
         securityContext:
+          allowPrivilegeEscalation: false  
+          runAsUser: 1000       
+          runAsNonRoot: true
           readOnlyRootFilesystem: true
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         resources:
           limits:
             memory: "512Mi"
@@ -50,5 +53,5 @@ spec:
     app: httpbin
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 8080
   type: LoadBalancer
