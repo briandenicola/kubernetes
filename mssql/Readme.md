@@ -49,7 +49,7 @@ SQL Server has had the ability to run on Linux and inside of a Docker container 
 
 # Setups
 0. Update mssql2019-stateful-alwayson-read-replica.yaml
-    * Replace ~REPLACE~WITH~BASE64~ENCODE~PASSWORD~ with SA_PASSWORD
+    * Replace ~REPLACE-WITH-BASE64-ENCODE-PASSWORD~ with SA_PASSWORD
 1. Create SQL Servers
     * kubectl apply -f ./mssql2019-stateful-alwayson-read-replica.yaml
 2. Launch SQL Management Studio and log into both SQL instances
@@ -86,13 +86,13 @@ SQL Server has had the ability to run on Linux and inside of a Docker container 
 
 7. On each instance, create the Database Mirroring Listener 
 ```
-	CREATE ENDPOINT [Hadr_endpoint]
-	    AS TCP (LISTENER_PORT = 5022)
-	    FOR DATABASE_MIRRORING (
-		    ROLE = ALL,
-		    AUTHENTICATION = CERTIFICATE dbm_certificate,
-			ENCRYPTION = REQUIRED ALGORITHM AES
-		);
+    CREATE ENDPOINT [Hadr_endpoint]
+        AS TCP (LISTENER_PORT = 5022)
+        FOR DATABASE_MIRRORING (
+            ROLE = ALL,
+            AUTHENTICATION = CERTIFICATE dbm_certificate,
+            ENCRYPTION = REQUIRED ALGORITHM AES
+        );
     ALTER ENDPOINT [Hadr_endpoint] STATE = STARTED;
 ```
 8. Create the Availabilty Group from the primary instance and add Database
@@ -130,11 +130,11 @@ SQL Server has had the ability to run on Linux and inside of a Docker container 
     ALTER AVAILABILITY GROUP [linux-demo03] ADD DATABASE [AdventureWorks2019];
 ```
 10. Get Primary and Secondary Pod's pod IP Address
-* kubectl get pod sqlserver0-0 -o json | jq ".status.podIPs[0].ip" (~PRIMARY_REPLICA_POD_IP~)
+* kubectl get pod sqlserver0-0 -o json | jq ".status.podIPs[0].ip" (~PRIMARY-REPLICA-POD-IP~)
 11. Create Availabilty Group Listener 
 ```
     ALTER AVAILABILITY GROUP [linux-demo03] ADD LISTENER 'sql' ( 
-        WITH IP (('~PRIMARY_REPLICA_POD_IP~','255.255.255.255')), 
+        WITH IP (('~PRIMARY-REPLICA-POD-IP~','255.255.255.255')), 
         PORT = 1440
     );
     SELECT * FROM sys.dm_tcp_listener_states;
