@@ -11,10 +11,7 @@ CLIENT_ID='4e565daf-621d-48d3-b010-1208da519cbe'
 SERVICE_CIDR='10.191.0.0/16'
 DNS_IP='10.191.0.10'
 SUBNET_ID='/subscriptions/bfafbd89-a2a3-43a5-af72-fb4ef0c514c1/resourceGroups/DevSub02_Network_RG/providers/Microsoft.Network/virtualNetworks/DevSub02-VNet-002/subnets/KubernetesWindows'
-VER='1.14.6'
-
-#az login
-#az extension add --name aks-preview
+VER='1.17.7'
 
 az aks create \
     --resource-group $RG_NAME \
@@ -37,9 +34,6 @@ az aks create \
     --min-count 1 \
     --max-count 3 \
     --load-balancer-sku Standard \
-#    --node-count 3 \
-#    --node-zones 1 2 3
-#    --enable-pod-security-policy \
 
 az aks nodepool add \
     --resource-group $RG_NAME \
@@ -48,5 +42,3 @@ az aks nodepool add \
     --name $WIN_NODE_POOL \
     --node-count 1 \
     --kubernetes-version $VER
-#    --node-count 3 \
-#    --node-zones 1 2 3 \
