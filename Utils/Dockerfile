@@ -4,16 +4,18 @@ RUN apt-get update \
   && apt-get install --no-install-recommends --yes \
     locales \
     curl \
+    git \
     dnsutils \
     jq \
-    netcat-openbsd \
-    mongodb-clients \
-    mysql-client \
     net-tools \
     redis-tools \
     vim \
     wget \
-    python-setuptools \
-    ca-certificates
+    python3 \
+    python3-pip \
+    traceroute \
+    netcat \
+    ca-certificates  \
+  && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ "pwsh" ]
+ENTRYPOINT [ "bash" ]
