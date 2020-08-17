@@ -18,4 +18,4 @@ RUN apt-get update \
     ca-certificates  \
   && rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT [ "bash" ]
+CMD [ "bash" ]
