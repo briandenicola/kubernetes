@@ -1,0 +1,20 @@
+FROM microsoft/iis
+
+ARG PASS
+ARG CERT
+
+WORKDIR /app
+COPY $CERT .
+
+RUN powershell.exe -Command \
+  Import-Module WebAdministration; \
+  $site = 'Default Web Site'; \
+  $certStore = 'Cert:\LocalMachine\My'; \
+  $secure = ConvertTo-SecureString -String $ENV:PASS -AsPlainText -Force; \
+  $cert = Import-PfxCertificate -FilePath $ENV:CERT -CertStoreLocation $certStore -Password $secure; \
+  New-WebBinding -Name $site -IP * -Port 443 -Protocol https; \
+  $binding = Get-WebBinding -Name $site -Protocol https; \
+  $binding.AddSslCertificate( $cert.Thumbprint, 'My' ); \
+  Remove-Item $ENV:CERT -Force 
+
+EXPOSE 443
