@@ -18,4 +18,5 @@ RUN apt-get update \
     ca-certificates  \
   && rm -rf /var/lib/apt/lists/*
 
-CMD [ "bash" ]
+COPY sleep.sh /bin/sleep.sh
+ENTRYPOINT ["/bin/sleep.sh"]
