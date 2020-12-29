@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iis-ssl-win10
+spec:
+  selector:
+    matchLabels:
+      app: iis-ssl-win10
+  replicas: 1 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: iis-ssl-win10
+    spec:
+      containers:
+      - name: iis-ssl-win10
+        image: bjd145.azurecr.io/windows/iisdemo:win10
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 443
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1024m"
+      nodeSelector:
+        beta.kubernetes.io/os: windows

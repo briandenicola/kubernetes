@@ -1,0 +1,47 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentity
+metadata:
+  name: bjdpodidentity
+spec:
+  type: 0
+  resourceID: /subscriptions/bfafbd89-a2a3-43a5-af72-fb4ef0c...../resourcegroups/DevSub02_K8S01_RG_winnodes/providers/Microsoft.ManagedIdentity/userAssignedIdentities/bjdPodIdentity
+  clientID: 178895fb-7139-4b71-9c66-e20d7d.....
+---
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentityBinding
+metadata:
+  name: bjdpodidentity-binding
+spec:
+  azureIdentity: bjdpodidentity
+  selector: bjdpodidentity
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aadpoddemo
+  labels:
+    aadpodidbinding: bjdpodidentity
+spec:
+  containers:
+  - name: demo
+    image: mcr.microsoft.com/k8s/aad-pod-identity/demo:1.6.0
+    args:
+      - --subscriptionid=bfafbd89-a2a3-43a5-af72-fb4ef0c.....
+      - --clientid=178895fb-7139-4b71-9c66-e20d7d.....
+      - --resourcegroup=DevSub02_K8S01_RG_winnodes
+    env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+  nodeSelector:
+    kubernetes.io/os: linux
+
