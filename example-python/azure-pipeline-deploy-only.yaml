@@ -1,0 +1,32 @@
+variables:
+    imageName:  'bjd145/httpbin:1058'
+
+stages:
+- stage: build
+  jobs:
+  - job: 'Publish_Files'
+    pool:
+    vmImage: 'Ubuntu 20.04'
+    steps:
+    - task: CopyFiles@2
+      displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+      inputs:
+        SourceFolder: example-python
+        TargetFolder: '$(build.artifactstagingdirectory)'
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+
+- stage: deploy
+  jobs:
+  - deployment: 'Push_to_AKS'
+    pool:
+      vmImage: 'Ubuntu 20.04'
+    environment: 'bjdk8s04sb'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - bash: |
+              kubectl apply -f '$(System.ArtifactsDirectory)/drop/deployment.yaml'
+            displayName: Kubectl apply 

@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: httpbin
 spec:
-  paused: true
   replicas: 2
   selector:
     matchLabels:
