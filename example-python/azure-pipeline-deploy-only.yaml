@@ -29,7 +29,8 @@ stages:
           steps:
           - task: DownloadPipelineArtifact@2
             inputs:
-              artifact: 'drop'
+              buildType: 'current'
+              targetPath: '$(System.ArtifactsDirectory)/'
           - task: Kubernetes@1
             displayName: kubectl apply
             inputs:
