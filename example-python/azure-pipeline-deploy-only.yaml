@@ -27,6 +27,11 @@ stages:
       runOnce:
         deploy:
           steps:
-          - bash: |
-              kubectl apply -f '$(System.ArtifactsDirectory)/drop/deployment.yaml'
-            displayName: Kubectl apply 
+          - task: Kubernetes@1
+            displayName: kubectl apply
+            inputs:
+              connectionType: Kubernetes Service Connection
+              kubernetesServiceEndpoint: bjdk8s04sb
+              command: apply
+              arguments: -f '$(System.ArtifactsDirectory)/drop/deployment.yaml'
+    
