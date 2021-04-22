@@ -16,5 +16,8 @@ steps:
   inputs:
     command: buildAndPush
     repository: httpdemo
+    buildContext: example-python
+    Dockerfile: example-python/dockerfile
     tags: |
       latest
+      $(Build.BuildId)
