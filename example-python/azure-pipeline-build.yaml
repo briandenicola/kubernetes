@@ -1,0 +1,14 @@
+pool:
+    vmImage: 'Ubuntu 20.04'
+
+variables:
+    dockerid:   'bjd002'
+    imageName:  'bjd002.azurecr.io/httpbin:latest'
+
+steps:
+- bash: |
+    cd example-python
+    docker build -t $(imageName) .
+    echo $(dockerPassword) | docker login -u $(dockerId) --password-stdin
+    docker push $(imageName)
+  displayName: Build Container 
