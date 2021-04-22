@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: httpbin
-        image: bjd002.azurecr.io/httpbin:latest
+        image: bjd002.azurecr.io/httpdemo:latest
         imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false  

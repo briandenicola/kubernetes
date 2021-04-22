@@ -1,6 +1,6 @@
 #REFERENCE: https://dev.azure.com/tjcorrigan
 
-FROM alpine:3.11.6
+FROM alpine:3.13.5
 
 RUN apk add --update \
     python3 \
