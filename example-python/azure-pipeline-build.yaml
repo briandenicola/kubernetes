@@ -6,9 +6,15 @@ variables:
     imageName:  'bjd002.azurecr.io/httpbin:latest'
 
 steps:
-- bash: |
-    cd example-python
-    docker build -t $(imageName) .
-    echo $(dockerPassword) | docker login -u $(dockerId) --password-stdin
-    docker push $(imageName)
-  displayName: Build Container 
+- task: Docker@2
+  displayName: Login to ACR
+  inputs:
+    command: login
+    containerRegistry: bjd002
+- task: Docker@2
+  displayName: Build and Push
+  inputs:
+    command: buildAndPush
+    repository: bjd002
+    tags: |
+      latest
