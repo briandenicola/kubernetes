@@ -18,6 +18,7 @@ steps:
     repository: httpdemo
     buildContext: example-python
     Dockerfile: example-python/dockerfile
+    addPipelineData: false
     tags: |
       latest
       $(Build.BuildId)
