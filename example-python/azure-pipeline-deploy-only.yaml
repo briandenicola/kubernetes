@@ -6,7 +6,7 @@ stages:
   jobs:
   - job: 'Publish_Files'
     pool:
-    vmImage: 'Ubuntu 20.04'
+      vmImage: 'Ubuntu 20.04'
     steps:
     - task: CopyFiles@2
       displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
