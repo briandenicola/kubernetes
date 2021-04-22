@@ -37,5 +37,5 @@ stages:
               connectionType: Kubernetes Service Connection
               kubernetesServiceEndpoint: bjdk8s04sb
               command: apply
-              arguments: -f '$(System.ArtifactsDirectory)/drop/deployment.yaml'
+              arguments: -f $(System.ArtifactsDirectory)/drop/deployment.yaml
     
