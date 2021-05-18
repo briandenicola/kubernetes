@@ -6,15 +6,16 @@ metadata:
    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: test.denicolafamily.com
+  - host: test.bjdazure.tech
     http:
      paths:
-     - backend:
-        servive:
+     - path: /app
+       pathType: Prefix
+       backend:
+        service:
           name: nginx
-          port: 
+          port:
             number: 80
-       path: /app 
 ---
 apiVersion: v1
 kind: Service
@@ -24,7 +25,7 @@ spec:
   ports:
   - port: 80
     protocol: TCP
-    targetPort: 80  
+    targetPort: 80
   selector:
     app: nginx
 
@@ -35,6 +36,9 @@ metadata:
   name: nginx
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
   template:
     metadata:
       labels:
