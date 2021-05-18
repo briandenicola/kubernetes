@@ -10,8 +10,10 @@ spec:
     http:
      paths:
      - backend:
-        serviceName: nginx
-        servicePort: 80
+        servive:
+          name: nginx
+          port: 
+            number: 80
        path: /app 
 ---
 apiVersion: v1
