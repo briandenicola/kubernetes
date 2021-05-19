@@ -10,7 +10,7 @@ steps:
   displayName: Login to ACR
   inputs:
     command: login
-    containerRegistry: bjd145
+    containerRegistry: bjd145.azurecr.io
 - task: Docker@2
   displayName: Build and Push
   inputs:
