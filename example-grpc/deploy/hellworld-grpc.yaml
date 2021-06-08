@@ -2,35 +2,35 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grpcbin
+  name: helloworldgrpc
   labels:
-    app: grpcbin
+    app: helloworldgrpc
   annotations:
-    konghq.com/protocol: "grpcs"
+    konghq.com/protocol: "grpc"
 spec:
   ports:
   - name: grpc
     port: 9001
-    targetPort: 9001
+    targetPort: 5000
   selector:
-    app: grpcbin
+    app: helloworldgrpc
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grpcbin
+  name: helloworldgrpc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: grpcbin
+      app: helloworldgrpc
   template:
     metadata:
       labels:
-        app: grpcbin
+        app: helloworldgrpc
     spec:
       containers:
-      - image: moul/grpcbin
-        name: grpcbin
+      - image: bjd145/grpc:0.2
+        name: helloworldgrpc
         ports:
-        - containerPort: 9001
+        - containerPort: 5000

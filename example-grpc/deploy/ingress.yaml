@@ -1,10 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: demo
+  name: grpc-bjdazure-tech-ingress
   annotations:
     kubernetes.io/ingress.class: kong
-    konghq.com/protocols : "grpc,grpcs"
+    konghq.com/protocols : "grpc,grpcs,https"
     kubernetes.io/tls-acme: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
