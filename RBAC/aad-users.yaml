@@ -1,30 +1,23 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
+kind: Role
 metadata:
-  name: cluster-admin
+  name: namespace-reader
   annotations:
     rbac.authorization.kubernetes.io/autoupdate: "true"
 rules:
-- apiGroups:
-  - '*'
-  resources:
-  - '*'
-  verbs:
-  - '*'
-- nonResourceURLs:
-  - '*'
-  verbs:
-  - '*'
+- apiGroups: [""] 
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
+kind: RoleBinding
 metadata:
-  name: contoso-cluster-admins
+  name: namespace-reader-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
+  kind: Role
+  name: namespace-reader
 subjects:
 - apiGroup: rbac.authorization.k8s.io
   kind: User
-  name: brian@bjdazure.tech
+  name: john@bjdazure.tech
