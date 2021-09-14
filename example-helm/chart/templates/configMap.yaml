@@ -4,4 +4,4 @@ metadata:
   name: greetingshelm
   namespace: default 
 data:
-  build.version: {{ .Values.build_version}}
+  build.version: {{ .Values.build_version }}
