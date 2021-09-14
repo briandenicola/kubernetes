@@ -6,7 +6,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: httpbin
+      app: greetingshelm
   strategy:
     type: RollingUpdate
     rollingUpdate:
