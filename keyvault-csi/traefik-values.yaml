@@ -1,0 +1,9 @@
+deployment:
+  podLabels: {
+    aadpodidbinding: bjdtraefik-identity
+  }
+
+ports:
+  websecure:
+    tls:
+      enabled: "true"
