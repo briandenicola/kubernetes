@@ -1,0 +1,15 @@
+{
+    "httpProxy": "http://10.3.99.4:3128/",
+    "httpsProxy": "http://10.3.99.4:3128/",
+    "noProxy": [
+      "localhost",
+      "127.0.0.1",
+      "10.191.0.0/16",
+      "10.3.0.0/16",
+      "10.5.0.0/16",
+      "10.1.0.0/16",
+      "svc",
+      "default.svc.cluster.local",
+      "istiod.istio-system.svc"
+    ]
+  }
