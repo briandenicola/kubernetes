@@ -3,17 +3,11 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "sshKeyData": {
-            "type": "string",
-            "metadata": {
-                "description": "SSH key data"
-            }
+            "type": "string"
         },
         "subnetId": {
-            "type": "string",
-            "metadata": {
-                "description": "Subnet ID"
-            }
-        },
+            "type": "string"
+        }
     },
     "variables": {},
     "resources": [
@@ -64,8 +58,7 @@
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
-                            "storageAccountType": "Premium_LRS",
-                            "id": "[resourceId('Microsoft.Compute/disks', 'proxy01-osdisk')]"
+                            "storageAccountType": "Premium_LRS"
                         },
                         "deleteOption": "Delete",
                         "diskSizeGB": 30
@@ -92,8 +85,7 @@
                         }
                     },
                     "secrets": [],
-                    "allowExtensionOperations": true,
-                    "requireGuestProvisionSignal": true
+                    "allowExtensionOperations": true
                 },
                 "networkProfile": {
                     "networkInterfaces": [

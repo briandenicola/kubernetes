@@ -14,12 +14,25 @@
             "defaultValue": "DevSub01-VNet-001",
             "type": "String"
         },
-        "core_vnet_externalid": {
+        "virtual_network_externalid": {
+            "type": "String"
+        },
+        "cluster_identity_principalId": {
             "type": "String"
         }
     },
-    "variables": {},
+    "variables": {  
+    },
     "resources": [
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[guid('AssignNetworkContributorRoleToClusterIdentity')]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '4d97b98b-1d4f-4787-a291-c67834d212e7')]",
+                "principalId": "[parameters('cluster_identity_principalId')]"
+            }
+        },
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
@@ -62,8 +75,7 @@
             "name": "[parameters('firewall_name')]",
             "location": "southcentralus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('firewall_name'), '-pip'))]",
-                "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworks_name'), 'AzureFirewallSubnet')]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('firewall_name'), '-pip'))]"
             ],
             "properties": {
                 "sku": {
@@ -184,7 +196,7 @@
                         "properties": {
                             "peeringState": "Connected",
                             "remoteVirtualNetwork": {
-                                "id": "[parameters('core_vnet_externalid')]"
+                                "id": "[parameters('virtual_network_externalid')]"
                             },
                             "allowVirtualNetworkAccess": true,
                             "allowForwardedTraffic": true,

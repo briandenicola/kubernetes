@@ -9,6 +9,7 @@
       "10.5.0.0/16",
       "10.1.0.0/16",
       "svc",
+      "svc.cluster.local",
       "default.svc.cluster.local",
       "istiod.istio-system.svc"
     ]
