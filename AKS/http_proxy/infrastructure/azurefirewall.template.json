@@ -2,16 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "routetable_name": {
-            "defaultValue": "RouteTable",
-            "type": "String"
-        },
-        "firewall_name": {
-            "defaultValue": "firewall01",
-            "type": "String"
-        },
         "virtualnetworks_name": {
-            "defaultValue": "DevSub01-VNet-001",
             "type": "String"
         },
         "virtual_network_externalid": {
@@ -36,7 +27,7 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
-            "name": "[concat(parameters('firewall_name'), '-pip')]",
+            "name": "firewall01-pip')]",
             "location": "southcentralus",
             "sku": {
                 "name": "Standard",
@@ -52,7 +43,7 @@
         {
             "type": "Microsoft.Network/routeTables",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('routetable_name')]",
+            "name": "RouteTable",
             "location": "southcentralus",
             "properties": {
                 "disableBgpRoutePropagation": false,
@@ -72,10 +63,10 @@
         {
             "type": "Microsoft.Network/azureFirewalls",
             "apiVersion": "2020-11-01",
-            "name": "[parameters('firewall_name')]",
+            "name": "firewall01",
             "location": "southcentralus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('firewall_name'), '-pip'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', 'firewall01-pip')]"
             ],
             "properties": {
                 "sku": {
@@ -88,10 +79,10 @@
                 },
                 "ipConfigurations": [
                     {
-                        "name": "[concat(parameters('firewall_name'), '-pip')]",
+                        "name": "firewall01-pip')]",
                         "properties": {
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('firewall_name'), '-pip'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'firewall01-pip')]"
                             },
                             "subnet": {
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualnetworks_name'), 'AzureFirewallSubnet')]"
@@ -143,7 +134,7 @@
             "name": "[parameters('virtualnetworks_name')]",
             "location": "southcentralus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', parameters('routetable_name'))]"
+                "[resourceId('Microsoft.Network/routeTables', 'RouteTable')]",
             ],
             "properties": {
                 "addressSpace": {
@@ -181,7 +172,7 @@
                         "properties": {
                             "addressPrefix": "10.3.54.0/23",
                             "routeTable": {
-                                "id": "[resourceId('Microsoft.Network/routeTables', parameters('routetable_name'))]"
+                                "id": "[resourceId('Microsoft.Network/routeTables', 'RouteTable')]"
                             },
                             "serviceEndpoints": [],
                             "delegations": [],

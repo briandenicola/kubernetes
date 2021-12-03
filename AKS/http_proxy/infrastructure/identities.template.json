@@ -80,5 +80,11 @@
                 }
             }
         }
-    ]
+    ],
+    "outputs" : {
+        "cluster_identity_id": {
+            "type": "string",
+            "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('cluster_identity_name'))).principalId]"
+        }
+    }
 }
