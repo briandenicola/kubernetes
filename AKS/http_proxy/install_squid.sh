@@ -1,3 +1,9 @@
+#!/bin/bash
+
+sudo apt-get update
+sudo apt-get install squid -y
+
+cat << EOF > test.txt
 acl SSL_ports port 443
 acl Safe_ports port 80		# http
 acl Safe_ports port 21		# ftp
@@ -16,3 +22,6 @@ http_access deny CONNECT !SSL_ports
 http_access allow all
 
 http_port 3128
+EOF 
+
+sudo systemctl restart squid
