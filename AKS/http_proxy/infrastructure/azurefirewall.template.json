@@ -27,7 +27,7 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
-            "name": "firewall01-pip')]",
+            "name": "firewall01-pip",
             "location": "southcentralus",
             "sku": {
                 "name": "Standard",
@@ -79,7 +79,7 @@
                 },
                 "ipConfigurations": [
                     {
-                        "name": "firewall01-pip')]",
+                        "name": "firewall01-pip",
                         "properties": {
                             "publicIPAddress": {
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'firewall01-pip')]"
@@ -134,7 +134,7 @@
             "name": "[parameters('virtualnetworks_name')]",
             "location": "southcentralus",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/routeTables', 'RouteTable')]",
+                "[resourceId('Microsoft.Network/routeTables', 'RouteTable')]"
             ],
             "properties": {
                 "addressSpace": {
