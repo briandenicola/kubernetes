@@ -35,9 +35,10 @@ RUN curl -Ls "https://github.com/fluxcd/flux2/releases/download/v0.24.1/flux_0.2
     && mv /tmp/flux /usr/local/bin \
     && rm -f /tmp/flux.tar.gz 
 
-RUN curl -LS "https://github.com/briandenicola/directory-size/releases/download/3.1.4/directorysize-linux-3.1.4.go.tar.gz" -o /tmp/ds.tar.gz \
+#RUN curl -LS "https://github.com/briandenicola/directory-size/releases/download/3.1.4/directorysize-linux-3.1.4.go.tar.gz" -o /tmp/ds.tar.gz \
+RUN curl -LS "https://github.com/briandenicola/directory-size/releases/download/3.5.9/directorysize-linux-x64.tar.gz" -o /tmp/ds.tar.gz \
     && tar -xf /tmp/ds.tar.gz -C /tmp \
-    && mv /tmp/directorysize /usr/local/bin/directorysize \
+    && mv /tmp/publish/DirectorySize /usr/local/bin/directorysize \
     && rm -rf /tmp/ds.tar.gz
 
 RUN wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash
