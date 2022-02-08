@@ -1,0 +1,11 @@
+---
+apiVersion: v1 
+kind: Pod
+metadata:   
+  name: utils
+spec:   
+  containers:
+  - image: {{  print .Values.acr_name "/utils:" .Values.build_version | nospace  }}
+    imagePullPolicy: Always
+    name: utils
+  restartPolicy: Always

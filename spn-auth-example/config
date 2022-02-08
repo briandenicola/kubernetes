@@ -1,0 +1,35 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ${cluster_certificate_get_via_az_aks_get-credentials}
+    server: https://my_cluster.privatelink.centralus.azmk8s.io:443
+  name: my_cluster
+contexts:
+- context:
+    cluster: my_cluster
+    namespace: spn-test
+    user: clusterUser_spn
+  name: my_cluster_context
+current-context: my_cluster_context
+kind: Config
+preferences: {}
+users:
+- name: clusterUser_spn
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - get-token
+      - --environment
+      - AzurePublicCloud
+      - --server-id
+      - 6dae42f8-4368-4678-94ff-3960e28e3630
+      - --client-id
+      - 80faf920-1908-4b52-b5ef-a8e7bedfc67a
+      - --tenant-id
+      - cf62007c-c1b2-44d4-82a8-f8bc84dca791
+      - --login
+      - spn
+      command: kubelogin
+      env: null
+      provideClusterInfo: false

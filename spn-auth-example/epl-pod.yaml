@@ -1,0 +1,31 @@
+---
+apiVersion: v1    
+kind: Secret
+metadata:
+ name: spn
+type: Opaque
+data:
+  clientID: NjlmOG.......
+  clientSecret: S09tN1F+..............
+---
+apiVersion: v1 
+kind: Pod
+metadata:   
+  name: spn-example
+spec:   
+  containers:
+  - image: bjd145/utils:3.6
+    imagePullPolicy: Always
+    name: spn
+    env:
+      - name: AAD_SERVICE_PRINCIPAL_CLIENT_ID
+        valueFrom:
+          secretKeyRef:
+            name: spn
+            key: clientID
+      - name: AAD_SERVICE_PRINCIPAL_CLIENT_SECRET
+        valueFrom:
+          secretKeyRef:
+            name: spn
+            key: clientSecret
+  restartPolicy: Always
