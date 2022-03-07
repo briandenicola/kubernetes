@@ -1,0 +1,78 @@
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: example-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: example-admin-role
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - deployments/rollback
+  - deployments/scale
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/log
+  - events
+  - configmaps
+  - endpoints
+  - secrets
+  - serviceaccounts
+  - services
+  - services/proxy
+  - replicasets
+  - replicasets/scale
+  - statefulsets
+  - statefulsets/scale
+  - persistentvolumeclaims
+  - replicationcontrollers
+  - replicationcontrollers/scale
+  verbs:
+  - create
+  - delete
+  - deletecollection
+  - patch
+  - update
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: example-admin-binding
+roleRef:
+  kind: Role
+  name: example-admin-role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: example-sa
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: deployer
+spec:
+  serviceAccountName: example-sa
+  containers:
+  - name: deployer
+    image:  bjd145/utils:3.6
+    imagePullPolicy: Always
+---
