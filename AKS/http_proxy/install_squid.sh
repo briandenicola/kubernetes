@@ -22,7 +22,7 @@ http_access deny !Safe_ports
 http_access deny CONNECT !SSL_ports
 http_access allow all
 
-http_port 3128" > /etc/squid/squid.conf.bak
+http_port 3128" > /etc/squid/squid.conf
 
 sudo systemctl restart squid
 sudo systemctl status squid

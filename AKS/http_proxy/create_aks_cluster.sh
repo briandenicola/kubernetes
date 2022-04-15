@@ -2,19 +2,21 @@
 
 export NAME=$1
 
-RG_NAME='DevSub01_AKS_RG'
-NETWORK_RG='DevSub01_Network_RG'
-NETWORK_NAME='DevSub01-VNet-001'
-NODEPOOL_RG_NAME=DevSub01_AKS_${NAME}_nodes_RG
+RG_NAME='aks_http_proxy_test'
+CORE_SUB_ID=''
+DNS_RG_NAME=''
+NETWORK_RG='DevSub02_Network_RG'
+NETWORK_NAME='DevSub02-Vnet-Sandbox-002'
+NODEPOOL_RG_NAME=DevSub02_AKS_${NAME}_nodes_RG
 LINUX_NODE_POOL='default'
 SERVICE_CIDR='10.191.0.0/16'
 DNS_IP='10.191.0.10'
-VER='1.22.2'
+VER='1.23.3'
 
 SUB_ID=`az account show -o tsv --query id`
 
-SUBNET_ID=/subscriptions/${SUB_ID}/resourceGroups/${NETWORK_RG}/providers/Microsoft.Network/virtualNetworks/${NETWORK_NAME}/subnets/kubernetes
-DNS_ZONE=/subscriptions/${SUB_ID}/resourceGroups/${RG_NAME}/providers/Microsoft.Network/privateDnsZones/privatelink.southcentralus.azmk8s.io
+SUBNET_ID=/subscriptions/${SUB_ID}/resourceGroups/${NETWORK_RG}/providers/Microsoft.Network/virtualNetworks/${NETWORK_NAME}/subnets/kubernetesdev
+DNS_ZONE=/subscriptions/${CORE_SUB_ID}/resourceGroups/${DNS_RG_NAME}/providers/Microsoft.Network/privateDnsZones/privatelink.southcentralus.azmk8s.io
 CLUSTER_IDENTITY=/subscriptions/${SUB_ID}/resourceGroups/${RG_NAME}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/k8s-cluster-identity
 KUBELET_IDENTITY=/subscriptions/${SUB_ID}/resourceGroups/${RG_NAME}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/k8s-kubelet-identity
 
