@@ -64,6 +64,9 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && rm -rf packages-microsoft-prod.deb
 
+
+COPY ca-certificates.crt /etc/ssl/certs/
+
 COPY sleep.sh /bin/sleep.sh
 RUN chmod a+x /bin/sleep.sh 
 
