@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: httpbin
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: httpbin
+    spec:
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: httpbin
+      containers:
+      - name: httpbin
+        image: bjd145/httpbin:1086
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false  
+          runAsUser: 1000       
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+          requests:
+            memory: "64Mi"
+            cpu: "0.25"
+        volumeMounts:
+        - mountPath: /usr/tmp
+          name: tmp-volume
+      volumes:
+      - name: tmp-volume
+        emptyDir: {}
