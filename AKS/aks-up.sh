@@ -9,6 +9,8 @@ LINUX_NODE_POOL='default'
 
 az group create -n ${CLUSTER_RG} -l southcentralus
 
+IP=`curl -s http://checkip.amazonaws.com/`
+
 az aks create \
     --resource-group ${CLUSTER_RG} \
     --name ${CLUSTER_NAME} \
@@ -32,3 +34,4 @@ az aks create \
     --disable-local-accounts \
     --enable-managed-identity \
     --os-sku CBLMariner \
+    --api-server-authorized-ip-ranges $IP/32
