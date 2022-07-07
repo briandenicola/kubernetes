@@ -1,18 +1,22 @@
 #!/bin/bash 
 
 export NAME=$1
-export WIN_PASSWORD=$2
+export LOCATION=$2
+export WIN_PASSWORD=$3
+export SUBNET_ID=$4
 
-RG_NAME='DevSub02_K8S01_RG'
-NODEPOOL_RG_NAME='DevSub02_K8S01_RG_winnodes'
+RG_NAME=${NAME}_RG
+NODEPOOL_RG_NAME=${NAME}_Nodes_RG
 LINUX_NODE_POOL='lpool1'
 WIN_NODE_POOL='wpool1'
 SERVICE_CIDR='10.191.0.0/16'
 DNS_IP='10.191.0.10'
-SUBNET_ID='/subscriptions/bfafbd89-a2a3-43a5-af72-fb4ef0c514c1/resourceGroups/DevSub02_Network_RG/providers/Microsoft.Network/virtualNetworks/DevSub02-VNet-002/subnets/KubernetesWindows'
-VER='1.17.7'
+
+VER='1.22'
 
 PUBLIC_IP=`curl -s http://checkip.amazonaws.com/`
+
+az group create -n ${NAME} -location ${LOCATION}
 
 az aks create \
     --resource-group $RG_NAME \
@@ -26,7 +30,6 @@ az aks create \
     --nodepool-name $LINUX_NODE_POOL \
     --network-plugin azure \
     --vnet-subnet-id $SUBNET_ID \
-    --ssh-key-value '~/.ssh/id_rsa.pub' \
     --kubernetes-version $VER \
     --service-cidr $SERVICE_CIDR \
     --dns-service-ip $DNS_IP \
@@ -35,7 +38,7 @@ az aks create \
     --max-count 3 \
     --load-balancer-sku Standard \
     --uptime-sla \
-	--enable-managed-identity \
+    --enable-managed-identity \
     --api-server-authorized-ip-ranges $PUBLIC_IP/32 
 
 az aks nodepool add \
