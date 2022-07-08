@@ -1,3 +1,11 @@
+data "azurerm_kubernetes_service_versions" "current" {
+  location = azurerm_resource_group.this.location
+}
+
+locals {
+  supported_versions = tolist(data.azurerm_kubernetes_service_versions.current.versions)
+}
+
 resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     ignore_changes = [
@@ -9,6 +17,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   resource_group_name             = azurerm_resource_group.this.name
   location                        = azurerm_resource_group.this.location
   node_resource_group             = "${local.resource_name}_k8s_nodes_rg"
+  kubernetes_version              = element(local.supported_versions, length(local.supported_versions) - 2)
   dns_prefix                      = local.aks_name
   sku_tier                        = "Paid"
   oidc_issuer_enabled             = true
