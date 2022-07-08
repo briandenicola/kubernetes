@@ -1,7 +1,7 @@
 param(
-    [Parmeter(Mandatory=$true)]
+    [Parameter(Mandatory=$true)]
     [string] $FeatureName = "AKSWindows2022Preview", 
-    [Parmeter(Mandatory=$true)]
+    [Parameter(Mandatory=$true)]
     [string] $NameSpace = "Microsoft.ContainerService"
 )
 
@@ -15,7 +15,7 @@ function Get-FeatureState
     return (az feature list -o tsv --query "[?contains(name,'$FeatureName')].`{State:properties.state}")
 }
 
-while ( Get-FeatureState -FeatureName "$NameSpace/$FeatureName" -eq "Registering" ) {
+while ( (Get-FeatureState -FeatureName "$NameSpace/$FeatureName") -eq "Registering" ) {
     Write-Host "." -NoNewline
     Start-Sleep -Seconds 60
 }
