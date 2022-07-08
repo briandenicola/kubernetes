@@ -4,6 +4,7 @@ param(
     [Parmeter(Mandatory=$true)]
     [string] $NameSpace = "Microsoft.ContainerService"
 )
+
 az feature register --namespace $NameSpace --name $FeatureName
 
 function Get-FeatureState 
