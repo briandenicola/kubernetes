@@ -27,7 +27,7 @@ spec:
             app: httpbin
       containers:
       - name: httpbin
-        image: bjd145/httpbin:1086
+        image: bjd145/httpbin:1087
         imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false  
