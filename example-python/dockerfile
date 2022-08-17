@@ -10,6 +10,8 @@ RUN apk add --update \
 
 RUN pip3 install -U pip 
 RUN pip3 install gunicorn httpbin 
+RUN pip3 install flask==2.1.1
+RUN pip3 install werkzeug==2.0.3
 
 RUN echo '#!/bin/sh' > run.sh \
     && echo 'gunicorn --bind=0.0.0.0:8080 httpbin:app' >> run.sh \
