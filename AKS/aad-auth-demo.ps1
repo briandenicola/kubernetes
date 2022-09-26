@@ -14,9 +14,11 @@ $creds = Get-Credential -UserName $ClientID -Message "Please enter the Client Se
 $uri = "https://login.microsoftonline.com/$TenantID/oauth2/token"
 
 if( -not ($AksApiUri.IsAbsoluteUri) ) {
-    $AksApiUri = "https://{0}" -f $AksApiUri
+    $namespaceUri = New-Object System.UriBuilder -ArgumentList ([uri]::UriSchemeHttps), $AksApiUri, 443, "api/v1/namespaces"
+} else {
+    $namespaceUri = New-Object System.UriBuilder($AksApiUri)
+    $namespaceUri.Path = "api/v1/namespaces"
 }
-$namespaceUri =  "{0}api/v1/namespaces" -f $AksApiUri
 
 Write-Host ("[{0}] - Authenticating {1} . . ." -f (Get-Date), $ClientID)
 $auth = Invoke-RestMethod -Uri $uri  -Method Post -Body @{
@@ -29,6 +31,6 @@ $auth = Invoke-RestMethod -Uri $uri  -Method Post -Body @{
 $h = @{}; $h.Add('Authorization', ('{0} {1}' -f $auth.token_type, $auth.access_token))
 
 Write-Host ("[{0}] - Getting all namespaces againist {1} . . ." -f (Get-Date), $AksApiUri.DnsSafeHost)
-Invoke-RestMethod -Method get -SkipCertificateCheck -Headers $h -ContentType "application/json" -Uri $namespaceUri |
+Invoke-RestMethod -Method get -SkipCertificateCheck -Headers $h -ContentType "application/json" -Uri $namespaceUri.ToString() |
      Select-Object @{Name = 'Name'; Expression = {$_.items.metadata.name}} | 
      Select-Object -ExpandProperty Name
