@@ -23,7 +23,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   oidc_issuer_enabled             = true
   open_service_mesh_enabled       = true
   azure_policy_enabled            = true
-  api_server_authorized_ip_ranges = ["${chomp(data.http.myip.body)}/32"]
+  api_server_authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
 
   azure_active_directory_role_based_access_control {
     managed                = true

@@ -12,7 +12,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   dns_prefix                = "${local.aks_name}"
   sku_tier                  = "Paid"
   oidc_issuer_enabled       = true
-  api_server_authorized_ip_ranges = ["${chomp(data.http.myip.body)}/32"]
+  api_server_authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
 
   azure_active_directory_role_based_access_control {
     managed                 = true
