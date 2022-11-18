@@ -22,6 +22,18 @@ resource "azapi_resource" "azureml_install" {
             allowInsecureConnections      = "True"
             inferenceRouterServiceType    = "LoadBalancer"
             inferenceLoadBalancerHA       = "False"
+            "relayserver.enabled"         = "False"
+            "nginxIngress.enabled"        = "True"
+            "servicebus.enabled"          = "False"
+            installVolcano                = "True"
+            installPromOp                 = "True"
+            clusterId                     = azurerm_kubernetes_cluster.this.id
+            cluster_name                  = azurerm_kubernetes_cluster.this.id
+            cluster_name_friendly         = local.aks_name
+            domain                        = "${azurerm_resource_group.this.location}.cloudapp.azure.com"
+            jobSchedulerLocation          = azurerm_resource_group.this.location
+            location                      = azurerm_resource_group.this.location
+            "prometheus.prometheusSpec.externalLabels.cluster_name" = azurerm_kubernetes_cluster.this.id
         }
     }
   })
