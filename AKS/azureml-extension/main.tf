@@ -33,7 +33,9 @@ locals {
   location              = "southcentralus"
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name              = "${local.resource_name}-aks"
+  acr_name              = "${replace(local.resource_name,"-","")}acr"
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
+  pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
   pods_subnet_cidir     = cidrsubnet(local.vnet_cidr, 7, 2)
 }
