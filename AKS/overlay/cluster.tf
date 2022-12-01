@@ -45,16 +45,16 @@ resource "azapi_resource" "aks" {
           vnetSubnetID        = azurerm_subnet.nodes.id
           count               = 3
           minCount            = 3
-          maxCount            = 10
+          maxCount            = 9
           maxPods             = 40
           osDiskSizeGB        = 30
           osSKU               = "CBLMariner"
           type                = "VirtualMachineScaleSets"
-          osDiskType          = "Managed"
+          osDiskType          = "Ephemeral"
           osType              = "Linux"
           mode                = "System"
           upgradeSettings     = {
-            maxSurge          = "25%"
+            maxSurge          = "33%"
           }
         }
       ]
@@ -76,9 +76,9 @@ resource "azapi_resource" "aks" {
 
       identityProfile = {
           kubeletidentity = {
-              resourceId  = azurerm_user_assigned_identity.aks_kubelet_identity.id
-              clientId    = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
-              objectId    = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
+            resourceId  = azurerm_user_assigned_identity.aks_kubelet_identity.id
+            clientId    = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
+            objectId    = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
           }
       }
 
@@ -100,27 +100,34 @@ resource "azapi_resource" "aks" {
         defender = {
           logAnalyticsWorkspaceResourceId = azurerm_log_analytics_workspace.this.id
           securityMonitoring = {
-            enabled     = true
+            enabled           = true
           }
         }
         imageCleaner = {
-          enabled       = true
-          intervalHours = 48
+          enabled             = true
+          intervalHours       = 48
         }
         workloadIdentity = {
-          enabled       = true
+          enabled             = true
+        }
+      }
+
+      workloadAutoScalerProfile = {
+        keda = {
+          enabled             = true
         }
       }
 
       storageProfile = {
         blobCSIDriver = {
-          enabled = true
+          enabled             = true
         }
         diskCSIDriver = {
-          enabled = true
+          enabled             = true
+          version             = "v1"
         }
         fileCSIDriver = {
-          enabled = true
+          enabled             = true
         }
       }      
     }
