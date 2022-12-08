@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: whatos
+  labels:
+    service: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: redis
+  template:
+    metadata:
+      labels:
+        service: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:6.2.7
+          ports:
+            - containerPort: 6379
+          securityContext:
+            allowPrivilegeEscalation: false  
+            runAsUser: 1000       
+            runAsNonRoot: true
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2"
+            requests:
+              memory: "1024Mi"
+              cpu: "0.25"
+              

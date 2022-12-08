@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq 
+  namespace: whatos
+  labels:
+    service: rabbitmq 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: rabbitmq 
+  template:
+    metadata:
+      labels:
+        service: rabbitmq 
+    spec:
+      containers:
+        - name: rabbitmq 
+          image: rabbitmq:3.10-management
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
+          securityContext:
+            allowPrivilegeEscalation: false  
+            runAsUser: 1000       
+            runAsNonRoot: true
+          resources:
+            limits:
+              memory: "2048Mi"
+              cpu: "2"
+            requests:
+              memory: "1024Mi"
+              cpu: "0.25"
+              

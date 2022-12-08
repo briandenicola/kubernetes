@@ -1,0 +1,31 @@
+{
+    "schemaType": "CredentialSet",
+    "schemaVersion": "1.0.1",
+    "name": "dev",
+    "credentials": [
+        {
+            "name": "CLIENT_ID",
+            "source": {
+              "env": "ARM_CLIENT_ID"
+            }
+          },
+          {
+            "name": "CLIENT_SECRET",
+            "source": {
+              "env": "ARM_CLIENT_SECRET"
+            }
+          },
+          {
+            "name": "SUBSCRIPTION_ID",
+            "source": {
+              "env": "ARM_SUBSCRIPTION_ID"
+            }
+          },
+          {
+            "name": "TENANT_ID",
+            "source": {
+              "env": "ARM_TENANT_ID"
+            }
+          }
+    ]
+}

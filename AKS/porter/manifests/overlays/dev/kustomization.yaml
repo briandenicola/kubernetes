@@ -1,0 +1,8 @@
+namePrefix: dev-
+resources:
+  - ../../base
+  - ingress.yaml
+  - redis.yaml
+  - rabbitmq.yaml
+patchesStrategicMerge:
+  - deployment.yaml

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatos
+  namespace: whatos
+  labels:
+    app: whatos
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whatos
+  template:
+    metadata:
+      labels:
+        app: whatos
+    spec:
+      serviceAccountName: default-sa-identity 
+      containers:
+        - name: whatos
+          image: whatos:latest
+          ports:
+            - containerPort: 8081

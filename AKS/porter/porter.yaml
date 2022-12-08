@@ -1,0 +1,62 @@
+schemaVersion: 1.0.0
+name: whatos
+version: 0.0.1
+description: "An example Porter configuration to deploy sample Whatos golang API"
+registry: "bjdcsa.azurecr.io"
+mixins:
+  - terraform
+  - az
+  - exec
+  - kubernetes
+
+credentials:
+- name: SUBSCRIPTION_ID
+  env: ARM_SUBSCRIPTION_ID
+- name: CLIENT_ID
+  env: ARM_CLIENT_ID
+- name: TENANT_ID
+  env: ARM_TENANT_ID
+- name: CLIENT_SECRET
+  env: ARM_CLIENT_SECRET
+
+install:
+  - terraform:
+      description: "Create Azure Resources"
+      outputs:
+        - name: AKS_RESOURCE_GROUP
+        - name: AKS_CLUSTER_NAME
+        - name: ACR_NAME
+        - name: CERTIFICATE_KV_URI
+        - name: APPLICATION_URI
+        - name: WORKLOAD_IDENTITY
+
+  - az:
+      arguments:
+      - login
+      flags:
+        service-principal:
+        username: '${ bundle.credentials.CLIENT_ID }'
+        password: '${ bundle.credentials.CLIENT_SECRET }'
+        tenant: ${ bundle.credentials.TENANT_ID}
+
+  - az:
+      arguments:
+      - aks
+      - get-credentials
+      flags:
+        name: '${ bundle.outputs.AKS_CLUSTER_NAME }'
+        resource-group: '${ bundle.outputs.AKS_RESOURCE_GROUP }'
+        admin:
+  
+  - kubernetes:
+      manifests:
+        - /cnab/app/manifests/overlay/dev
+      wait: true
+
+uninstall:
+  - az:
+      arguments:
+      - group
+      - delete
+      flags:
+        name: '${ bundle.outputs.AKS_RESOURCE_GROUP }'

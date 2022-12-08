@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.azure.com/tls-cert-keyvault-uri: ${CERTIFICATE_KV_URI}
+    kubernetes.azure.com/use-osm-mtls: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/configuration-snippet: |2-
+
+      proxy_ssl_name "${WORKLOAD_IDENTITY}.whatos.cluster.local";
+    nginx.ingress.kubernetes.io/proxy-ssl-secret: kube-system/osm-ingress-client-cert
+    nginx.ingress.kubernetes.io/proxy-ssl-verify: "on"
+  name: whatos-ingress
+  namespace: whatos
+spec:
+  ingressClassName: webapprouting.kubernetes.azure.com
+  rules:
+  - host: ${APPLICATION_URI}
+    http:
+      paths:
+      - backend:
+          service:
+            name: ${SERVICE_NAME}
+            port:
+              number: 8081
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - ${APPLICATION_URI}
+    secretName: keyvault-${SERVICE_NAME}-ingress
+---
+apiVersion: policy.openservicemesh.io/v1alpha1
+kind: IngressBackend
+metadata:
+  name: whatos-ingressbackend
+  namespace: whatos
+spec:
+  backends:
+  - name: ${SERVICE_NAME}
+    port:
+      number: 8081
+      protocol: https
+  sources:
+  - kind: Service
+    name: nginx
+    namespace: app-routing-system
+  - kind: AuthenticatedPrincipal
+    name: ingress-nginx.ingress.cluster.local

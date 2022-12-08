@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatos
+  namespace: whatos
+spec:
+  template:
+    spec:
+      serviceAccountName: ${WORKLOAD_IDENTITY}
