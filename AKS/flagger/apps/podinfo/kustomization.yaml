@@ -1,0 +1,8 @@
+namespace: test
+resources:
+  - namespace.yaml
+  - hpa.yaml
+  - podinfo-deployment.yaml
+  - tester-deployment.yaml
+  - canary.yaml
+

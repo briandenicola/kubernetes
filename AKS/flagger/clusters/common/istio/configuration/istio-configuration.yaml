@@ -1,0 +1,53 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio-controlplane
+spec:
+  profile: default
+  meshConfig:
+    accessLogFile: /dev/stdout
+    accessLogEncoding: JSON
+    enableTracing: true
+    enablePrometheusMerge: true
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY
+    defaultConfig:
+      tracing:
+        zipkin:
+          address: otel-collector.default.svc.cluster.local:9411
+  values:
+    global:
+      tracer:
+        zipkin:
+          address: otel-collector.default.svc.cluster.local:9411
+  components:
+    pilot:
+      k8s:
+        podDisruptionBudget:
+          minAvailable: 1
+    egressGateways:
+    - name: istio-egressgateway
+      namespace: default
+      enabled: true
+      k8s:
+        podDisruptionBudget:
+          minAvailable: 1
+    ingressGateways:
+    - name: istio-ingressgateway
+      namespace: default
+      enabled: true
+      label:
+        aadpodidbinding: default_cluster_name-istio-pod-identity
+      k8s:
+        podDisruptionBudget:
+          minAvailable: 1
+        serviceAnnotations:
+          service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  addonComponents:
+    prometheus:
+      enabled: false
+    kiali:
+      enabled: false
+    grafana:
+      enabled: false
