@@ -1,3 +1,7 @@
+data "azurerm_kubernetes_service_versions" "current" {
+  location = azurerm_resource_group.this.location
+}
+
 resource "azapi_resource" "aks" {
   type            = "Microsoft.ContainerService/managedClusters@2022-08-03-preview"
   name            = local.aks_name
@@ -13,6 +17,7 @@ resource "azapi_resource" "aks" {
     properties = {
 
       nodeResourceGroup     = "${local.resource_name}_k8s_nodes_rg"
+      kubernetesVersion     = data.azurerm_kubernetes_service_versions.current.latest_version
       disableLocalAccounts  = true 
       enableRBAC            = true
       dnsPrefix             = local.aks_name
