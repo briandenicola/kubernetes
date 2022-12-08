@@ -17,7 +17,7 @@ resource "azapi_resource" "aks" {
     properties = {
 
       nodeResourceGroup     = "${local.resource_name}_k8s_nodes_rg"
-      kubernetesVersion     = data.azurerm_kubernetes_service_versions.current.latest_version
+      kubernetesVersion     = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions)-2]
       disableLocalAccounts  = true 
       enableRBAC            = true
       dnsPrefix             = local.aks_name
