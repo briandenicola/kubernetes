@@ -1,0 +1,20 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: basic-topology
+  namespace: default
+spec:
+  components:
+    - name: nginx-basic
+      type: webservice
+      properties:
+        image: nginx
+      traits:
+        - type: expose
+          properties:
+            port: [80]
+  policies:
+    - name: topology-southcentralus-clusters
+      type: topology
+      properties:
+        clusters: ["localhost"]
