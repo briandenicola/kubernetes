@@ -60,10 +60,13 @@ resource "azapi_resource" "aks" {
       ]
 
       apiServerAccessProfile = {
-        authorizedIPRanges    = ["${chomp(data.http.myip.response_body)}/32"]
-        disableRunCommand     = true
-        enableVnetIntegration = true
-        subnetId              = azurerm_subnet.api.id
+        //authorizedIPRanges              = ["${chomp(data.http.myip.response_body)}/32"]
+        disableRunCommand               = true
+        enableVnetIntegration           = true
+        enablePrivateCluster            = true
+        enablePrivateClusterPublicFQDN  = false
+        privateDNSZone                  = azurerm_private_dns_zone.aks_private_zone.id
+        subnetId                        = azurerm_subnet.api.id
       }
 
       autoUpgradeProfile = {
