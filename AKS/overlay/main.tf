@@ -41,6 +41,11 @@ locals {
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   api_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
+  app_path              = "./clusters/aks-01"
+  istio_crd_path        = "./clusters/common/istio/customresources"
+  istio_cfg_path        = "./clusters/common/istio/configuration"
+  istio_gw_path         = "./clusters/common/istio/gateway"
+  flux_repository       = "https://github.com/briandenicola/aks-flux-extension"
 }
 
 resource "azurerm_resource_group" "this" {
