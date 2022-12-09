@@ -20,7 +20,8 @@ resource "azapi_resource" "aks" {
       kubernetesVersion     = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions)-2]
       disableLocalAccounts  = true 
       enableRBAC            = true
-      dnsPrefix             = local.aks_name
+      //dnsPrefix             = local.aks_name
+      fqdnSubdomain         = local.aks_name
 
       aadProfile = {
         adminGroupObjectIDs = [var.azure_rbac_group_object_id]
