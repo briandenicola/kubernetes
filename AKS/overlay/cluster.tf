@@ -66,7 +66,6 @@ resource "azapi_resource" "aks" {
       ]
 
       apiServerAccessProfile = {
-        //authorizedIPRanges              = ["${chomp(data.http.myip.response_body)}/32"]
         disableRunCommand               = true
         enableVnetIntegration           = true
         enablePrivateCluster            = true
@@ -99,7 +98,9 @@ resource "azapi_resource" "aks" {
         loadBalancerSku       = "standard"
         networkPlugin         = "azure"
         networkPluginMode     = "overlay"
-        podCidr               = "100.${random_integer.pod_cidr.id}.0.0/16"
+        //podCidr               = "100.${random_integer.pod_cidr.id}.0.0/16" 
+        //Only got Istio functional with 192.168 for POD CIDR range...
+        podCidr               = "192.168.0.0/16"
         serviceCidr           = "100.${random_integer.services_cidr.id}.0.0/16"
       }
 
