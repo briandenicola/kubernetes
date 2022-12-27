@@ -31,13 +31,18 @@ locals {
   container_insights_tables = ["ContainerLog", "ContainerLogV2"]
 }
 
-//Table Update requires PATCH to change to Basic Plan but azapi_update_resource only does PUT updates 
-resource "null_resource" "container_insights_basic_plan" {
-  for_each = toset(local.container_insights_tables)
+resource "azapi_resource_action" "this" {
+  for_each    = toset(local.container_insights_tables)
+  type        = "Microsoft.OperationalInsights/workspaces/tables@2022-10-01"
+  resource_id = "${azurerm_log_analytics_workspace.this.id}/tables/${each.key}"
+  method      = "PATCH"
+  body        = jsonencode({
+    properties = {
+      plan = "Basic"
+    }
+  })
+
   depends_on = [
-    azurerm_log_analytics_solution.this
+    azurerm_log_analytics_solution.this,
   ]
-  provisioner "local-exec" {
-    command = "az monitor log-analytics workspace table update --resource-group ${azurerm_resource_group.this.name}  --workspace-name ${azurerm_log_analytics_workspace.this.name} --name ${each.key}  --plan Basic"
-  }
 }
