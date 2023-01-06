@@ -4,7 +4,7 @@ tasks:
   environment:
     cmds:
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}"
+    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     - task: creds
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
