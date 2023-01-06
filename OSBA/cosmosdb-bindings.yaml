@@ -1,9 +1,0 @@
-apiVersion: servicecatalog.k8s.io/v1beta1
-kind: ServiceBinding
-metadata:
-  name: cosmosdb002-binding
-  namespace: default
-spec:
-  instanceRef:
-    name: cosmosdb002
-  secretName: cosmosdb002-secret
