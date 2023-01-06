@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata: 
- name: acr-auth
-data:
- .dockerconfigjson: ....3b3JkIjoiUCs5dno9UW5CRCtuYWdHYVljb2t0UlNUVmFwMnVWVm0iLCJlbWFpbCI6ImJyaWFuQGRlbmljb2xhZmFtaWx5LmNvbSIsImF1dGgiOiJZbXBrTVRRMU9sQXJPWFo2UFZGdVFrUXJibUZuUjJGWlkyOXJkRkpUVkZaaGNESjFWbFp0In19fQ==
-type: kubernetes.io/dockerconfigjson
