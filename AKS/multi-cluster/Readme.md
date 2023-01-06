@@ -1,4 +1,5 @@
 # Overview
+This is a quick demo of AKS Fleet Manager load balancing requests acrsos the two clusters deployed to two different Azure regions.
 
 # Infrastructure 
 
@@ -58,6 +59,11 @@ KUBECONFIG=aks-southcentral kubectl get pods -o wide
 ```
 
 ## Application Load Balancing
+The host name returned by the command below should bounce between the two clusters
 ```bash 
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080 | jq .origin
+    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
+    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
+    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
+    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
+    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
 ```
