@@ -1,0 +1,29 @@
+version: '3'
+
+tasks:
+  environment:
+    cmds:
+    - terraform init
+    - terraform apply -auto-approve -var "region={{.REGION}}"
+    - task: creds
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  creds:
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  clean:
+    cmds:
+    - cd infrastructure ;
+      rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform  output -raw AKS_RESOURCE_GROUP
