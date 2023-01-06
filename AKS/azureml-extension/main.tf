@@ -2,7 +2,12 @@ data "azurerm_client_config" "current" {}
 data "azurerm_subscription" "current" {}
 
 data "http" "myip" {
-  url = "http://checkip.amazonaws.com/"
+#  url = "http://checkip.amazonaws.com/"
+  url = "https://api64.ipify.org?format=json"
+
+  request_headers = {
+    Accept = "application/json"
+  }
 }
 
 resource "random_id" "this" {
@@ -31,6 +36,7 @@ resource "random_integer" "services_cidr" {
 
 locals {
   location              = var.region
+  ip_address            = "${jsondecode(data.http.myip.response_body).ip}"
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name              = "${local.resource_name}-aks"
   acr_name              = "${replace(local.resource_name,"-","")}acr"
