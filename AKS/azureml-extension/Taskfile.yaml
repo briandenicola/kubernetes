@@ -6,6 +6,7 @@ tasks:
     - terraform init
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     - task: creds
+    - task: attach
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
@@ -18,6 +19,21 @@ tasks:
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
+
+  attach:
+    cmds:
+    - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSAPCE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+      AKS_ID: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+      WORKSPACE: 
+        sh: terraform output -raw ML_WORKSPACE_NAME
+
+
 
   clean:
     cmds:
