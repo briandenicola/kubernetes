@@ -22,14 +22,14 @@ tasks:
 
   attach:
     cmds:
-    - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSAPCE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
+    - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSPACE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
       AKS_ID: 
-        sh: terraform output -raw AKS_CLUSTER_NAME
+        sh: terraform output -raw AKS_CLUSTER_ID
       WORKSPACE: 
         sh: terraform output -raw ML_WORKSPACE_NAME
 
