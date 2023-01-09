@@ -37,6 +37,14 @@ resource "azurerm_subnet" "pe" {
   address_prefixes     = [ local.pe_subnet_cidir ]
 }
 
+resource "azurerm_subnet" "compute" {
+  name                 = "compute"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = [ local.compute_subnet_cidir ]
+}
+
+
 resource "azurerm_network_security_group" "this" {
   name                = "${local.resource_name}-nsg"
   location            = azurerm_resource_group.this.location
@@ -55,5 +63,10 @@ resource "azurerm_subnet_network_security_group_association" "pods" {
 
 resource "azurerm_subnet_network_security_group_association" "pe" {
   subnet_id                 = azurerm_subnet.pe.id
+  network_security_group_id = azurerm_network_security_group.this.id
+}
+
+resource "azurerm_subnet_network_security_group_association" "compute" {
+  subnet_id                 = azurerm_subnet.compute.id
   network_security_group_id = azurerm_network_security_group.this.id
 }

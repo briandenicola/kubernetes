@@ -44,6 +44,7 @@ locals {
   pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
   pods_subnet_cidir     = cidrsubnet(local.vnet_cidr, 7, 2)
+  compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 10)
 }
 
 resource "azurerm_resource_group" "this" {
