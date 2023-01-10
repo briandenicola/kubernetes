@@ -1,11 +1,11 @@
 resource "azapi_resource" "flux_install" {
   depends_on = [
-    azurerm_kubernetes_cluster.this
+    azurerm_kubernetes_cluster.kubevela
   ]
 
   type      = "Microsoft.KubernetesConfiguration/extensions@2022-03-01"
   name      = "flux"
-  parent_id = azurerm_kubernetes_cluster.this.id
+  parent_id = azurerm_kubernetes_cluster.kubevela.id
 
   body = jsonencode({
     properties = {
@@ -21,8 +21,8 @@ resource "azapi_resource" "flux_config" {
   ]
 
   type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-03-01"
-  name      = "cluster-config"
-  parent_id = azurerm_kubernetes_cluster.this.id
+  name      = "kubevela-config"
+  parent_id = azurerm_kubernetes_cluster.kubevela.id
 
   body = jsonencode({
     properties : {

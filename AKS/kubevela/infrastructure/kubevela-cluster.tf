@@ -1,18 +1,14 @@
-data "azurerm_kubernetes_service_versions" "current" {
-  location = azurerm_resource_group.this.location
-}
-
-resource "azurerm_kubernetes_cluster" "this" {
+resource "azurerm_kubernetes_cluster" "kubevela" {
   lifecycle {
     ignore_changes = [
       default_node_pool.0.node_count,
     ]
   }
 
-  name                              = local.aks_name
+  name                              = local.kubevela_name
   resource_group_name               = azurerm_resource_group.this.name
   location                          = azurerm_resource_group.this.location
-  node_resource_group               = "${local.resource_name}_k8s_nodes_rg"
+  node_resource_group               = "${local.resource_name}_kubevela_nodes_rg"
   dns_prefix                        = local.aks_name
   kubernetes_version                = data.azurerm_kubernetes_service_versions.current.latest_version
   sku_tier                          = "Free"
@@ -34,13 +30,13 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
+    identity_ids = [azurerm_user_assigned_identity.kubevela_identity.id]
   }
 
   kubelet_identity {
-    client_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
-    object_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
-    user_assigned_identity_id = azurerm_user_assigned_identity.aks_kubelet_identity.id
+    client_id                 = azurerm_user_assigned_identity.kubevela_kubelet_identity.client_id
+    object_id                 = azurerm_user_assigned_identity.kubevela_kubelet_identity.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.kubevela_kubelet_identity.id
   }
 
   default_node_pool {
@@ -48,7 +44,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     node_count          = 1
     vm_size             = "Standard_DS4_v2"
     os_disk_size_gb     = 30
-    vnet_subnet_id      = azurerm_subnet.this.id
+    vnet_subnet_id      = azurerm_subnet.kubevela.id
     os_sku              = "CBLMariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
@@ -56,13 +52,13 @@ resource "azurerm_kubernetes_cluster" "this" {
     max_count           = 3
     max_pods            = 40
     upgrade_settings {
-      max_surge             = "25%"
+      max_surge = "25%"
     }
   }
 
   network_profile {
-    dns_service_ip     = "100.${random_integer.services_cidr.id}.0.10"
-    service_cidr       = "100.${random_integer.services_cidr.id}.0.0/16"
+    dns_service_ip     = "100.${random_integer.kubevela_services_cidr.id}.0.10"
+    service_cidr       = "100.${random_integer.kubevela_services_cidr.id}.0.0/16"
     docker_bridge_cidr = "172.17.0.1/16"
     network_plugin     = "azure"
     load_balancer_sku  = "standard"
@@ -77,13 +73,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled   = true
-    secret_rotation_interval  = "5m"
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "5m"
   }
 
 }
 
-data "azurerm_public_ip" "aks" {
-  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.this.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
-  resource_group_name = azurerm_kubernetes_cluster.this.node_resource_group
+data "azurerm_public_ip" "kubevela" {
+  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.kubevela.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
+  resource_group_name = azurerm_kubernetes_cluster.kubevela.node_resource_group
 }
