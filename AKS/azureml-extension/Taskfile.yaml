@@ -2,6 +2,7 @@ version: '3'
 
 tasks:
   environment:
+    desc: Creates a complete Azure ML environment 
     cmds:
     - terraform init
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
@@ -11,6 +12,7 @@ tasks:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   creds:
+    desc: Gets AKS credential file
     cmds:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
     - kubelogin convert-kubeconfig -l azurecli
@@ -21,6 +23,7 @@ tasks:
         sh: terraform output -raw AKS_CLUSTER_NAME
 
   attach:
+    desc: Attaches an AKS cluster with the AzureML extension to an Azure ML Workspace
     cmds:
     - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSPACE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
     vars:
@@ -33,9 +36,8 @@ tasks:
       WORKSPACE: 
         sh: terraform output -raw ML_WORKSPACE_NAME
 
-
-
   clean:
+    desc: Destroys all Azure resources and cleans up Terraform
     cmds:
     - rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
     - az group delete -n {{.RG}} --yes || true
