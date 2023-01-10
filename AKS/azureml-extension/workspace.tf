@@ -1,5 +1,5 @@
 resource "azurerm_machine_learning_workspace" "this" {
-    name                            = "${local.resource_name}-workspace"
+    name                            = "${local.resource_name}-amlworkspace"
     location                        = azurerm_resource_group.this.location
     resource_group_name             = azurerm_resource_group.this.name
     application_insights_id         = azurerm_application_insights.this.id
@@ -14,7 +14,7 @@ resource "azurerm_machine_learning_workspace" "this" {
 }
 
 resource "azurerm_private_endpoint" "mlw" {
-  name                = "ple-${local.resource_name}-workspace"
+  name                = "ple-${local.resource_name}-amlworkspace"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   subnet_id           = azurerm_subnet.pe.id
