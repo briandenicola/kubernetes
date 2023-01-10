@@ -4,5 +4,5 @@ variable "azure_rbac_group_object_id" {
 }
 
 variable "production" {
-  default     = false
+  default = false
 }

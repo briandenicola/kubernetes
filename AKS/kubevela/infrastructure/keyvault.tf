@@ -1,23 +1,23 @@
 resource "azurerm_key_vault" "this" {
-  name                        = "${local.resource_name}-kv"
-  resource_group_name         = azurerm_resource_group.this.name
-  location                    = azurerm_resource_group.this.location
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
-  enable_rbac_authorization   = false
+  name                       = "${local.resource_name}-kv"
+  resource_group_name        = azurerm_resource_group.this.name
+  location                   = azurerm_resource_group.this.location
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+  enable_rbac_authorization  = false
 
   sku_name = "standard"
 
   network_acls {
-    bypass                    = "AzureServices"
-    default_action            = "Allow"
-    ip_rules                  = ["${chomp(data.http.myip.response_body)}/32"]
+    bypass         = "AzureServices"
+    default_action = "Allow"
+    ip_rules       = ["${chomp(data.http.myip.response_body)}/32"]
   }
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id 
+    object_id = data.azurerm_client_config.current.object_id
 
     certificate_permissions = [
       "Get",
@@ -92,7 +92,7 @@ resource "azurerm_key_vault_certificate" "this" {
 
       subject_alternative_names {
         dns_names = [
-            "api.${local.resource_name}.local"
+          "api.${local.resource_name}.local"
         ]
       }
 

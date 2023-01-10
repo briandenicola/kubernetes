@@ -1,15 +1,15 @@
 resource "azurerm_redis_cache" "this" {
-  count                             = var.production ? 1 : 0
-  name                              = local.redis_name
-  resource_group_name               = azurerm_resource_group.this.name
-  location                          = azurerm_resource_group.this.location
-  capacity                          = 0
-  family                            = "C"
-  sku_name                          = "Standard"
-  enable_non_ssl_port               = false
-  public_network_access_enabled     = true
-  minimum_tls_version               = "1.2"
-  redis_version                     = "6"
+  count                         = var.production ? 1 : 0
+  name                          = local.redis_name
+  resource_group_name           = azurerm_resource_group.this.name
+  location                      = azurerm_resource_group.this.location
+  capacity                      = 0
+  family                        = "C"
+  sku_name                      = "Standard"
+  enable_non_ssl_port           = false
+  public_network_access_enabled = true
+  minimum_tls_version           = "1.2"
+  redis_version                 = "6"
 
   redis_configuration {
   }
