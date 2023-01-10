@@ -46,9 +46,14 @@ resource "azurerm_subnet" "compute" {
   private_link_service_network_policies_enabled = false
 }
 
-
 resource "azurerm_network_security_group" "this" {
-  name                = "${local.resource_name}-nsg"
+  name                = "${local.resource_name}-default-nsg"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_network_security_group" "ml" {
+  name                = "${local.resource_name}-amlworkspace-nsg"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
 
@@ -251,5 +256,5 @@ resource "azurerm_subnet_network_security_group_association" "pe" {
 
 resource "azurerm_subnet_network_security_group_association" "compute" {
   subnet_id                 = azurerm_subnet.compute.id
-  network_security_group_id = azurerm_network_security_group.this.id
+  network_security_group_id = azurerm_network_security_group.ml.id
 }
