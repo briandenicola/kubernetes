@@ -25,6 +25,18 @@ tasks:
       AKS: 
         sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
 
+  deploy:
+    desc: Deploys same application to cluster 
+    cmds:
+    - task: port-forward
+    - argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-namespace default --server localhost:8080 --insecure --port-forward-namespace argocd --dest-server https://kubernetes.default.svc
+
+  port-forward:
+    desc: Display default password and forward Argo CD service to localhost
+    cmds:
+    - echo "»»»»💡Argo CD Admin password is $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)"
+    - kubectl port-forward svc/argo-cd-repo-argocd-server -n argocd 8080:443 & 
+
   down:
     desc: Destorys Azure infrastructure and cleans up terraform state files
     cmds:
