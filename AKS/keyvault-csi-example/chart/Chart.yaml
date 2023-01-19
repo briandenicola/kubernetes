@@ -1,0 +1,6 @@
+apiVersion: v2
+name: KeyVaultCSI-with-Workload-Identities
+description: A demo application that utlizies Azure Workload Identities for KeyVault CSI Driver 
+type: application
+version: 0.0.1
+appVersion: "1.0.0"
