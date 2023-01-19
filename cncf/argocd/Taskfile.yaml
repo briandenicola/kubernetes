@@ -1,0 +1,36 @@
+version: '3'
+
+env:
+  ACR_NAME: bjdcsa
+  ACR_RG: Core_ContainerRepo_RG
+  COMMIT_VERSION: workloadid-9cc7fb7f16eg
+  
+tasks:
+  up:
+    desc: Creates Azure infrastructure and deploys application code
+    cmds:
+    - terraform -chdir=./infrastructure init
+    - terraform -chdir=./infrastructure apply -auto-approve
+    - task: creds
+    - task: deploy
+
+  creds:
+    desc: Gets credential file for newly created AKS cluster
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
+
+  down:
+    desc: Destorys Azure infrastructure and cleans up terraform state files
+    cmds:
+    - cd infrastructure ;
+      rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
