@@ -7,12 +7,12 @@ This repository is a demostration on how to deploy a private Azure ML Workspace 
 ## Complete Environment
 ```bash
     az login --scope https://graph.microsoft.com/.default
-    task environment
+    task up
 ```
 
 ## Clean up
 ```bash
-    task cleanup
+    task down
 ```
 
 ## Notes

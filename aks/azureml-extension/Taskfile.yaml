@@ -1,7 +1,7 @@
 version: '3'
 
 tasks:
-  environment:
+  up:
     desc: Creates a complete Azure ML environment 
     cmds:
     - terraform init
@@ -36,7 +36,7 @@ tasks:
       WORKSPACE: 
         sh: terraform output -raw ML_WORKSPACE_NAME
 
-  clean:
+  down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
     - rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
