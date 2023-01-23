@@ -1,7 +1,6 @@
 resource "kubernetes_secret" "http-credentials" {
   depends_on = [
-    azapi_resource.flux_install,
-    azapi_resource.flux_config
+    azurerm_kubernetes_cluster.this
   ]
   metadata {
     name      = "http-credentials"
