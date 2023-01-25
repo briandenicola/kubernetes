@@ -29,6 +29,7 @@ spec:
     metadata:
       labels:
         app: util
+        azure.workload.identity/use: "true"
     spec:
       serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
       securityContext:
