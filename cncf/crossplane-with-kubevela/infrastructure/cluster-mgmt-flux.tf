@@ -1,11 +1,11 @@
-resource "azapi_resource" "flux_install" {
+resource "azapi_resource" "mgmt_cluster_flux_install" {
   depends_on = [
-    azurerm_kubernetes_cluster.kubevela
+    azurerm_kubernetes_cluster.controlplane
   ]
 
   type      = "Microsoft.KubernetesConfiguration/extensions@2022-03-01"
   name      = "flux"
-  parent_id = azurerm_kubernetes_cluster.kubevela.id
+  parent_id = azurerm_kubernetes_cluster.controlplane.id
 
   body = jsonencode({
     properties = {
@@ -15,14 +15,14 @@ resource "azapi_resource" "flux_install" {
   })
 }
 
-resource "azapi_resource" "flux_config" {
+resource "azapi_resource" "mgmt_cluster_flux_config" {
   depends_on = [
-    azapi_resource.flux_install
+    azapi_resource.mgmt_cluster_flux_install
   ]
 
   type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-03-01"
-  name      = "kubevela-config"
-  parent_id = azurerm_kubernetes_cluster.kubevela.id
+  name      = "cluster-config"
+  parent_id = azurerm_kubernetes_cluster.controlplane.id
 
   body = jsonencode({
     properties : {
@@ -40,7 +40,7 @@ resource "azapi_resource" "flux_config" {
       }
       kustomizations : {
         addons = {
-          path                   = local.cluster_path
+          path                   = local.mgmt_cluster_cfg_path
           dependsOn              = []
           timeoutInSeconds       = 600
           syncIntervalInSeconds  = 120
