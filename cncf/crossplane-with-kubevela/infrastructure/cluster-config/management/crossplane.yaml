@@ -31,14 +31,14 @@ spec:
         namespace: flux-system
       interval: 1m
 ---
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-terraform
-  namespace: crossplane-system
-spec:
-  package: xpkg.upbound.io/upbound/provider-terraform:0.4.0
----
+#apiVersion: pkg.crossplane.io/v1
+#kind: Provider
+#metadata:
+#  name: provider-terraform
+#  namespace: crossplane-system
+#spec:
+#  package: xpkg.upbound.io/upbound/provider-terraform:0.1.0
+#---
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
