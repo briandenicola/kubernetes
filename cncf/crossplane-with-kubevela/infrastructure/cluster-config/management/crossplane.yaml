@@ -31,6 +31,19 @@ spec:
         namespace: flux-system
       interval: 1m
 ---
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: xp-getting-started-with-azure
+  namespace: crossplane-system
+spec:
+  ignoreCrossplaneConstraints: false
+  package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
+  packagePullPolicy: IfNotPresent
+  revisionActivationPolicy: Automatic
+  revisionHistoryLimit: 0
+  skipDependencyResolution: false
+#---
 #apiVersion: pkg.crossplane.io/v1
 #kind: Provider
 #metadata:
@@ -39,11 +52,11 @@ spec:
 #spec:
 #  package: xpkg.upbound.io/upbound/provider-terraform:0.1.0
 #---
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-azure
-  namespace: crossplane-system
-spec:
-  package: xpkg.upbound.io/crossplane-contrib/provider-azure:v0.20.1
+#apiVersion: pkg.crossplane.io/v1
+#kind: Provider
+#metadata:
+#  name: provider-azure
+#  namespace: crossplane-system
+#spec:
+#  package: xpkg.upbound.io/crossplane-contrib/provider-azure:v0.20.0
   
