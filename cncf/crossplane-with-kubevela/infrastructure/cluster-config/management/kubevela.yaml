@@ -24,7 +24,7 @@ spec:
   chart:
     spec:
       chart: vela-core
-      version: '1.7.0'
+      version: '1.7.2'
       sourceRef:
         kind: HelmRepository
         name: kubevela
