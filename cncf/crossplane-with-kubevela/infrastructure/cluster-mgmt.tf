@@ -9,7 +9,7 @@ resource "azurerm_kubernetes_cluster" "controlplane" {
   resource_group_name               = azurerm_resource_group.this.name
   location                          = azurerm_resource_group.this.location
   node_resource_group               = "${local.resource_name}_controlplane_nodes_rg"
-  dns_prefix                        = local.aks_name
+  dns_prefix                        = local.controlplane_name
   kubernetes_version                = data.azurerm_kubernetes_service_versions.current.latest_version
   sku_tier                          = "Free"
   oidc_issuer_enabled               = true
