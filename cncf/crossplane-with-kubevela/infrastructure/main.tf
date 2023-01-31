@@ -51,7 +51,7 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "whatos"
+    Application = "tbd"
     Components  = "aks; kubevela; crossplane; oam"
     DeployedOn  = timestamp()
     Deployer    = data.azurerm_client_config.current.object_id
