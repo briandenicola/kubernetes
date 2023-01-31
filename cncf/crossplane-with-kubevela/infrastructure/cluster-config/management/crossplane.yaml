@@ -45,5 +45,5 @@ metadata:
   name: provider-azure
   namespace: crossplane-system
 spec:
-  package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
-  #package: xpkg.upbound.io/upbound/provider-azure:<version>
+  package: xpkg.upbound.io/crossplane-contrib/provider-azure:v0.20.1
+  
