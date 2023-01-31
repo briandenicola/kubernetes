@@ -39,8 +39,8 @@ locals {
   controlplane_name         = "${local.resource_name}-controlplane"
   aks_name                  = "${local.resource_name}-workload"
   flux_repository           = "https://github.com/briandenicola/kubernetes"
-  workload_cluster_cfg_path = "./aks/crossplane-with-kubevela/infrastructure/cluster-config/workload"
-  mgmt_cluster_cfg_path     = "./aks/crossplane-with-kubevela/infrastructure/cluster-config/management"
+  workload_cluster_cfg_path = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/workload"
+  mgmt_cluster_cfg_path     = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/management"
   vnet_cidr                 = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   controlplane_subnet_cidr  = cidrsubnet(local.vnet_cidr, 8, 2)
   workload_subnet_cidr      = cidrsubnet(local.vnet_cidr, 8, 3)
