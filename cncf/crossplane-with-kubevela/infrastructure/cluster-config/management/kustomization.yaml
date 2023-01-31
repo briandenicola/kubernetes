@@ -4,3 +4,4 @@ resources:
   - ../common
   - crossplane.yaml
   - kubevela.yaml
+  - azure-creds.yaml

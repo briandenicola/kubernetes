@@ -47,16 +47,3 @@ metadata:
 spec:
   package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
   #package: xpkg.upbound.io/upbound/provider-azure:<version>
----
-apiVersion: azure.crossplane.io/v1beta1
-kind: ProviderConfig
-metadata:
-  name: azure-creds
-  namespace: crossplane-system
-spec:
-  credentials:
-    source: Secret
-    secretRef:
-      namespace: crossplane-system
-      name: azure-creds
-      key: creds
