@@ -30,3 +30,32 @@ spec:
         name: crossplane-stable
         namespace: flux-system
       interval: 1m
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-terraform
+  namespace: crossplane-system
+spec:
+  package: xpkg.upbound.io/upbound/provider-terraform:0.4.0
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-azure
+  namespace: crossplane-system
+spec:
+  package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
+---
+apiVersion: azure.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: azure-creds
+  namespace: crossplane-system
+spec:
+  credentials:
+      source: Secret
+      secretRef:
+          namespace: crossplane-system
+          name: azure-creds
+          key: creds
