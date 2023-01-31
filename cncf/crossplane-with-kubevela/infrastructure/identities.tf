@@ -1,11 +1,11 @@
 resource "azurerm_user_assigned_identity" "controlplane_identity" {
-  name                = "${local.aks_name}-controlplane-cluster-identity"
+  name                = "${local.controlplane_name}-cluster-identity"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 }
 
 resource "azurerm_user_assigned_identity" "controlplane_kubelet_identity" {
-  name                = "${local.aks_name}-controlplane-kubelet-identity"
+  name                = "${local.controlplane_name}-kubelet-identity"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 }
