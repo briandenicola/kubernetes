@@ -42,6 +42,7 @@ locals {
   workload_cluster_cfg_path = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/workload"
   mgmt_cluster_cfg_path     = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/management"
   crossplane_cfg_path       = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/management/crossplane-configs"
+  crossplane_creds_path     = "./cncf/crossplane-with-kubevela/infrastructure/cluster-config/management/crossplane-creds"
   vnet_cidr                 = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   controlplane_subnet_cidr  = cidrsubnet(local.vnet_cidr, 8, 2)
   workload_subnet_cidr      = cidrsubnet(local.vnet_cidr, 8, 3)

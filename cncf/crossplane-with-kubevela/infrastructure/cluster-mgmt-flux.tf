@@ -57,6 +57,16 @@ resource "azapi_resource" "mgmt_cluster_flux_config" {
           retryIntervalInSeconds = 300
           prune                  = true
         }
+        crossplane-creds = {
+          path                   = local.crossplane_creds_path
+          dependsOn              = [
+            "crossplane-cfg"
+          ]
+          timeoutInSeconds       = 600
+          syncIntervalInSeconds  = 120
+          retryIntervalInSeconds = 300
+          prune                  = true
+        }
       }
     }
   })
