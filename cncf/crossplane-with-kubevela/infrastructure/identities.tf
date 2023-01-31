@@ -22,4 +22,17 @@ resource "azurerm_user_assigned_identity" "aks_kubelet_identity" {
   location            = azurerm_resource_group.this.location
 }
 
+resource "azuread_application" "crossplane" {
+  display_name = "${local.resource_name}-crossplane"
+  owners       = [data.azurerm_client_config.current.object_id]
+}
 
+resource "azuread_service_principal" "crossplane" {
+  application_id               = azuread_application.crossplane.application_id
+  app_role_assignment_required = false
+  owners                       = [data.azurerm_client_config.current.object_id]
+}
+
+resource "azuread_service_principal_password" "crossplane" {
+  service_principal_id = azuread_service_principal.crossplane.object_id
+}

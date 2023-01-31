@@ -31,3 +31,10 @@ resource "azurerm_role_assignment" "aks_role_assignment_msi" {
   principal_id                     = azurerm_user_assigned_identity.aks_identity.principal_id
   skip_service_principal_aad_check = true
 }
+
+resource "azurerm_role_assignment" "crossplane" {
+  scope                            = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
+  role_definition_name             = "Contributor"
+  principal_id                     = azuread_service_principal.crossplane.object_id
+  skip_service_principal_aad_check = true
+}

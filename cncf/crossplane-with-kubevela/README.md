@@ -22,28 +22,9 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
     task up
 ```
 
-# Sample Crossplane Setup / Commands
-```bash
-    source ./scripts/setup-env.sh
-    kubectl crossplane install configuration registry.upbound.io/xp/getting-started-with-azure:v1.10.2
-    az ad sp create-for-rbac --role Contributor --scopes /subscriptions/${AKS_SUBSCRIPTION_ID} > "creds.json"
-    kubectl create secret generic azure-creds -n crossplane-system --from-file=creds=./creds.json
-    cat << EOF | kubectl apply -f -
-        apiVersion: azure.crossplane.io/v1beta1
-        kind: ProviderConfig
-        metadata:
-            name: default
-        spec:
-            credentials:
-                source: Secret
-                secretRef:
-                    namespace: crossplane-system
-                    name: azure-creds
-                    key: creds
-    EOF 
-```
+# Sample Crossplane Commands
 
-# Sample KubeVela commands
+# Sample KubeVela Commands
 ```
     vela addon enable velaux
     vela addon enable fluxcd
