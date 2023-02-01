@@ -2,145 +2,107 @@ data "azurerm_kubernetes_service_versions" "current" {
   location = azurerm_resource_group.this.location
 }
 
-resource "azapi_resource" "aks" {
-  type            = "Microsoft.ContainerService/managedClusters@2022-08-03-preview"
-  name            = local.aks_name
-  location        = azurerm_resource_group.this.location
-  parent_id       = azurerm_resource_group.this.id
+resource "azurerm_kubernetes_cluster" "aks" {
+  lifecycle {
+    ignore_changes = [
+      default_node_pool.0.node_count,
+    ]
+  }
+
+  name                                = local.aks_name
+  resource_group_name                 = azurerm_resource_group.this.name
+  location                            = azurerm_resource_group.this.location
+  node_resource_group                 = "${local.resource_name}_k8s_nodes_rg"
+  private_cluster_enabled             = true
+  dns_prefix_private_cluster          = local.aks_name
+  private_dns_zone_id                 = azurerm_private_dns_zone.aks_private_zone.id
+  private_cluster_public_fqdn_enabled = false
+  kubernetes_version                  = data.azurerm_kubernetes_service_versions.current.latest_version
+  sku_tier                            = "Free"
+  oidc_issuer_enabled                 = true
+  workload_identity_enabled           = true
+  open_service_mesh_enabled           = false
+  azure_policy_enabled                = true
+  local_account_disabled              = true
+  role_based_access_control_enabled   = true
+  automatic_channel_upgrade           = "patch"
+  image_cleaner_enabled               = true
+  image_cleaner_interval_hours        = "48"
+
+  api_server_access_profile {
+    vnet_integration_enabled = true
+    subnet_id                = azurerm_subnet.api.id
+  }
+
+  azure_active_directory_role_based_access_control {
+    managed                = true
+    azure_rbac_enabled     = true
+    tenant_id              = data.azurerm_client_config.current.tenant_id
+    admin_group_object_ids = [var.azure_rbac_group_object_id]
+  }
 
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
   }
 
-  body = jsonencode({
-    properties = {
+  kubelet_identity {
+    client_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
+    object_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.aks_kubelet_identity.id
+  }
 
-      nodeResourceGroup     = "${local.resource_name}_k8s_nodes_rg"
-      kubernetesVersion     = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions)-2]
-      disableLocalAccounts  = true 
-      enableRBAC            = true
-      fqdnSubdomain         = local.aks_name
+  default_node_pool {
+    name                = "default"
+    node_count          = 3
+    vm_size             = "Standard_DS2_v2"
+    os_disk_size_gb     = 30
+    vnet_subnet_id      = azurerm_subnet.nodes.id
+    os_sku              = "CBLMariner"
+    os_disk_type        = "Ephemeral"
+    type                = "VirtualMachineScaleSets"
+    enable_auto_scaling = true
+    min_count           = 3
+    max_count           = 9
+    max_pods            = 40
 
-      aadProfile = {
-        adminGroupObjectIDs = [var.azure_rbac_group_object_id]
-        enableAzureRBAC     = true
-        managed             = true
-        tenantID            = data.azurerm_client_config.current.tenant_id
-      }
-
-      addonProfiles = {
-        azurepolicy = {
-          enabled = true
-        }
-      
-        omsagent = {
-          enabled = true
-          config = {
-            logAnalyticsWorkspaceResourceID = azurerm_log_analytics_workspace.this.id
-          }
-        }
-      }
-
-      agentPoolProfiles = [
-        {
-          name                = "default"
-          enableAutoScaling   = true
-          vmSize              = "Standard_DS2_v2"
-          vnetSubnetID        = azurerm_subnet.nodes.id
-          count               = 3
-          minCount            = 3
-          maxCount            = 9
-          maxPods             = 40
-          osDiskSizeGB        = 30
-          osSKU               = "CBLMariner"
-          type                = "VirtualMachineScaleSets"
-          osDiskType          = "Ephemeral"
-          osType              = "Linux"
-          mode                = "System"
-          upgradeSettings     = {
-            maxSurge          = "33%"
-          }
-        }
-      ]
-
-      apiServerAccessProfile = {
-        disableRunCommand               = true
-        enableVnetIntegration           = true
-        enablePrivateCluster            = true
-        enablePrivateClusterPublicFQDN  = false
-        privateDNSZone                  = azurerm_private_dns_zone.aks_private_zone.id
-        subnetId                        = azurerm_subnet.api.id
-      }
-
-      autoUpgradeProfile = {
-        upgradeChannel      = "patch"
-      }
-
-      azureMonitorProfile = {
-        metrics = {
-          enabled           = true
-        }
-      }
-
-      identityProfile = {
-          kubeletidentity = {
-            resourceId  = azurerm_user_assigned_identity.aks_kubelet_identity.id
-            clientId    = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
-            objectId    = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
-          }
-      }
-
-      networkProfile = {
-        dnsServiceIP          = "100.${random_integer.services_cidr.id}.0.10"
-        dockerBridgeCidr      = "172.17.0.1/16"
-        loadBalancerSku       = "standard"
-        networkPlugin         = "azure"
-        networkPluginMode     = "overlay"
-        //podCidr               = "100.${random_integer.pod_cidr.id}.0.0/16" 
-        //Only got Istio functional with 192.168 for POD CIDR range...
-        podCidr               = "192.168.0.0/16"
-        serviceCidr           = "100.${random_integer.services_cidr.id}.0.0/16"
-      }
-
-      oidcIssuerProfile = {
-        enabled               = true
-      }
-
-      securityProfile = {
-        defender = {
-          logAnalyticsWorkspaceResourceId = azurerm_log_analytics_workspace.this.id
-          securityMonitoring = {
-            enabled           = true
-          }
-        }
-        imageCleaner = {
-          enabled             = true
-          intervalHours       = 48
-        }
-        workloadIdentity = {
-          enabled             = true
-        }
-      }
-
-      workloadAutoScalerProfile = {
-        keda = {
-          enabled             = true
-        }
-      }
-
-      storageProfile = {
-        blobCSIDriver = {
-          enabled             = true
-        }
-        diskCSIDriver = {
-          enabled             = true
-          version             = "v2"
-        }
-        fileCSIDriver = {
-          enabled             = true
-        }
-      }      
+    upgrade_settings {
+      max_surge         = "33%"
     }
-  })
+  }
+
+  network_profile {
+    dns_service_ip      = "100.${random_integer.services_cidr.id}.0.10"
+    service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
+    docker_bridge_cidr  = "172.17.0.1/16"
+    network_plugin      = "azure"
+    network_plugin_mode = "Overlay"
+    load_balancer_sku   = "standard"
+    pod_cidr            = "192.168.0.0/16"
+  }
+
+  oms_agent {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+  }
+
+  microsoft_defender {
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+  }
+
+  key_vault_secrets_provider {
+    secret_rotation_enabled  = true
+    secret_rotation_interval = "5m"
+  }
+
+  workload_autoscaler_profile {
+    keda_enabled        = true
+  }
+
+  storage_profile {
+    blob_driver_enabled = true
+    disk_driver_enabled = true
+    disk_driver_version = "v2"
+    file_driver_enabled = true
+  }
+
 }

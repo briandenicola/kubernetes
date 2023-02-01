@@ -1,19 +1,11 @@
-data "azurerm_kubernetes_cluster" "this" {
-  depends_on = [
-    azapi_resource.aks
-  ]
-  name                = local.aks_name
-  resource_group_name = azurerm_resource_group.this.name
-}
-
 resource "azapi_resource" "flux_install" {
   depends_on = [
-    azapi_resource.aks
+    azurerm_kubernetes_cluster.aks
   ]
 
   type      = "Microsoft.KubernetesConfiguration/extensions@2021-09-01"
   name      = "flux"
-  parent_id = data.azurerm_kubernetes_cluster.this.id
+  parent_id = azurerm_kubernetes_cluster.aks.id
 
   body = jsonencode({
     properties = {
@@ -30,7 +22,7 @@ resource "azapi_resource" "flux_config" {
 
   type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-03-01"
   name      = "aks-flux-extension"
-  parent_id = data.azurerm_kubernetes_cluster.this.id
+  parent_id = azurerm_kubernetes_cluster.aks.id
 
   body = jsonencode({
     properties : {

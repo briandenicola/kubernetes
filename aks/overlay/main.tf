@@ -35,7 +35,7 @@ resource "random_integer" "services_cidr" {
 }
 
 locals {
-  location              = "northcentralus"
+  location              = var.region
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name              = "${local.resource_name}-aks"
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
