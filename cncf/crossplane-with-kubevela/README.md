@@ -48,6 +48,8 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
 * http://kubevela.net/docs/developers/references/devex/faq
 * https://github.com/kubevela/terraform-controller
 * https://docs.crossplane.io/v1.10/cloud-providers/azure/azure-provider/
+* https://gist.github.com/vfarcic/6d40ff0847a41f1d1607f4df73cd5bad
+* https://github.com/vfarcic/devops-toolkit-crossplane
 
 # Backlog
 - [ ] Learn Crossplane
