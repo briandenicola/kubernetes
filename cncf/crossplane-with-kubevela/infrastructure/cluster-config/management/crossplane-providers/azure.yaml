@@ -1,23 +1,32 @@
----
-apiVersion: pkg.crossplane.io/v1
-kind: Configuration
-metadata:
-  name: xp-getting-started-with-azure
-  namespace: crossplane-system
-spec:
-  ignoreCrossplaneConstraints: false
-  package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
-  packagePullPolicy: IfNotPresent
-  revisionActivationPolicy: Automatic
-  revisionHistoryLimit: 0
-  skipDependencyResolution: false
----
-
-
+#---
 #apiVersion: pkg.crossplane.io/v1
-#kind: Provider
+#kind: Configuration
 #metadata:
-#  name: provider-azure
+#  name: xp-getting-started-with-azure
 #  namespace: crossplane-system
 #spec:
-#  package: xpkg.upbound.io/crossplane-contrib/provider-azure:v0.20.0
+#  ignoreCrossplaneConstraints: false
+#  package: registry.upbound.io/xp/getting-started-with-azure:v1.10.2
+#  packagePullPolicy: IfNotPresent
+#  revisionActivationPolicy: Automatic
+#  revisionHistoryLimit: 0
+#  skipDependencyResolution: false
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: azure-config
+  labels:
+    app: crossplane-provider-azure
+spec:
+  image: crossplane/provider-azure:v0.1.0
+  args: ["-d"]
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: crossplane-provider-azure
+spec:
+  package: crossplane/provider-azure:v0.1.0
+  controllerConfigRef:
+    name: azure-config
