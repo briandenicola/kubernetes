@@ -14,11 +14,17 @@ resource "kubernetes_secret" "crossplane-azure-secret" {
   }
 
   data = {
-    "creds.json" = jsonencode({
-        "appId": azuread_application.crossplane.application_id
-        "displayName": azuread_service_principal.crossplane.display_name
-        "password": azuread_service_principal_password.crossplane.value
-        "tenant": azuread_service_principal.crossplane.application_tenant_id
+    "creds" = jsonencode({
+      "clientId": azuread_application.crossplane.application_id
+      "clientSecret": azuread_service_principal_password.crossplane.value
+      "tenantId": data.azurerm_client_config.current.tenant_id
+      "subscriptionId": data.azurerm_client_config.current.subscription_id 
+      "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+      "resourceManagerEndpointUrl": "https://management.azure.com/",
+      "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+      "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+      "galleryEndpointUrl": "https://gallery.azure.com/",
+      "managementEndpointUrl": "https://management.core.windows.net/"
     })
   }
 
