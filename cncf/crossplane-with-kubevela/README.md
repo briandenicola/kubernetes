@@ -1,8 +1,6 @@
-# ⚠️EXPERIMENTAL ⚠️
-
 # Overview
 
-This repository is a demonstration of using Crossplane with KubeVela in Azure on AKS.
+This repository is a demonstration of using Crossplane/Upbound with KubeVela in Azure on AKS. It is currently a work in progress
 
 * [Crossplane](https://www.crossplane.io/) is an open source Kubernetes add-on that transforms your cluster into a universal control plane. Crossplane enables platform teams to assemble infrastructure from multiple vendors, and expose higher level self-service APIs for application teams to consume, without having to write any code.
 * [KubeVela](https://kubevela.io/docs/) is a modern software delivery control plane that strides to make deploying and operating applications across today's multi-cloud environments easier, faster and more reliable.  
@@ -34,9 +32,12 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
 
 # Sample KubeVela Commands
 ```
+    vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
     vela addon enable velaux
     vela addon enable vela-workflow
     vela addon enable terraform-azure
+    vela addon enable crossplane
+
     vela port-forward addon-velaux -n vela-system
 
     vela cluster list
