@@ -12,5 +12,7 @@ kind: ResourceGroup
 metadata:
   name: test-official-providers
 spec:
+  providerConfigRef:
+    name: azure
   forProvider:
     location: SouthCentral US
