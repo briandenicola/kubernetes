@@ -1,8 +1,16 @@
-apiVersion: azure.crossplane.io/v1alpha3
+#apiVersion: azure.crossplane.io/v1alpha3
+#kind: ResourceGroup
+#metadata:
+#  name: example-rg
+#spec:
+#  location: West US 2
+#  providerConfigRef:
+#    name: azure
+---
+apiVersion: azure.upbound.io/v1beta1
 kind: ResourceGroup
 metadata:
-  name: example-rg
+  name: test-official-providers
 spec:
-  location: West US 2
-  providerConfigRef:
-    name: azure
+  forProvider:
+    location: SouthCentral US

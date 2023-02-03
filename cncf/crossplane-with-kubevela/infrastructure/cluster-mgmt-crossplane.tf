@@ -3,14 +3,14 @@ resource "kubernetes_namespace" "controlplane-system" {
     azurerm_kubernetes_cluster.controlplane
   ]
   metadata {
-    name = "crossplane-system"
+    name = "upbound-system"
   }
 }
 
 resource "kubernetes_secret" "crossplane-azure-secret" {
   metadata {
     name      = "azure-creds"
-    namespace = "crossplane-system"
+    namespace = "upbound-system"
   }
 
   data = {
