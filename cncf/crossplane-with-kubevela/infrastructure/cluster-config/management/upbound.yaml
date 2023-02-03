@@ -56,7 +56,7 @@ spec:
   chart:
     spec:
       chart: upbound
-      version: '1.10.2-up.1'
+      version: 'v1.10.2-up.1'
       sourceRef:
         kind: HelmRepository
         name: upbound-stable
