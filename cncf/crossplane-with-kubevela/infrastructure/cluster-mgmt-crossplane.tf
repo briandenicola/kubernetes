@@ -8,6 +8,10 @@ resource "kubernetes_namespace" "controlplane-system" {
 }
 
 resource "kubernetes_secret" "crossplane-azure-secret" {
+  depends_on = [
+    kubernetes_namespace.controlplane-system
+  ]
+
   metadata {
     name      = "azure-creds"
     namespace = "upbound-system"
