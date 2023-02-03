@@ -55,7 +55,7 @@ spec:
   targetNamespace: upbound-system
   chart:
     spec:
-      chart: upbound
+      chart: universal-crossplane
       version: 'v1.10.2-up.1'
       sourceRef:
         kind: HelmRepository
