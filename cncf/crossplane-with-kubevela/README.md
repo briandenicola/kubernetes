@@ -14,7 +14,7 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
 * [Terraform](https://github.com/briandenicola/tooling/blob/main/terraform.sh)
 * [Task](https://github.com/briandenicola/tooling/blob/main/task.sh)
 * [Vela Cli](https://github.com/briandenicola/tooling/blob/main/kubevela.sh)
-* [Crossplane Cli](https://github.com/briandenicola/tooling/blob/main/crossplane.sh)
+* [Upbound Cli](https://github.com/briandenicola/tooling/blob/main/upbound.sh)
 
 # Quicksteps
 ```bash
@@ -23,14 +23,22 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
 ```
 
 # Sample Crossplane Commands
+```bash
+    #Create a virtual network and AKS cluster named aks02
+    kubectl apply -f ./manifests/crossplane/akscluster.yaml
+
+    kubectl get kubernetescluster
+    NAME    READY   SYNCED   EXTERNAL-NAME   AGE
+    aks02   True    True     aks02           13m
+```
 
 # Sample KubeVela Commands
 ```
     vela addon enable velaux
-    vela addon enable fluxcd
-    vela addon enable flink-kubernetes-operator   
-    vela addon enable cert-manager
-    vela addon enable ingrexx-nginx
+    vela addon enable vela-workflow
+    vela addon enable terraform-azure
+    vela port-forward addon-velaux -n vela-system
+
     vela cluster list
     
     vela env init prod --namespace prod
@@ -38,10 +46,7 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
     vela status first-vela-app
     vela port-forward first-vela-app 8000:8000
     vela workflow resume first-vela-app
-    vela port-forward addon-velaux -n vela-system
-
-    vela show helm
-
+ 
 ```
 
 # Additional References
@@ -54,5 +59,5 @@ This repository is a demonstration of using Crossplane with KubeVela in Azure on
 * https://marketplace.upbound.io/providers/crossplane-contrib/provider-azure/v0.20.1/resources/compute.azure.crossplane.io/AKSCluster/v1alpha3
 
 # Backlog
-- [ ] Learn Crossplane
+- [X] Learn Crossplane
 - [ ] Learn KubeVela
