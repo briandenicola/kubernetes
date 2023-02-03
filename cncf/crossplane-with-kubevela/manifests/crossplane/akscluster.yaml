@@ -5,7 +5,7 @@ metadata:
 spec:
   location: SouthCentral US
   providerConfigRef:
-    name: azure-creds
+    name: azure
 ---
 apiVersion: network.azure.crossplane.io/v1alpha3
 kind: VirtualNetwork
@@ -20,7 +20,7 @@ spec:
       addressPrefixes:
         - 10.183.0.0/16
   providerConfigRef:
-    name: azure-creds
+    name: azure
 ---
 apiVersion: network.azure.crossplane.io/v1alpha3
 kind: Subnet
@@ -34,7 +34,7 @@ spec:
   properties:
     addressPrefix: 10.183.2.0/24
   providerConfigRef:
-    name: azure-creds
+    name: azure
 ---
 apiVersion: network.azure.crossplane.io/v1alpha3
 kind: Subnet
@@ -48,7 +48,7 @@ spec:
   properties:
     addressPrefix: 10.183.1.0/24
   providerConfigRef:
-    name: azure-creds
+    name: azure
 ---
 apiVersion: compute.azure.crossplane.io/v1alpha3
 kind: AKSCluster
@@ -66,7 +66,7 @@ spec:
   dnsNamePrefix: aks01
   disableRBAC: false
   providerConfigRef:
-    name: azure-creds
+    name: azure
   writeConnectionSecretToRef:
     namespace: crossplane-system
     name: aks01
