@@ -1,0 +1,72 @@
+apiVersion: azure.crossplane.io/v1alpha3
+kind: ResourceGroup
+metadata:
+  name: crossplane-demo-rg
+spec:
+  location: SouthCentral US
+  providerConfigRef:
+    name: azure-creds
+---
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: VirtualNetwork
+metadata:
+  name: crossplane-vnet
+spec:
+  resourceGroupNameRef:
+    name: crossplane-demo-rg
+  location: SouthCentral US
+  properties:
+    addressSpace:
+      addressPrefixes:
+        - 10.183.0.0/16
+  providerConfigRef:
+    name: azure-creds
+---
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: Subnet
+metadata:
+  name: kubernetes
+spec:
+  resourceGroupNameRef:
+    name: crossplane-demo-rg
+  virtualNetworkNameRef:
+    name: crossplane-vnet
+  properties:
+    addressPrefix: 10.183.2.0/24
+  providerConfigRef:
+    name: azure-creds
+---
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: Subnet
+metadata:
+  name: private-endpoints
+spec:
+  resourceGroupNameRef:
+    name: crossplane-demo-rg
+  virtualNetworkNameRef:
+    name: crossplane-vnet
+  properties:
+    addressPrefix: 10.183.1.0/24
+  providerConfigRef:
+    name: azure-creds
+---
+apiVersion: compute.azure.crossplane.io/v1alpha3
+kind: AKSCluster
+metadata:
+  name: aks01
+spec:
+  resourceGroupNameRef:
+    name: crossplane-demo-rg
+  vnetSubnetIDRef:
+    name: kubernetes
+  location: SouthCentral US
+  version: "1.24.6"
+  nodeCount: 1
+  nodeVMSize: Standard_B2s
+  dnsNamePrefix: aks01
+  disableRBAC: false
+  providerConfigRef:
+    name: azure-creds
+  writeConnectionSecretToRef:
+    namespace: crossplane-system
+    name: aks01
