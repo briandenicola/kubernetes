@@ -20,7 +20,7 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
     task up
 ```
 
-# Sample Crossplane Commands
+# Sample AKS Cluster Deployed via Crossplane
 ```bash
     #Create a virtual network and AKS cluster named aks02
     kubectl apply -f ./manifests/crossplane/akscluster.yaml
@@ -30,8 +30,8 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
     aks02   True    True     aks02           13m
 ```
 
-# Sample KubeVela Commands
-```
+# Sample KubeVela Commands and Configurations
+``` bash
     # Add Addons to Deployment
     vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
     vela addon enable vela-workflow
@@ -46,13 +46,12 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
     vela cluster join <your kubeconfig path>
     vela cluster list
 
-    # Deploy environment 
+    # Deploy applications 
     vela env init prod --namespace prod
     vela up -f https://kubevela.net/example/applications/first-app.yaml
     vela status first-vela-app
     vela port-forward first-vela-app 8000:8000
     vela workflow resume first-vela-app
- 
 ```
 
 # Additional References
@@ -70,6 +69,7 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 ## Other
 * https://gist.github.com/vfarcic/6d40ff0847a41f1d1607f4df73cd5bad
 * https://open-cluster-management.io/
+* https://cuelang.org/
 
 # Backlog
 - [X] Learn Crossplane
