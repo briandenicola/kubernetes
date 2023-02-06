@@ -32,16 +32,21 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 
 # Sample KubeVela Commands
 ```
+    # Add Addons to Deployment
     vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
-    vela addon enable velaux
     vela addon enable vela-workflow
     vela addon enable terraform-azure
     vela addon enable crossplane
 
+    # UI 
+    vela addon enable velaux
     vela port-forward addon-velaux -n vela-system
 
+    # Add additional clusters
+    vela cluster join <your kubeconfig path>
     vela cluster list
-    
+
+    # Deploy environment 
     vela env init prod --namespace prod
     vela up -f https://kubevela.net/example/applications/first-app.yaml
     vela status first-vela-app
@@ -51,14 +56,21 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 ```
 
 # Additional References
-* http://kubevela.net/docs/developers/references/devex/faq
-* https://github.com/kubevela/terraform-controller
+## Crossplane
+* https://docs.crossplane.io/v1.11/concepts/terminology/
 * https://docs.crossplane.io/v1.10/cloud-providers/azure/azure-provider/
-* https://gist.github.com/vfarcic/6d40ff0847a41f1d1607f4df73cd5bad
-* https://github.com/vfarcic/devops-toolkit-crossplane
+* https://docs.crossplane.io/v1.11/concepts/composition/
 * https://github.com/PacktPublishing/End-to-End-Automation-with-Kubernetes-and-Crossplane/tree/main/Chapter09/Hand-on-examples
 * https://marketplace.upbound.io/providers/crossplane-contrib/provider-azure/v0.20.1/resources/compute.azure.crossplane.io/AKSCluster/v1alpha3
+* https://github.com/vfarcic/devops-toolkit-crossplane
+## Kubevela
+* https://kubevela.io/docs/platform-engineers/traits/customize-trait/
+* https://kubevela.io/docs/getting-started/core-concept
+* https://github.com/kubevela/terraform-controller
+## Other
+* https://gist.github.com/vfarcic/6d40ff0847a41f1d1607f4df73cd5bad
+* https://open-cluster-management.io/
 
 # Backlog
 - [X] Learn Crossplane
-- [ ] Learn KubeVela
+- [X] Learn KubeVela
