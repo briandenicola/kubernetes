@@ -1,0 +1,12 @@
+apiVersion: containers.bjdazure.tech/v1alpha1
+kind: AKSCluster
+metadata:
+  namespace: default
+  name: my-aks
+spec:
+  compositionRef:
+    name: xcluster-dev
+  parameters:
+    location: southcentralus
+    name: my-aks
+    nodeCount: 2

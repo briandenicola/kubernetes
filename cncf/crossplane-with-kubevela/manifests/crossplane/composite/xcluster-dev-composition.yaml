@@ -1,0 +1,182 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xcluster-dev
+  labels:
+    crossplane.io/xrd: xaksclusters.containers.bjdazure.tech
+    provider: azure
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: containers.bjdazure.tech/v1alpha1
+    kind: XAKSCluster
+  resources:
+  - name: azure-resource-group
+    base:
+      apiVersion: azure.upbound.io/v1beta1
+      kind: ResourceGroup
+      metadata:
+        annotations:
+          meta.upbound.io/api-id: upbound/v1beta1
+        labels:
+          meta.upbound.io/rg-name: crossplane-demo-rg
+          meta.upbound.io/type: azure-resource-group
+        name: crossplane-demo-rg
+      spec:
+        providerConfigRef:
+          name: azure
+    patches:
+    - fromFieldPath: spec.parameters.location
+      toFieldPath: spec.forProvider.location
+      transforms:
+        - type: map
+          map:
+            southcentralus: South Central US
+            northcentralus: North Central US
+  - name: azure-vnet
+    base:
+      apiVersion: network.azure.upbound.io/v1beta1
+      kind: VirtualNetwork
+      metadata:
+        annotations:
+          meta.upbound.io/api-id: upbound/v1beta1
+        labels:
+          meta.upbound.io/rg-name: crossplane-demo-rg
+          meta.upbound.io/vnet-name: crossplane-vnet
+          meta.upbound.io/type: azure-virtual-network
+        name: crossplane-vnet
+      spec:
+        providerConfigRef:
+          name: azure
+        forProvider:
+          addressSpace:
+            - 10.183.0.0/16
+          resourceGroupNameSelector:
+            matchLabels:
+              meta.upbound.io/rg-name: crossplane-demo-rg
+              meta.upbound.io/type: azure-resource-group
+    patches:
+    - fromFieldPath: spec.parameters.location
+      toFieldPath: spec.forProvider.location
+      transforms:
+        - type: map
+          map:
+            southcentralus: South Central US
+            northcentralus: North Central US
+  - name: azure-subnet-private-endpoints
+    base:
+      apiVersion: network.azure.upbound.io/v1beta1
+      kind: Subnet
+      metadata:
+        name: private-endpoints
+        labels:
+          meta.upbound.io/type: azure-virtual-subnet
+      spec:
+        providerConfigRef:
+          name: azure
+        forProvider:
+          addressPrefixes:
+            - 10.183.1.0/24
+          resourceGroupNameSelector:
+            matchLabels:
+              meta.upbound.io/rg-name: crossplane-demo-rg
+              meta.upbound.io/type: azure-resource-group
+          virtualNetworkNameSelector:
+            matchLabels:
+              meta.upbound.io/vnet-name: crossplane-vnet
+              meta.upbound.io/type: azure-virtual-network
+  - name: azure-subnet-kubernetes
+    base:
+      apiVersion: network.azure.upbound.io/v1beta1
+      kind: Subnet
+      metadata:
+        name: kubernetes
+        labels:
+          meta.upbound.io/type: azure-virtual-subnet
+          meta.upbound.io/subnet-for: akscluster
+      spec:
+        providerConfigRef:
+          name: azure
+        forProvider:
+          addressPrefixes:
+            - 10.183.2.0/24
+          resourceGroupNameSelector:
+            matchLabels:
+              meta.upbound.io/rg-name: crossplane-demo-rg
+              meta.upbound.io/type: azure-resource-group
+          virtualNetworkNameSelector:
+            matchLabels:
+              meta.upbound.io/vnet-name: crossplane-vnet
+              meta.upbound.io/type: azure-virtual-network
+  - name: azure-aks-cluster
+    base:
+      apiVersion: containerservice.azure.upbound.io/v1beta1
+      kind: KubernetesCluster
+      metadata:
+        name: aks
+        labels:
+          meta.upbound.io/rg-name: crossplane-demo-rg
+          meta.upbound.io/type: azure-kubernetes-service
+      spec:
+        providerConfigRef:
+          name: azure
+        forProvider:
+          azurePolicyEnabled: true
+          oidcIssuerEnabled: true
+          workloadIdentityEnabled: true
+          localAccountDisabled: true
+          azureActiveDirectoryRoleBasedAccessControl:
+          - azureRbacEnabled: true 
+            managed: true
+          defaultNodePool:
+            - name: default
+              vnetSubnetIdSelector:
+                matchLabels:
+                  meta.upbound.io/type: azure-virtual-subnet
+                  meta.upbound.io/subnet-for: akscluster
+              vmSize: Standard_B4ms
+              nodeCount: 1
+              maxPods: 40
+              osDiskSizeGb: 30
+              osSku: CBLMariner
+          kubernetesVersion: "1.24.6"
+          networkProfile:
+          - dnsServiceIp: "100.99.0.10"
+            dockerBridgeCidr: 172.17.0.1/16
+            loadBalancerSku: standard
+            networkPlugin: azure
+            serviceCidr: 100.99.0.0/16
+          identity:
+            - type: SystemAssigned
+          resourceGroupNameSelector:
+            matchLabels:
+              meta.upbound.io/rg-name: crossplane-demo-rg
+              meta.upbound.io/type: azure-resource-group
+        writeConnectionSecretToRef:
+          namespace: upbound-system
+    patches:
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.parameters.location
+      toFieldPath: spec.forProvider.location
+      transforms:
+        - type: map
+          map:
+            southcentralus: South Central US
+            northcentralus: North Central US
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.parameters.name
+      toFieldPath: spec.forProvider.dnsPrefix
+    - type: FromCompositeFieldPath
+      fromFieldPath: spec.parameters.name
+      toFieldPath: spec.writeConnectionSecretToRef.name
+    - type: CombineFromComposite
+      combine:
+        variables:
+        - fromFieldPath: spec.parameters.name
+        - fromFieldPath: spec.parameters.location
+        strategy: string
+        string:
+          fmt: "%s_%s_nodes_rg"
+      toFieldPath: spec.forProvider.nodeResourceGroup
+      policy:
+        fromFieldPath: Required

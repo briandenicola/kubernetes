@@ -22,13 +22,42 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 
 # Sample AKS Cluster Deployed via Crossplane
 ```bash
+    #Create a simple resource group
+    kubectl apply -f ./manifests/crossplane/resourcegroup.yaml
+
     #Create a virtual network and AKS cluster named aks02
     kubectl apply -f ./manifests/crossplane/akscluster.yaml
 
     kubectl get kubernetescluster
     NAME    READY   SYNCED   EXTERNAL-NAME   AGE
     aks02   True    True     aks02           13m
+
+    #Make a Claim against a Composite Resource (XR)
+    kubectl apply -f ./manifests/crossplane/composite/
+    kubectl get compositeresourcedefinition.apiextensions.crossplane.io xclusters.aks.bjdazure.tech
+    NAME                                     ESTABLISHED   OFFERED   AGE
+    xaksclusters.containers.bjdazure.tech    True          True      62s
+
+    kubectl get compositions
+    NAME           AGE
+    xcluster-dev   6m50s
+
+    kubectl apply -f ./manifests/crossplane/aksclaim.yaml
+
+    kubectl get get aksclusters.containers.bjdazure.tech/aks03
+    NAME    SYNCED   READY   CONNECTION-SECRET   AGE
+    aks03   True     False                       32s
+
+    ...
+    kubectl get get aksclusters.containers.bjdazure.tech/aks03
+    NAME    SYNCED   READY   CONNECTION-SECRET   AGE
+    aks03   True     True                        32s
+
+    kubectl get  resourcegroup,virtualnetwork,subnet,kubernetes
+    NAME    READY   SYNCED   EXTERNAL-NAME   AGE
+    aks03   True    True     aks03           13m
 ```
+
 
 # Sample KubeVela Commands and Configurations
 ``` bash
@@ -60,7 +89,7 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 * https://docs.crossplane.io/v1.10/cloud-providers/azure/azure-provider/
 * https://docs.crossplane.io/v1.11/concepts/composition/
 * https://github.com/PacktPublishing/End-to-End-Automation-with-Kubernetes-and-Crossplane/tree/main/Chapter09/Hand-on-examples
-* https://marketplace.upbound.io/providers/crossplane-contrib/provider-azure/v0.20.1/resources/compute.azure.crossplane.io/AKSCluster/v1alpha3
+* https://marketplace.upbound.io/providers/upbound/provider-azure/
 * https://github.com/vfarcic/devops-toolkit-crossplane
 ## Kubevela
 * https://kubevela.io/docs/platform-engineers/traits/customize-trait/
@@ -74,3 +103,4 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 # Backlog
 - [X] Learn Crossplane
 - [X] Learn KubeVela
+- [ ] Fix resource group and virtual network reference to utilizes patches
