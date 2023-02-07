@@ -63,9 +63,11 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 ``` bash
     # Add Addons to Deployment
     vela addon registry add experimental --type=helm --endpoint=https://addons.kubevela.net/experimental/
+    vela addon enable fluxcd
+    vela addon enable helm
     vela addon enable vela-workflow
-    vela addon enable terraform-azure
-    vela addon enable crossplane
+    #vela addon enable terraform-azure
+    #vela addon enable crossplane
 
     # UI 
     vela addon enable velaux

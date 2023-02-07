@@ -1,0 +1,18 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: label-selector-topology
+  namespace: app
+spec:
+  components:
+    - name: nginx-label-selector
+      type: webservice
+      properties:
+        image: nginx
+  policies:
+    - name: topology-azure-clusters
+      type: topology
+      properties:
+        clusterLabelSelector:
+          region: southcentralus
+          #clusters: ["aks-1", "aks-2"]

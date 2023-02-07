@@ -1,0 +1,17 @@
+apiVersion: core.oam.dev/v1beta1
+kind: Application
+metadata:
+  name: a-team
+spec:
+  components:
+  - name: aks
+    type: kubernetes
+    properties:
+      name: a-team
+      nodeCount: 3
+    traits:
+    - type: aksnodepool
+      properties:
+        name: a-team
+        vnetName: #tbd
+        subnetName: #tbd
