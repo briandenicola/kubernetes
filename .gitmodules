@@ -1,3 +1,9 @@
 [submodule "cncf/knative/aks-flux-extension"]
 	path = cncf/knative/aks-flux-extension
 	url = https://github.com/briandenicola/aks-flux-extension
+[submodule "cncf/knative/--name"]
+	path = cncf/knative/--name
+	url = https://github.com/briandenicola/aks-flux-extension
+[submodule "cncf/knative/cluster"]
+	path = cncf/knative/cluster
+	url = https://github.com/briandenicola/aks-flux-extension
