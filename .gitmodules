@@ -1,0 +1,3 @@
+[submodule "cncf/knative/aks-flux-extension"]
+	path = cncf/knative/aks-flux-extension
+	url = https://github.com/briandenicola/aks-flux-extension
