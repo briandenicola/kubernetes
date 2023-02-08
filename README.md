@@ -1,3 +1,3 @@
 # Kubernetes
 
-Some simple configuration files to learn Kubernetes with...
+A set pf configurations and demostrations for Kubernetes with a focus on Azure AKS and CNCF projects
