@@ -13,9 +13,8 @@ sed -i s/devicecode/azurecli/g fleet
 
 ## Cluster - South Central
 ```bash
-terraform -chdir=./infrastructure workspace new sc
-terraform -chdir=./infrastructure init
-terraform -chdir=./infrastructure apply -auto-approve -var "region=southcentralus"
+cd infrastructure
+task up -- southcentralus
 source ./scripts/setup-env.sh
 az aks get-credentials -g ${RG} -n ${AKS} --overwrite-existing --file=aks-southcentral
 sed -i s/devicecode/azurecli/g aks-southcentral
@@ -24,9 +23,8 @@ az fleet member create --fleet-name fleet01 --member-cluster-id ${AKS_CLUSTER_ID
 
 ## Cluster - West US 3
 ```bash
-terraform -chdir=./infrastructure workspace new west
-terraform -chdir=./infrastructure init
-terraform -chdir=./infrastructure apply -auto-approve -var "region=westus3"
+cd infrastructure
+task up -- westus3
 source ./scripts/setup-env.sh
 az aks get-credentials -g ${RG} -n ${AKS} --overwrite-existing --file=aks-west
 sed -i s/devicecode/azurecli/g aks-west
