@@ -4,6 +4,8 @@ tasks:
   up:
     desc: Creates a complete Azure ML environment 
     cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
     - terraform init
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     - task: creds
