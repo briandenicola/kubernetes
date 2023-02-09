@@ -60,10 +60,10 @@ KUBECONFIG=aks-west kubectl get pods -o wide
 ## Application Load Balancing
 The host name returned by the command below should bounce between the two clusters
 ```bash 
-    export IP_ADDR_FROM_MULTI_CLUSTER_SERVICE=$(KUBECONFIG=aks-southcentral kubectl get multiclusterservice httpbin --namespace app -o json | jq '.status.loadBalancer.ingress[0].ip' -r)
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
-    curl -s http://${IP_ADDR_FROM_MULTI_CLUSTER_SERVICE}:8080/api/os | jq .Host
+    export MCS_IP=$(KUBECONFIG=aks-southcentral kubectl -n app get multiclusterservice httpbin  -o json | jq '.status.loadBalancer.ingress[0].ip' -r)
+    curl -s http://${MCS_IP}:8080/api/os | jq .Host
+    curl -s http://${MCS_IP}:8080/api/os | jq .Host
+    curl -s http://${MCS_IP}:8080/api/os | jq .Host
+    curl -s http://${MCS_IP}:8080/api/os | jq .Host
+    curl -s http://${MCS_IP}:8080/api/os | jq .Host
 ```
