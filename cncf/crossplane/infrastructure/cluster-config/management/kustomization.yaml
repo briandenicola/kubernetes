@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ../common
   - upbound.yaml
-  - kubevela.yaml
+  #- kubevela.yaml
