@@ -5,7 +5,7 @@ This is a quick demo of AKS Fleet Manager load balancing requests acrsos the two
 
 # Fleet Manager 
 ```bash
-az group --name fleet_rg --location southcentralus
+az group create --name fleet_rg --location southcentralus
 az fleet create --name fleet01 --resource-group fleet_rg
 az fleet get-credentials --name fleet01 --resource-group fleet_rg --file fleet
 sed -i s/devicecode/azurecli/g fleet
