@@ -101,8 +101,10 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 * https://gist.github.com/vfarcic/6d40ff0847a41f1d1607f4df73cd5bad
 * https://open-cluster-management.io/
 * https://cuelang.org/
+* https://www.youtube.com/watch?v=Ii-lpLuzPxw
 
 # Backlog
 - [X] Learn Crossplane
 - [X] Learn KubeVela
-- [ ] Fix resource group and virtual network reference to utilizes patches
+- [ ] Learn Backstage
+- [ ] Update automation to deploy app from Backstage to newly created cluster through Crossplane and Flux
