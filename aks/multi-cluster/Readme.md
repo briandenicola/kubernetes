@@ -51,10 +51,10 @@ KUBECONFIG=fleet kubectl get clusterresourceplacements
 KUBECONFIG=aks-southcentral kubectl get multiclusterservice httpbin --namespace app
 KUBECONFIG=aks-southcentral kubectl get serviceexport httpbin --namespace app
 KUBECONFIG=aks-southcentral kubectl get serviceimport httpbin --namespace app
-KUBECONFIG=aks-southcentral kubectl get pods -o wide
+KUBECONFIG=aks-southcentral kubectl get pods -o wide --namespace app
 
 KUBECONFIG=aks-west kubectl get serviceexport httpbin --namespace app
-KUBECONFIG=aks-west kubectl get pods -o wide
+KUBECONFIG=aks-west kubectl get pods -o wide --namespace app
 ```
 
 ## Application Load Balancing
