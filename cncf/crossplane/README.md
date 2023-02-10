@@ -6,6 +6,10 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 * [KubeVela](https://kubevela.io/docs/) is a modern software delivery control plane that strides to make deploying and operating applications across today's multi-cloud environments easier, faster and more reliable.  
 * [Crossplane with Kubevela](https://kubevela.io/docs/platform-engineers/crossplane/)
 
+# Design
+![overview](./assets/backstage-crossplane.drawio.png)
+---
+
 # Prerequisites 
 * Azure Subscription
 * [Azure Cli](https://github.com/briandenicola/tooling/blob/main/azure-cli.sh)
