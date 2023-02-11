@@ -7,7 +7,7 @@ This repository is a demonstration of using Crossplane/Upbound with KubeVela in 
 * [Crossplane with Kubevela](https://kubevela.io/docs/platform-engineers/crossplane/)
 
 # Design
-![overview](./assets/backstage-crossplane.drawio.png)
+![overview](./assets/backstage-crossplane.png)
 ---
 
 # Prerequisites 
