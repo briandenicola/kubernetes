@@ -26,7 +26,7 @@ tasks:
         sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
 
   deploy:
-    desc: Deploys same application to cluster 
+    desc: Deploys sample guessbook application to cluster 
     cmds:
     - task: port-forward
     - argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-namespace default --server localhost:8080 --insecure --port-forward-namespace argocd --dest-server https://kubernetes.default.svc
