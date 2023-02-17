@@ -52,10 +52,9 @@ resource "azurerm_key_vault" "this" {
 }
 
 resource "azurerm_key_vault_secret" "redis" {
-  count        = var.production ? 1 : 0
   name         = "redis"
   key_vault_id = azurerm_key_vault.this.id
-  value        = azurerm_redis_cache.this[count.index].primary_connection_string
+  value        = azurerm_redis_cache.this.primary_connection_string
 }
 
 resource "azurerm_key_vault_certificate" "this" {

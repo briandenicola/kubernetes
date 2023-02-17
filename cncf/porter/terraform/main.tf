@@ -18,27 +18,11 @@ resource "random_password" "password" {
   special = true
 }
 
-resource "random_integer" "vnet_cidr" {
-  min = 10
-  max = 250
-}
-
-resource "random_integer" "services_cidr" {
-  min = 64
-  max = 127
-}
-
 locals {
-  location        = "southcentralus"
+  location        = var.region
   resource_name   = "${random_pet.this.id}-${random_id.this.dec}"
-  aks_name        = "${local.resource_name}-aks"
-  acr_name        = "${random_pet.this.id}${random_id.this.dec}acr"
   redis_name      = "${random_pet.this.id}${random_id.this.dec}-cache"
   workload_id     = "${local.resource_name}-sa-identity"
-  cluster_path    = "./AKS/porter/cluster-config"
-  flux_repository = "https://github.com/briandenicola/kubernetes"
-  vnet_cidr       = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
-  subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
 }
 
 resource "azurerm_resource_group" "this" {

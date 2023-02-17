@@ -1,5 +1,4 @@
 resource "azurerm_redis_cache" "this" {
-  count                             = var.production ? 1 : 0
   name                              = local.redis_name
   resource_group_name               = azurerm_resource_group.this.name
   location                          = azurerm_resource_group.this.location
@@ -16,18 +15,16 @@ resource "azurerm_redis_cache" "this" {
 }
 
 resource "azurerm_redis_firewall_rule" "codespaces" {
-  count               = var.production ? 1 : 0
   name                = "codespaces"
-  redis_cache_name    = azurerm_redis_cache.this[count.index].name
+  redis_cache_name    = azurerm_redis_cache.this.name
   resource_group_name = azurerm_resource_group.this.name
   start_ip            = chomp(data.http.myip.response_body)
   end_ip              = chomp(data.http.myip.response_body)
 }
 
 resource "azurerm_redis_firewall_rule" "aks" {
-  count               = var.production ? 1 : 0
   name                = "aks"
-  redis_cache_name    = azurerm_redis_cache.this[count.index].name
+  redis_cache_name    = azurerm_redis_cache.name
   resource_group_name = azurerm_resource_group.this.name
   start_ip            = data.azurerm_public_ip.aks.ip_address
   end_ip              = data.azurerm_public_ip.aks.ip_address

@@ -1,8 +1,7 @@
-variable "azure_rbac_group_object_id" {
-  description = "GUID of the AKS admin Group"
-  default     = "15390134-7115-49f3-8375-da9f6f608dce"
+variable oidc_issuer_url {
+  description = "The OIDC Issuer Url of the AKS cluster"
 }
 
-variable "production" {
-  default     = false
+variable region {
+  description = "The Region to deploy Azure resources"
 }

@@ -1,23 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: whatos
-  namespace: whatos
+  name: simple
+  namespace: simple
   labels:
-    app: whatos
+    app: simple
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: whatos
+      app: simple
   template:
     metadata:
       labels:
-        app: whatos
+        app: simple
     spec:
       serviceAccountName: default-sa-identity 
       containers:
-        - name: whatos
-          image: whatos:latest
+        - name: simple
+          image: bjd145/simple:f299c36fa3d19428f15c359e6437aca13fdcb335
           ports:
-            - containerPort: 8081
+            - containerPort: 5501
+          securityContext:
+            allowPrivilegeEscalation: false  
+            runAsUser: 1000       
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "2"
+            requests:
+              memory: "64Mi"
+              cpu: "0.25"
