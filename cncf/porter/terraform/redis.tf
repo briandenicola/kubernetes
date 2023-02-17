@@ -22,10 +22,10 @@ resource "azurerm_redis_firewall_rule" "codespaces" {
   end_ip              = chomp(data.http.myip.response_body)
 }
 
-resource "azurerm_redis_firewall_rule" "aks" {
-  name                = "aks"
-  redis_cache_name    = azurerm_redis_cache.name
-  resource_group_name = azurerm_resource_group.this.name
-  start_ip            = data.azurerm_public_ip.aks.ip_address
-  end_ip              = data.azurerm_public_ip.aks.ip_address
-}
+#resource "azurerm_redis_firewall_rule" "aks" {
+#  name                = "aks"
+#  redis_cache_name    = azurerm_redis_cache.this.name
+#  resource_group_name = azurerm_resource_group.this.name
+#  start_ip            = data.azurerm_public_ip.aks.ip_address
+#  end_ip              = data.azurerm_public_ip.aks.ip_address
+#}
