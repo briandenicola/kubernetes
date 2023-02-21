@@ -28,7 +28,7 @@ resource "azurerm_application_insights" "this" {
 }
 
 locals {
-  container_insights_tables = ["ContainerLog", "ContainerLogV2"]
+  container_insights_tables = ["ContainerLogV2"]
 }
 
 resource "azapi_resource_action" "this" {
