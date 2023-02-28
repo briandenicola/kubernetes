@@ -9,7 +9,7 @@ This repository is a demonstration of CLoud Native Build Packs as a replacement 
 * [Bill of Materials](https://paketo.io/docs/concepts/sbom/)
 
 # Install Cli
-* [pack] cli (https://github.com/briandenicola/tooling/blob/main/pack.sh)
+* [pack](https://github.com/briandenicola/tooling/blob/main/pack.sh) cli 
 
 # Quicksteps
 ```bash
