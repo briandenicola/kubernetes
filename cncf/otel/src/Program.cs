@@ -17,7 +17,7 @@ builder.Services.AddOpenTelemetry().WithTracing(tracerProviderBuilder =>
         .AddConsoleExporter()
         .AddZipkinExporter(o =>
         {
-            o.Endpoint = new Uri("otel-collector.otel-system.svc.cluster.local:9411");
+            o.Endpoint = new Uri("http://otel-collector.otel-system.svc.cluster.local:9411/api/v2/spans");
         })
         .AddOtlpExporter(opt =>
         {
