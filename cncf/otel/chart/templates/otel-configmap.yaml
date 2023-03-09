@@ -28,3 +28,11 @@ data:
             traces:
                 receivers: [zipkin]
                 exporters: [azuremonitor,logging]
+            metrics:
+                receivers: [otlp]
+                processors: [memory_limiter, batch]
+                exporters: [azuremonitor,logging]
+            logs:
+                receivers: [otlp]
+                processors: [memory_limiter, batch]
+                exporters: [azuremonitor,logging]
