@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: otel-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: otel-system
+  labels:
+    app: opentelemetry
+    component: otel-collector
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: opentelemetry
+  template:
+    metadata:
+      labels:
+        app: opentelemetry
+        component: otel-collector
+    spec:
+      containers:
+      - name: otel-collector
+        #image: otel/opentelemetry-collector:latest
+        #command:
+        #- "/otelcol"
+        #- "--config=/config/otel-collector-config.yaml"
+        image: otel/opentelemetry-collector-contrib-dev:latest #Required for Azure Monitor integration
+        command:
+        - "/otelcontribcol"
+        - "--config=/config/otel-collector-config.yaml"
+        resources:
+          limits:
+            cpu: 1
+            memory: 2Gi
+          requests:
+            cpu: 200m
+            memory: 400Mi
+        ports:
+          - containerPort: 9411
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 13133
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 13133
+        volumeMounts:
+        - name: config
+          mountPath: "/config"
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: otel-collector-config
+          items:
+          - key: "otel-collector-config.yaml"
+            path: "otel-collector-config.yaml"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+  namespace: otel-system
+  labels:
+    component: otel-collector
+spec:
+  ports:
+  - name: zipkin
+    port: 9411
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    component: otel-collector

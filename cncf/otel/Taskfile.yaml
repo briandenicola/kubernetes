@@ -1,0 +1,56 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Builds the environment
+    cmds:
+    - terraform -chdir=./infrastructure workspace new {{.REGION}} || true
+    - terraform -chdir=./infrastructure workspace select {{.REGION}}
+    - terraform -chdir=./infrastructure init
+    - terraform -chdir=./infrastructure apply -auto-approve -var "region={{.REGION}}"
+    - task: creds
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+  
+  build:
+    desc: Builds the code and pushes to Azure Container Register
+    cmds:
+    - docker build -t {{.ACR_NAME}}.azurecr.io/otel-demo:{{.COMMIT_VERSION}} src/
+    - az acr login -n {{.ACR_NAME}}
+    - docker push {{.ACR_NAME}}.azurecr.io/otel-demo:{{.COMMIT_VERSION}}
+    vars:
+      ACR_NAME: '{{default "bjdcsa" .CLI_ARGS}}'
+      COMMIT_VERSION:
+        sh: git rev-parse HEAD | cut -c 1-8
+
+  deploy:
+    desc: Deploys code via Helm 
+    cmds:
+    - helm upgrade -i oteldemo --set ACR_NAME="{{.ACR_NAME}}" --set COMMIT_VERSION={{.COMMIT_VERSION}} --set APP_INSIGHTS_KEY="{{.APP_INSIGHTS_KEY}}" ./chart
+    vars:
+      ACR_NAME: '{{default "bjdcsa" .CLI_ARGS}}'
+      COMMIT_VERSION:
+        sh: git rev-parse HEAD | cut -c 1-8
+      APP_INSIGHTS_KEY: 
+        sh: terraform -chdir=./infrastructure output -raw AI_INSTRUMENTATION_KEY
+
+  creds:
+    desc: Grab AKS credentials 
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up terraform
+    cmds:
+    - cd infrastructure ;
+      rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP

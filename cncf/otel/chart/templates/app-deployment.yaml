@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-demo
+  namespace: {{ .Values.NAMESPACE }}
+spec:
+  selector:
+    matchLabels:
+      app: otel-demo
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: otel-demo
+    spec:
+      containers:
+      - name: otel-demo
+        image: {{ print .Values.ACR_NAME ".azurecr.io/otel-demo:" .Values.COMMIT_VERSION }} 
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-demo-svc
+  namespace: {{ .Values.NAMESPACE }}
+  labels:
+    version: "1.0"
+spec:
+  selector:
+    app: otel-demo
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer 
