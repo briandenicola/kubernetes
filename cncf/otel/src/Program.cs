@@ -14,6 +14,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenTelemetry().WithTracing(tracerProviderBuilder =>
 {
     tracerProviderBuilder
+        .AddConsoleExporter()
+        .AddZipkinExporter(o =>
+        {
+            o.Endpoint = new Uri("otel-collector.otel-system.svc.cluster.local:9411");
+        })
         .AddOtlpExporter(opt =>
         {
             opt.Protocol = OtlpExportProtocol.HttpProtobuf;
