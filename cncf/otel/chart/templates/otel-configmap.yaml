@@ -15,8 +15,19 @@ data:
         zpages:
             endpoint: :55679
     exporters:
+        #otlp:
+        #   endpoint: "jaeger:4317"
+        #   tls:
+        #       insecure: true
+        
         logging:
             loglevel: debug
+        #   prometheus:
+        #       endpoint: "otelcol:9464"
+        #       resource_to_telemetry_conversion:
+        #           enabled: true
+        #       enable_open_metrics: true
+
         azuremonitor:
             endpoint: "https://dc.services.visualstudio.com/v2/track"
             instrumentation_key: {{ .Values.APP_INSIGHTS_KEY }}
