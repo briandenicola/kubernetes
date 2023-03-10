@@ -13,8 +13,9 @@ This repository is a demonstration of CLoud Native Build Packs as a replacement 
 
 # Quicksteps
 ```bash
-pack build dotnet-sample --path ./src --builder paketo-buildpacks/dotnet-core
-docker run -d -p 8080:8080 -e PORT=8080 dotnet-sample
+pack config default-builder paketobuildpacks/builder:base
+pack build bjdcsa.azurecr.io/dotnet-sample:v1.0 --path ./src --buildpack paketo-buildpacks/dotnet-core
+docker run -d -p 8080:8080 -e PORT=8080 bjdcsa.azurecr.io/dotnet-sample:v1.0
 curl http://localhost:8080/weatherforecast -vvv
 ```
 
