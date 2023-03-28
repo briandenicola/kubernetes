@@ -1,5 +1,5 @@
 
-#Data Collection Endpoint
+# Data Collection Endpoint
 resource "azurerm_monitor_data_collection_endpoint" "this" {
   name                          = "${local.resource_name}-datacollection-ep"
   resource_group_name           = azurerm_resource_group.this.name
@@ -8,7 +8,7 @@ resource "azurerm_monitor_data_collection_endpoint" "this" {
   public_network_access_enabled = true
 }
 
-#Data Collection Rules
+# Data Collection Rules
 resource "azurerm_resource_group_template_deployment" "data_collection_rules" {
   depends_on = [
     azapi_resource.azure_monitor_workspace,
@@ -23,7 +23,7 @@ resource "azurerm_resource_group_template_deployment" "data_collection_rules" {
       value = "${local.resource_name}-datacollection-rules"
     },
     "dataCollectionEndpointResourceId" = {
-      value =  azurerm_monitor_data_collection_endpoint.this.id
+      value = azurerm_monitor_data_collection_endpoint.this.id
     },
     "azureMonitorWorkspaceResourceId" = {
       value = local.am_workspace_id
