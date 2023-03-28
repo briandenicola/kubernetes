@@ -170,6 +170,59 @@ data "azurerm_monitor_data_collection_rule" "data_collection_rules" {
 }
 
 #Data Collection Rules Association
+resource "azurerm_resource_group_template_deployment" "data_collection_rules_association" {
+  depends_on = [
+    azurerm_resource_group_template_deployment.data_collection_rules
+  ]
+
+  name                = "data_collection_rules_association-deployment"
+  resource_group_name = azurerm_resource_group.this.name
+  deployment_mode     = "Incremental"
+  parameters_content = jsonencode({
+    "dataCollectionEpRulesName" = {
+      value = "${local.resource_name}-datacollection-rules"
+    },
+    "clusterName" = {
+      value = local.aks_name
+    },
+    "dataCollectionRulesAssociationName" = {
+      value = "${local.resource_name}-datacollection-rules-association"
+    }
+  })
+  template_content = <<TEMPLATE
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "dataCollectionEpRulesName": {
+            "type": "string"
+        },
+        "clusterName": {
+            "type": "string"
+        },
+        "dataCollectionRulesAssociationName": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+          "type": "Microsoft.ContainerService/managedClusters/providers/dataCollectionRuleAssociations",
+          "name": "[concat(parameters('clusterName'),'/microsoft.insights/', parameters('dataCollectionRulesAssociationName'))]",
+          "apiVersion": "2021-09-01-preview",
+          "location": "[resourceGroup().location]",
+          "properties": {
+            "dataCollectionRuleId": "[resourceId('Microsoft.Insights/dataCollectionRules', parameters('dataCollectionEpRulesName'))]"
+          }
+        }
+    ],
+    "outputs": {
+    }
+}
+TEMPLATE
+}
+
+/*
 resource "azapi_resource" "azurerm_monitor_data_collection_rule_association" {
   type = "Microsoft.Insights/dataCollectionRuleAssociations@2021-09-01-preview"
   name = "${local.resource_name}-datacollection-rules-association"
@@ -179,7 +232,8 @@ resource "azapi_resource" "azurerm_monitor_data_collection_rule_association" {
       dataCollectionRuleId = data.azurerm_monitor_data_collection_rule.data_collection_rules.id
     }
   })
-}
+}*/
+
 
 #Data Collection Prometheus Rule Group
 resource "azapi_resource" "prometheus_rule_groups" {
