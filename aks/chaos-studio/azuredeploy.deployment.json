@@ -1,0 +1,109 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "resourceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the resource being enabled."
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh')]",
+      "location": "[parameters('location')]",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/NetworkChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/PodChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/StressChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/IOChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/TimeChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/KernelChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/DNSChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.ContainerService/managedClusters/providers/targets/capabilities",
+      "apiVersion": "2021-09-15-preview",
+      "name": "[concat(parameters('resourceName'), '/', 'Microsoft.Chaos/Microsoft-AzureKubernetesServiceChaosMesh/HTTPChaos-2.1')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat(resourceId('Microsoft.ContainerService/managedClusters', parameters('resourceName')), '/', 'providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+      ],
+      "properties": {}
+    }
+  ],
+  "outputs": {}
+}
