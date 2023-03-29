@@ -1,0 +1,110 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "experimentName": {
+            "defaultValue": "experiment002",
+            "type": "String"
+        },
+        "aksClusterName": {
+            "type": "String"
+        }
+    },
+    "variables": {
+        "aksResourceId": "[resourceId('Microsoft.ContainerService/managedClusters',parameters('aksClusterName'))]",
+        "serviceChaosMeshResourceId": "[concat( variables('aksResourceId'),'/providers/Microsoft.Chaos/targets/Microsoft-AzureKubernetesServiceChaosMesh')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Chaos/experiments",
+            "apiVersion": "2022-10-01-preview",
+            "name": "[parameters('experimentName')]",
+            "location": "centralus",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "selectors": [
+                    {
+                        "type": "List",
+                        "id": "4f2b278f-8ec5-4839-b046-2606971c2f3f",
+                        "targets": [
+                            {
+                                "id": "[variables('serviceChaosMeshResourceId')]",
+                                "type": "ChaosTarget"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "List",
+                        "id": "3514fcce-5875-4fcc-9e1c-2b56cec4a400",
+                        "targets": [
+                            {
+                                "id": "[variables('serviceChaosMeshResourceId')]",
+                                "type": "ChaosTarget"
+                            }
+                        ]
+                    }
+                ],
+                "steps": [
+                    {
+                        "name": "Pod Chaos...",
+                        "branches": [
+                            {
+                                "name": "Ruining My Default Namespace",
+                                "actions": [
+                                    {
+                                        "type": "delay",
+                                        "duration": "PT2M",
+                                        "name": "urn:csci:microsoft:chaosStudio:TimedDelay/1.0"
+                                    },
+                                    {
+                                        "type": "continuous",
+                                        "selectorId": "4f2b278f-8ec5-4839-b046-2606971c2f3f",
+                                        "duration": "PT5M",
+                                        "parameters": [
+                                            {
+                                                "key": "jsonSpec",
+                                                "value": "{\n  \"action\": \"random\",\n  \"mode\": \"all\",\n  \"patterns\": [\n   \t\"azure.com\",\n    \"chaos-mesh.*\",\n    \"github.com\"\n  ],\n  \"selector\": {\n    \"namespaces\": [\"default\"]\n  }\n}"
+                                            }
+                                        ],
+                                        "name": "urn:csci:microsoft:azureKubernetesServiceChaosMesh:DNSChaos/2.1"
+                                    },
+                                    {
+                                        "type": "delay",
+                                        "duration": "PT2M",
+                                        "name": "urn:csci:microsoft:chaosStudio:TimedDelay/1.0"
+                                    },
+                                    {
+                                        "type": "continuous",
+                                        "selectorId": "3514fcce-5875-4fcc-9e1c-2b56cec4a400",
+                                        "duration": "PT5M",
+                                        "parameters": [
+                                            {
+                                                "key": "jsonSpec",
+                                                "value": "{\n    \"mode\": \"all\",\n    \"selector\": {\n        \"labelSelectors\": {\n            \"app\": \"httpbin\"\n        }\n    },\n    \"target\": \"Request\",\n    \"port\": 80,\n    \"method\": \"GET\",\n    \"path\": \"/anything\",\n    \"abort\": true,\n    \"duration\": \"5m\",\n    \"scheduler\": {\n        \"cron\": \"@every 10m\"\n    }\n}"
+                                            }
+                                        ],
+                                        "name": "urn:csci:microsoft:azureKubernetesServiceChaosMesh:HTTPChaos/2.1"
+                                    },
+                                    {
+                                        "type": "continuous",
+                                        "selectorId": "35f0f478-a339-40b0-97e1-33168775be20",
+                                        "duration": "PT10M",
+                                        "parameters": [
+                                            {
+                                                "key": "jsonSpec",
+                                                "value": "{\"action\":\"pod-failure\",\"mode\":\"all\",\"duration\":\"600s\",\"selector\":{\"namespaces\":[\"default\"]}}"
+                                            }
+                                        ],
+                                        "name": "urn:csci:microsoft:azureKubernetesServiceChaosMesh:podChaos/2.1"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
