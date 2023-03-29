@@ -1,5 +1,11 @@
 version: '3'
 
+includes:
+  infra:
+    taskfile: ../basic/Taskfile.yaml
+    dir: ../basic
+    optional: true
+
 tasks:
   deploy:
     desc: Creates a complete Azure Chaos Experiment
