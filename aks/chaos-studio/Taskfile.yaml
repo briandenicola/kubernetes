@@ -1,0 +1,50 @@
+version: '3'
+
+tasks:
+  deploy:
+    desc: Creates a complete Azure Chaos Experiment
+    cmds:
+    - task: creds
+    - task: extensions
+    - task: targets
+    - task: experiment
+
+  creds:
+    desc: Gets AKS credential file
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - sed -i s/devicecode/azurecli/g ~/.kube/config
+    vars:
+      AKS: '{{.CLI_ARGS}}'
+      RG: 
+        sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
+  
+  extensions:
+    desc: Installing Chaos Mesh via Helm
+    cmds:
+    - helm repo add chaos-mesh https://charts.chaos-mesh.org
+    - helm repo update
+    - kubectl create ns chaos-testing
+    - helm install chaos-mesh chaos-mesh/chaos-mesh --namespace=chaos-testing --set chaosDaemon.runtime=containerd --set chaosDaemon.socketPath=/run/containerd/containerd.sock
+    vars:
+      AKS: '{{.CLI_ARGS}}'
+      RG: 
+        sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
+
+  targets:
+    desc: On boards Chaos Extension onto AKS Cluster Resource
+    cmds:
+    - az group deployment create -n ChaosExperiment -g {{.RG}} --template-file ./azuredeploy.deployment.json --parameters resourceName={{.AKS}} 
+    vars:
+      AKS: '{{.CLI_ARGS}}'
+      RG: 
+        sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
+
+  experiment:
+    desc: Creates an Chaos Engineering
+    cmds:
+    - az group deployment create -n ChaosExperiment -g {{.RG}} --template-file ./azurechaos.experiment.json --parameters aksClusterName={{.AKS}}
+    vars:
+      AKS: '{{.CLI_ARGS}}'
+      RG: 
+        sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
