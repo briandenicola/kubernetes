@@ -44,6 +44,16 @@
                                 "type": "ChaosTarget"
                             }
                         ]
+                    },
+                    {
+                        "type": "List",
+                        "id": "35f0f478-a339-40b0-97e1-33168775be20",
+                        "targets": [
+                            {
+                                "id": "[variables('serviceChaosMeshResourceId')]",
+                                "type": "ChaosTarget"
+                            }
+                        ]
                     }
                 ],
                 "steps": [
