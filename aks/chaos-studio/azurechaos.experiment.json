@@ -104,7 +104,7 @@
                                         "parameters": [
                                             {
                                                 "key": "jsonSpec",
-                                                "value": "{\"action\":\"pod-failure\",\"mode\":\"all\",\"duration\":\"600s\",\"selector\":{\"namespaces\":[\"default\"]}}"
+                                                "value": "{\"action\":\"delay\",\"mode\":\"one\",\"selector\":{\"namespaces\":[\"default\"],\"labelSelectors\":{\"app\":\"httpbin\"}},\"delay\":{\"latency\":\"10ms\",\"correlation\":\"100\",\"jitter\":\"0ms\"}}"
                                             }
                                         ],
                                         "name": "urn:csci:microsoft:azureKubernetesServiceChaosMesh:networkChaos/2.1"
