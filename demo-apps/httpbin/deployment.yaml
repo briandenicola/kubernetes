@@ -17,11 +17,14 @@ spec:
     metadata:
       labels:
         app: httpbin
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/"
     spec:
       containers:
       - name: httpbin
-        image: bjdcsa.azurecr.io/httpdemo:latest
-        #image: bjd145/httpbin:1087
+        image: bjd145/httpbin:1087
         imagePullPolicy: Always
         securityContext:
           allowPrivilegeEscalation: false  
