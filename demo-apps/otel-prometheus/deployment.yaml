@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-promtheus-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otel-demo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: otel-demo
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "80"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: otel-demo
+        image: bjd145/otel-promtheus-demo:5210a5788
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+          requests:
+            memory: "64Mi"
+            cpu: "0.25"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-demo-svc
+  annotations:
+   service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: otel-demo
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
