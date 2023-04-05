@@ -58,7 +58,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   network_profile {
     dns_service_ip     = "100.${random_integer.services_cidr.id}.0.10"
     service_cidr       = "100.${random_integer.services_cidr.id}.0.0/16"
-    //docker_bridge_cidr = "172.17.0.1/16"
     network_plugin     = "azure"
     network_policy     = "calico"
     load_balancer_sku  = "standard"
@@ -81,7 +80,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   
   oms_agent {
     log_analytics_workspace_id      = azurerm_log_analytics_workspace.this.id
-    msi_auth_for_monitoring_enabled = true
+    //msi_auth_for_monitoring_enabled = true
   }
 
   microsoft_defender {
