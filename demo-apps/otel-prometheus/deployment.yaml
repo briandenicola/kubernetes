@@ -19,15 +19,15 @@ spec:
         app: otel-demo
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "80"
+        prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
     spec:
       containers:
       - name: otel-demo
-        image: bjd145/otel-promtheus-demo:5210a5788
+        image: bjd145/otel-promtheus-demo:2a82b185
         imagePullPolicy: Always
         ports:
-        - containerPort: 80
+        - containerPort: 5000
         resources:
           limits:
             memory: "512Mi"
@@ -47,5 +47,5 @@ spec:
     app: otel-demo
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 5000
   type: LoadBalancer
