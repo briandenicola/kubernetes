@@ -1,7 +1,7 @@
 #Data Collection Prometheus Node Rule Group
 resource "azapi_resource" "prometheus_node_recording_rule_group" {
   depends_on = [
-    azurerm_resource_group_template_deployment.data_collection_rules
+    azurerm_resource_group_template_deployment.azuremonitor_datacollection
   ]
 
   type      = "Microsoft.AlertsManagement/prometheusRuleGroups@2021-07-22-preview"
@@ -68,7 +68,7 @@ resource "azapi_resource" "prometheus_node_recording_rule_group" {
 #Data Collection Prometheus Kubernetes Rule Group
 resource "azapi_resource" "prometheus_kubernetes_rule_groups" {
   depends_on = [
-    azurerm_resource_group_template_deployment.data_collection_rules
+    azurerm_resource_group_template_deployment.azuremonitor_datacollection
   ]
 
   type      = "Microsoft.AlertsManagement/prometheusRuleGroups@2021-07-22-preview"

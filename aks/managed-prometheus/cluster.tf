@@ -80,7 +80,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   
   oms_agent {
     log_analytics_workspace_id      = azurerm_log_analytics_workspace.this.id
-    //msi_auth_for_monitoring_enabled = true
+    msi_auth_for_monitoring_enabled = true
   }
 
   microsoft_defender {

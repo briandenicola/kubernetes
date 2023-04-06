@@ -9,18 +9,18 @@ resource "azurerm_monitor_data_collection_endpoint" "this" {
 }
 
 # Data Collection Rules
-resource "azurerm_resource_group_template_deployment" "data_collection_rules" {
+resource "azurerm_resource_group_template_deployment" "azuremonitor_datacollection" {
   depends_on = [
     azapi_resource.azure_monitor_workspace,
     azurerm_monitor_data_collection_endpoint.this
   ]
 
-  name                = "data_collection_rules-deployment"
+  name                = "azuremonitor_datacollection-deployment"
   resource_group_name = azurerm_resource_group.this.name
   deployment_mode     = "Incremental"
   parameters_content = jsonencode({
     "dataCollectionEpRulesName" = {
-      value = "${local.resource_name}-datacollection-rules"
+      value = "${local.resource_name}-azuremonitor-datacollection"
     },
     "dataCollectionEndpointResourceId" = {
       value = azurerm_monitor_data_collection_endpoint.this.id
@@ -84,7 +84,7 @@ TEMPLATE
 #Data Collection Rules Association
 resource "azurerm_resource_group_template_deployment" "data_collection_rules_association" {
   depends_on = [
-    azurerm_resource_group_template_deployment.data_collection_rules
+    azurerm_resource_group_template_deployment.azuremonitor_datacollection
   ]
 
   name                = "data_collection_rules_association-deployment"
@@ -92,13 +92,13 @@ resource "azurerm_resource_group_template_deployment" "data_collection_rules_ass
   deployment_mode     = "Incremental"
   parameters_content = jsonencode({
     "dataCollectionEpRulesName" = {
-      value = "${local.resource_name}-datacollection-rules"
+      value = "${local.resource_name}-azuremonitor-datacollection"
     },
     "clusterName" = {
       value = local.aks_name
     },
     "dataCollectionRulesAssociationName" = {
-      value = "${local.resource_name}-datacollection-rules-association"
+      value = "${local.resource_name}-azuremonitor-datacollection-association"
     }
   })
   template_content = <<TEMPLATE
