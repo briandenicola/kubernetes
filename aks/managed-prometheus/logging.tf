@@ -44,139 +44,42 @@ resource "null_resource" "container_insights_basic_plan" {
   }
 }
 
-# Data Collection Rules
-resource "azurerm_resource_group_template_deployment" "loganalytics_datacollection" {
+resource "azurerm_monitor_data_collection_rule" "log_analytics" {
+  name                = "${local.resource_name}-law-datacollection-rules"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
   depends_on = [
     azurerm_log_analytics_workspace.this
   ]
 
-  name                = "loganalytics_datacollection-deployment"
-  resource_group_name = azurerm_resource_group.this.name
-  deployment_mode     = "Incremental"
-  parameters_content = jsonencode({
-    "dataCollectionEpRulesName" = {
-      value = "${local.resource_name}-loganalytics-datacollection"
-    },
-    "logAnalyticsWorkspaceResourceId" = {
-      value = azurerm_log_analytics_workspace.this.id
-    },
-    "logAnalyticsWorkspaceId" = {
-      value = azurerm_log_analytics_workspace.this.workspace_id 
+  destinations {
+    log_analytics {
+      workspace_resource_id = azurerm_log_analytics_workspace.this.id
+      name                  = "ciworkspace"
+    }
+  }
+
+  data_flow {
+    streams      = ["Microsoft-ContainerInsights-Group-Default"]
+    destinations = ["ciworkspace"]
+  }
+
+  data_sources {
+    extension {
+      streams   = ["Microsoft-ContainerInsights-Group-Default"]
+      extension_name = "ContainerInsights"
+      name = "ContainerInsightsExtension"
+    }
+  }
+}
+
+resource "azapi_resource" "log_analytics_datacollection_rule_associations" {
+  type = "Microsoft.Insights/dataCollectionRuleAssociations@2021-09-01-preview"
+  name = "${local.resource_name}-law-datacollection-rules-association"
+  parent_id = azurerm_kubernetes_cluster.this.id
+  body = jsonencode({
+    properties = {
+      dataCollectionRuleId = azurerm_monitor_data_collection_rule.log_analytics.id
     }
   })
-  template_content = <<TEMPLATE
-{
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "dataCollectionEpRulesName": {
-            "type": "string"
-        },
-        "logAnalyticsWorkspaceResourceId": {
-            "type": "string"
-        },
-        "logAnalyticsWorkspaceId": {
-            "type": "string"
-        }
-    },
-    "variables": {},
-    "resources": [
-        {
-          "type": "Microsoft.Insights/dataCollectionRules",
-          "apiVersion": "2022-06-01",
-          "name": "[parameters('dataCollectionEpRulesName')]",
-          "location": "[resourceGroup().location]",
-          "kind": "Linux",
-          "properties": {
-            "dataSources": {
-                "extensions": [
-                    {
-                        "streams": [
-                            "Microsoft-ContainerInsights-Group-Default"
-                        ],
-                        "extensionName": "ContainerInsights",
-                        "name": "ContainerInsightsExtension"
-                    }
-                ]
-            },
-            "destinations": {
-                "logAnalytics": [
-                    {
-                        "workspaceResourceId": "[parameters('logAnalyticsWorkspaceResourceId')]",
-                        "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
-                        "name": "ciworkspace"
-                    }
-                ]
-            },
-            "dataFlows": [
-                {
-                    "streams": [
-                        "Microsoft-ContainerInsights-Group-Default"
-                    ],
-                    "destinations": [
-                        "ciworkspace"
-                    ]
-                }
-            ]
-          }
-        }
-
-    ],
-    "outputs": {
-    }
-}
-TEMPLATE
-}
-
-#Data Collection Rules Association
-resource "azurerm_resource_group_template_deployment" "loganalytics_datacollection_association" {
-  depends_on = [
-    azurerm_resource_group_template_deployment.azuremonitor_datacollection
-  ]
-
-  name                = "loganalytics_datacollection_association-deployment"
-  resource_group_name = azurerm_resource_group.this.name
-  deployment_mode     = "Incremental"
-  parameters_content = jsonencode({
-    "dataCollectionEpRulesName" = {
-      value = "${local.resource_name}-loganalytics-datacollection"
-    },
-    "clusterName" = {
-      value = local.aks_name
-    },
-    "dataCollectionRulesAssociationName" = {
-      value = "${local.resource_name}-loganalytics_datacollection-association"
-    }
-  })
-  template_content = <<TEMPLATE
-{
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "dataCollectionEpRulesName": {
-            "type": "string"
-        },
-        "clusterName": {
-            "type": "string"
-        },
-        "dataCollectionRulesAssociationName": {
-            "type": "string"
-        }
-    },
-    "variables": {},
-    "resources": [
-        {
-          "type": "Microsoft.ContainerService/managedClusters/providers/dataCollectionRuleAssociations",
-          "name": "[concat(parameters('clusterName'),'/microsoft.insights/', parameters('dataCollectionRulesAssociationName'))]",
-          "apiVersion": "2021-09-01-preview",
-          "location": "[resourceGroup().location]",
-          "properties": {
-            "dataCollectionRuleId": "[resourceId('Microsoft.Insights/dataCollectionRules', parameters('dataCollectionEpRulesName'))]"
-          }
-        }
-    ],
-    "outputs": {
-    }
-}
-TEMPLATE
 }

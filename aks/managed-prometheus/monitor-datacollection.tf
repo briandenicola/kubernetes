@@ -1,7 +1,7 @@
 
 # Data Collection Endpoint
 resource "azurerm_monitor_data_collection_endpoint" "this" {
-  name                          = "${local.resource_name}-datacollection-ep"
+  name                          = "${local.resource_name}-azuremonitor-datacollection-ep"
   resource_group_name           = azurerm_resource_group.this.name
   location                      = azurerm_resource_group.this.location
   kind                          = "Linux"
@@ -20,7 +20,7 @@ resource "azurerm_resource_group_template_deployment" "azuremonitor_datacollecti
   deployment_mode     = "Incremental"
   parameters_content = jsonencode({
     "dataCollectionEpRulesName" = {
-      value = "${local.resource_name}-azuremonitor-datacollection"
+      value = "${local.resource_name}-azuremonitor-datacollection-rules"
     },
     "dataCollectionEndpointResourceId" = {
       value = azurerm_monitor_data_collection_endpoint.this.id
