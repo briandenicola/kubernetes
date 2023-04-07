@@ -1,5 +1,5 @@
 #Data Collection Prometheus Node Rule Group
-resource "azapi_resource" "prometheus_node_recording_rule_group" {
+/*resource "azapi_resource" "prometheus_node_recording_rule_group" {
   depends_on = [
     azurerm_resource_group_template_deployment.azuremonitor_datacollection
   ]
@@ -174,4 +174,4 @@ resource "azapi_resource" "prometheus_kubernetes_rule_groups" {
       ]
     }
   })
-}
+}*/
