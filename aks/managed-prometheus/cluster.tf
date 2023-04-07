@@ -10,7 +10,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   location                        = azurerm_resource_group.this.location
   node_resource_group             = "${local.resource_name}_k8s_nodes_rg"
   dns_prefix                      = local.aks_name
-  sku_tier                        = "Paid"
+  sku_tier                        = "Standard"
   automatic_channel_upgrade       = "patch"
   oidc_issuer_enabled             = true
   workload_identity_enabled       = true
