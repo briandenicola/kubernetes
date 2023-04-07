@@ -66,16 +66,16 @@ resource "azurerm_monitor_data_collection_rule" "log_analytics" {
 
   data_sources {
     extension {
-      streams   = ["Microsoft-ContainerInsights-Group-Default"]
+      streams        = ["Microsoft-ContainerInsights-Group-Default"]
       extension_name = "ContainerInsights"
-      name = "ContainerInsightsExtension"
+      name           = "ContainerInsightsExtension"
     }
   }
 }
 
 resource "azapi_resource" "log_analytics_datacollection_rule_associations" {
-  type = "Microsoft.Insights/dataCollectionRuleAssociations@2021-09-01-preview"
-  name = "${local.resource_name}-law-datacollection-rules-association"
+  type      = "Microsoft.Insights/dataCollectionRuleAssociations@2021-09-01-preview"
+  name      = "${local.resource_name}-law-datacollection-rules-association"
   parent_id = azurerm_kubernetes_cluster.this.id
   body = jsonencode({
     properties = {
