@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: greetingshelm
-  namespace: default 
-data:
-  build.version: {{ .Values.build_version }}
