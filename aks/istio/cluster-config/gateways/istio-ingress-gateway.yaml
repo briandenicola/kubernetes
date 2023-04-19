@@ -1,0 +1,33 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: default-bjdazure-tech-gw
+  namespace: istio-gateway
+spec:
+  selector:
+    istio: ingressgateway 
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.bjdazure.tech"
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name:  default-bjdazure-tech-vs
+  namespace: istio-gateway
+spec:
+  hosts:
+  -  istio-default.bjdazure.tech
+  gateways:
+  -  default-bjdazure-tech-gw
+  http:
+  - route:
+    - destination:
+        host: ingress-svc
+        port:
+          number: 80
+  

@@ -16,10 +16,6 @@ resource "azapi_update_resource" "this" {
               mode = "Internal",
               enabled= true
             }]
-            egressGateways = [{
-              mode = "Internal",
-              enabled= true
-            }]
           }
         }
       }
