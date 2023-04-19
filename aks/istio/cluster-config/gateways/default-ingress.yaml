@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: default-backend
-  namespace: istio-gateway
+  namespace: aks-istio-ingress
 spec:
   selector:
     matchLabels:
@@ -31,17 +31,12 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-      tolerations:
-      - key: "reservedFor"
-        operator: "Equal"
-        value: "istio-gateway"
-        effect: "NoSchedule"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: default-backend-svc
-  namespace: istio-gateway
+  namespace: aks-istio-ingress
   labels:
     version: "1.0"
 spec:
