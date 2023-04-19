@@ -5,3 +5,4 @@ metadata:
   name: bookstore
   labels:
     istio-injection: enabled
+    istio.io/rev: asm-1-17
