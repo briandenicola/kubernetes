@@ -13,21 +13,5 @@ spec:
       protocol: HTTP
     hosts:
     - "*.bjdazure.tech"
----
-apiVersion: networking.istio.io/v1beta1
-kind: VirtualService
-metadata:
-  name:  default-bjdazure-tech-vs
-  namespace: aks-istio-ingress
-spec:
-  hosts:
-  -  istio-default.bjdazure.tech
-  gateways:
-  -  default-bjdazure-tech-gw
-  http:
-  - route:
-    - destination:
-        host: ingress-svc
-        port:
-          number: 80
+
   

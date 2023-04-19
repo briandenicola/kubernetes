@@ -7,7 +7,7 @@ spec:
   hosts:
   - bookstore.bjdazure.tech
   gateways:
-  - istio-gateway/default-bjdazure-tech-gw
+  - aks-istio-ingress/default-bjdazure-tech-gw
   http:
   - match:
     - uri:

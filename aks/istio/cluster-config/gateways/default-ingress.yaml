@@ -1,8 +1,16 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default-ingress-backend
+  labels:
+    istio.io/rev: asm-1-17
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: default-backend
-  namespace: aks-istio-ingress
+  namespace: default-ingress-backend
 spec:
   selector:
     matchLabels:
@@ -36,7 +44,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: default-backend-svc
-  namespace: aks-istio-ingress
+  namespace: default-ingress-backend
   labels:
     version: "1.0"
 spec:
@@ -46,3 +54,20 @@ spec:
   - port: 80
     targetPort: 80
   type: ClusterIP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name:  default-bjdazure-tech-vs
+  namespace: default-ingress-backend
+spec:
+  hosts:
+  -  istio-default.bjdazure.tech
+  gateways:
+  -  aks-istio-ingress/default-bjdazure-tech-gw
+  http:
+  - route:
+    - destination:
+        host: default-backend-svc
+        port:
+          number: 80
