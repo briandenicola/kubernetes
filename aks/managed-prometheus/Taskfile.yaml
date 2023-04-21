@@ -9,6 +9,8 @@ tasks:
     - terraform init
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     - task: creds
+    - task: deploy-configs
+    - task: deploy-app
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
@@ -16,12 +18,24 @@ tasks:
     desc: Gets AKS credential file
     cmds:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
-    - kubelogin convert-kubeconfig -l azurecli
+    - sed -i s/devicecode/azurecli/g ~/.kube/config
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
+
+  deploy-configs:
+    desc: Deploy Prometheus configmaps
+    cmds:
+    - kubectl apply -f ./manifests/prometheus-config.yaml
+    - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
+    - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
+
+  deploy-app:
+    desc: Deploy Otel Demo Application
+    cmds:
+    - kubectl apply -f ../../demo-apps/otel-prometheus/deployment.yaml
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
