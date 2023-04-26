@@ -52,7 +52,7 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "tbd"
+    Application = "otel"
     Components  = "aks;"
     DeployedOn  = timestamp()
   }
