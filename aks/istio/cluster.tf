@@ -5,19 +5,19 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                            = local.aks_name
-  resource_group_name             = azurerm_resource_group.this.name
-  location                        = azurerm_resource_group.this.location
-  node_resource_group             = "${local.resource_name}_k8s_nodes_rg"
-  dns_prefix                      = local.aks_name
-  sku_tier                        = "Standard"
-  automatic_channel_upgrade       = "patch"
-  oidc_issuer_enabled             = true
-  workload_identity_enabled       = true
-  azure_policy_enabled            = true
-  local_account_disabled          = false 
-  open_service_mesh_enabled       = false
-  run_command_enabled             = false
+  name                      = local.aks_name
+  resource_group_name       = azurerm_resource_group.this.name
+  location                  = azurerm_resource_group.this.location
+  node_resource_group       = "${local.resource_name}_k8s_nodes_rg"
+  dns_prefix                = local.aks_name
+  sku_tier                  = "Standard"
+  automatic_channel_upgrade = "patch"
+  oidc_issuer_enabled       = true
+  workload_identity_enabled = true
+  azure_policy_enabled      = true
+  local_account_disabled    = false
+  open_service_mesh_enabled = false
+  run_command_enabled       = false
 
   api_server_access_profile {
     vnet_integration_enabled = true
@@ -55,34 +55,38 @@ resource "azurerm_kubernetes_cluster" "this" {
     max_count           = 3
     max_pods            = 60
     upgrade_settings {
-      max_surge         = "25%"
-    }  
+      max_surge = "25%"
+    }
   }
 
   network_profile {
-    dns_service_ip     = "100.${random_integer.services_cidr.id}.0.10"
-    service_cidr       = "100.${random_integer.services_cidr.id}.0.0/16"
+    dns_service_ip      = "100.${random_integer.services_cidr.id}.0.10"
+    service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_plugin_mode = "Overlay"
     load_balancer_sku   = "standard"
     pod_cidr            = "192.168.0.0/16"
   }
 
+  service_mesh_profile {
+    mode = "Istio"
+  }
+
   maintenance_window {
     allowed {
-      day               = "Friday"
-      hours             = [21, 22, 22] 
+      day   = "Friday"
+      hours = [21, 22, 22]
     }
     allowed {
-      day               = "Sunday"
-      hours             = [1, 2, 3, 4, 5] 
+      day   = "Sunday"
+      hours = [1, 2, 3, 4, 5]
     }
   }
 
   auto_scaler_profile {
-    max_unready_nodes   = "1"
+    max_unready_nodes = "1"
   }
-  
+
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }

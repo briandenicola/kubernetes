@@ -1,4 +1,4 @@
-resource "azapi_update_resource" "this" {
+resource "azapi_update_resource" "istio_ingressgateway" {
   depends_on = [
     azurerm_kubernetes_cluster.this
   ]
@@ -9,12 +9,11 @@ resource "azapi_update_resource" "this" {
   body = jsonencode({
     properties = {
       serviceMeshProfile = {
-        mode = "Istio"
         istio = {
           components = {
             ingressGateways = [{
               mode = "Internal",
-              enabled= true
+              enabled = true
             }]
           }
         }
