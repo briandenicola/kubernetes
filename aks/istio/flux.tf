@@ -1,23 +1,32 @@
-resource "azapi_resource" "flux_install" {
+# resource "azapi_resource" "flux_install" {
+#   depends_on = [
+#     azurerm_kubernetes_cluster.this
+#   ]
+
+#   type      = "Microsoft.KubernetesConfiguration/extensions@2021-09-01"
+#   name      = "flux"
+#   parent_id = azurerm_kubernetes_cluster.this.id
+
+#   body = jsonencode({
+#     properties = {
+#       extensionType           = "microsoft.flux"
+#       autoUpgradeMinorVersion = true
+#     }
+#   })
+# }
+
+resource "azurerm_kubernetes_cluster_extension" "flux" {
   depends_on = [
-    azurerm_kubernetes_cluster.this
+    azapi_update_resource.istio_ingressgateway
   ]
-
-  type      = "Microsoft.KubernetesConfiguration/extensions@2021-09-01"
-  name      = "flux"
-  parent_id = azurerm_kubernetes_cluster.this.id
-
-  body = jsonencode({
-    properties = {
-      extensionType           = "microsoft.flux"
-      autoUpgradeMinorVersion = true
-    }
-  })
+  name           = "flux"
+  cluster_id     = azurerm_kubernetes_cluster.this.id
+  extension_type = "microsoft.flux"
 }
 
 resource "azapi_resource" "flux_config" {
   depends_on = [
-    azapi_resource.flux_install
+    azurerm_kubernetes_cluster_extension.flux
   ]
 
   type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-03-01"
