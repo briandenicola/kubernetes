@@ -1,3 +1,14 @@
+resource "tls_private_key" "rsa" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# SSH Key Rotation Example
+# resource "tls_private_key" "rsa2" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+
 resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     ignore_changes = [
@@ -29,6 +40,13 @@ resource "azurerm_kubernetes_cluster" "this" {
   identity {
     type         = "UserAssigned"
     identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
+  }
+
+  linux_profile {
+    admin_username = "manager"
+    ssh_key {
+      key_data = tls_private_key.rsa.public_key_openssh
+    }
   }
 
   kubelet_identity {
