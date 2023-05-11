@@ -12,11 +12,11 @@ resource "azurerm_subnet" "nodes" {
   address_prefixes     = [local.nodes_subnet_cidir]
 }
 
-resource "azurerm_subnet" "pods" {
-  name                 = "pods"
+resource "azurerm_subnet" "api" {
+  name                 = "api"
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = [local.pods_subnet_cidir]
+  address_prefixes     = [local.api_subnet_cidir]
 
   delegation {
     name = "aks-delegation"
@@ -57,10 +57,6 @@ resource "azurerm_subnet_network_security_group_association" "nodes" {
   network_security_group_id = azurerm_network_security_group.this.id
 }
 
-resource "azurerm_subnet_network_security_group_association" "pods" {
-  subnet_id                 = azurerm_subnet.pods.id
-  network_security_group_id = azurerm_network_security_group.this.id
-}
 
 resource "azurerm_subnet_network_security_group_association" "pe" {
   subnet_id                 = azurerm_subnet.pe.id
