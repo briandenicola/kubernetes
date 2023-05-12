@@ -68,4 +68,8 @@ resource "azurerm_subnet_network_security_group_association" "compute" {
   network_security_group_id = azurerm_network_security_group.this.id
 }
 
+resource "azurerm_subnet_network_security_group_association" "api" {
+  subnet_id                 = azurerm_subnet.api.id
+  network_security_group_id = azurerm_network_security_group.this.id
+}
 
