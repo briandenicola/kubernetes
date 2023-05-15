@@ -63,15 +63,15 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   default_node_pool {
     name                = "default"
-    node_count          = 1
-    vm_size             = "Standard_B4ms"
+    node_count          = var.node_count
+    vm_size             = var.vm_size
     os_disk_size_gb     = 60
     vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = "CBLMariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 3
+    max_count           = var.node_count
     max_pods            = 60
     upgrade_settings {
       max_surge = "25%"

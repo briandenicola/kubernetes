@@ -1,5 +1,9 @@
 version: '3'
 
+vars:
+  SKU: "Standard_B4ms"
+  COUNT: 1
+
 tasks:
   up:
     desc: Creates a complete Azure ML environment 
@@ -7,7 +11,7 @@ tasks:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     - task: creds
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
