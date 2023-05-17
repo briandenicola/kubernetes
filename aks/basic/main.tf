@@ -30,8 +30,8 @@ resource "random_integer" "services_cidr" {
 }
 
 resource "random_integer" "pod_cidr" {
-  min = 64
-  max = 99
+  min = 100
+  max = 127
 }
 
 locals {
