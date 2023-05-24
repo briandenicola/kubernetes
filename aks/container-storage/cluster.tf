@@ -19,7 +19,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   name                      = local.aks_name
   resource_group_name       = azurerm_resource_group.this.name
   location                  = azurerm_resource_group.this.location
-  node_resource_group       = "${local.resource_name}_k8s_nodes_rg"
+  node_resource_group       = local.aks_node_rg_name
   dns_prefix                = local.aks_name
   sku_tier                  = "Standard"
   automatic_channel_upgrade = "patch"

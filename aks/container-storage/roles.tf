@@ -16,7 +16,7 @@ data "azurerm_resource_group" "aks_nodepool_rg" {
   depends_on = [
     azurerm_kubernetes_cluster.this
   ]
-  name = "${local.resource_name}_k8s_nodes_rg"
+  name = local.aks_node_rg_name
 }
 
 resource "azurerm_role_assignment" "container_storage_role" {
