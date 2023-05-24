@@ -2,8 +2,8 @@ version: '3'
 
 vars:
   SKU: "Standard_D4s_v5"
-  COUNT: 3
-
+  COUNT: 5
+  
 tasks:
   up:
     desc: Creates a complete Azure ML environment 
