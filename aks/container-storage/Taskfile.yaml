@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   SKU: "Standard_B4ms"
-  COUNT: 1
+  COUNT: 3
 
 tasks:
   up:
