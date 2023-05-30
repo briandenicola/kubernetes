@@ -28,7 +28,7 @@ resource "azurerm_application_insights" "this" {
 }
 
 locals {
-  container_insights_tables = ["ContainerLog", "ContainerLogV2"]
+  container_insights_tables = ["ContainerLogV2"]
 }
 
 //Table Update requires PATCH to change to Basic Plan but azapi_update_resource only does PUT updates 

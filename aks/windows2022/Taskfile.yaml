@@ -12,7 +12,9 @@ tasks:
     - terraform workspace select {{.REGION}}
     - terraform init
     - task: apply
-    
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'  
+      
   apply:
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
