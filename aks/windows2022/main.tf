@@ -50,8 +50,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "tbd"
-    Components  = "aks; winodws2022"
+    Application = "PartsUnlimited"
+    Components  = "aks; windows2022"
     DeployedOn  = timestamp()
   }
 }
