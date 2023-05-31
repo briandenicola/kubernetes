@@ -10,3 +10,6 @@
 [submodule "cncf/porter/cluster"]
 	path = cncf/porter/cluster
 	url = https://github.com/briandenicola/aks-flux-extension
+[submodule "aks/multi-cluster/infrastructure"]
+	path = aks/multi-cluster/infrastructure
+	url = https://github.com/briandenicola/aks-with-istio
