@@ -13,5 +13,16 @@ spec:
       protocol: HTTP
     hosts:
     - "*.bjdazure.tech"
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: istio-ingress-tls
+    hosts:
+    - "*.bjdazure.tech"
+
+  
 
   
