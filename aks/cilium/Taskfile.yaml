@@ -1,0 +1,37 @@
+version: '3'
+
+vars:
+  SKU: "Standard_B4ms"
+  COUNT: 1
+
+tasks:
+  up:
+    desc: Creates a complete Azure ML environment 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    - task: creds
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  creds:
+    desc: Gets AKS credential file
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform  output -raw AKS_RESOURCE_GROUP
