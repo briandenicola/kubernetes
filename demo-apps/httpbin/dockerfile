@@ -1,4 +1,5 @@
-FROM alpine:3.16.5
+#FROM alpine:3.16.5
+FROM alpine:3.18.0
 
 RUN apk add --update \
     python3 \
@@ -11,7 +12,7 @@ RUN apk add --update \
 RUN pip3 install -U pip 
 RUN pip3 install gunicorn httpbin 
 RUN pip3 install flask==2.3.2
-RUN pip3 install werkzeug==2.0.3
+RUN pip3 install werkzeug==2.3.6
 
 RUN echo '#!/bin/sh' > run.sh \
     && echo 'gunicorn --bind=0.0.0.0:8080 httpbin:app' >> run.sh \
