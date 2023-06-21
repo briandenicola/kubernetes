@@ -18,7 +18,6 @@ resource "azurerm_kubernetes_cluster_extension" "flux" {
   name              = "flux"
   cluster_id        = azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.flux"
-  release_train     = "prod"
   release_namespace = "flux-system"
 }
 
@@ -27,7 +26,7 @@ resource "azapi_resource" "flux_config" {
     azurerm_kubernetes_cluster_extension.flux
   ]
 
-  type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-11-01"
+  type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-07-01"
   name      = "aks-flux-extension"
   parent_id = azurerm_kubernetes_cluster.this.id
 
