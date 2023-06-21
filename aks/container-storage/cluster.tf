@@ -73,6 +73,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     min_count           = 1
     max_count           = var.node_count
     max_pods            = 60
+    zones               = ["1", "2", "3"]
 
     upgrade_settings {
       max_surge = "25%"
