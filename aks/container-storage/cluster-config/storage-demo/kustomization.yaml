@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - storagepool.yaml
   - pvc.yaml
-  - deployment.yaml
+  - pod.yaml
