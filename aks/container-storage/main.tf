@@ -45,7 +45,7 @@ locals {
   api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
   nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
   compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
-  app_path              = "./aks/container-storage/cluster-configs"
+  app_path              = "./aks/container-storage/cluster-config"
   flux_repository       = "https://github.com/briandenicola/kubernetes"
 }
 
