@@ -65,15 +65,15 @@ resource "azurerm_kubernetes_cluster" "this" {
     name                = "default"
     node_count          = var.node_count
     vm_size             = var.vm_size
-    os_disk_size_gb     = 60
+    os_disk_size_gb     = 120
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "CBLMariner"
+    #os_sku              = "Mariner" -- Container Storage does not support Mainer yet.  No NVMe drivers
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
     max_count           = var.node_count
     max_pods            = 60
-    
+
     upgrade_settings {
       max_surge = "25%"
     }
