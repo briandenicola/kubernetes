@@ -1,0 +1,21 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: fiopodsan
+  namespace: default
+spec:
+  nodeSelector:
+    acstor.azure.com/io-engine: acstor
+  volumes:
+    - name: managedpv
+      persistentVolumeClaim:
+        claimName: managedpvc
+  containers:
+    - name: fio
+      image: nixery.dev/shell/fio
+      args:
+        - sleep
+        - "1000000"
+      volumeMounts:
+        - mountPath: "/volume"
+          name: managedpv

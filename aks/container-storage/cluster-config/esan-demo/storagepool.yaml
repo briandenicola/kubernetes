@@ -1,0 +1,14 @@
+apiVersion: containerstorage.azure.com/v1alpha1
+kind: StoragePool
+metadata:
+  name: esan
+  namespace: acstor-system
+spec:
+  poolType:
+    elasticSan: {}
+  resources:
+    requests: {"storage": 1Ti}
+  
+# This will create an Elastic SAN resource in the AKS Nodepool RG.  
+# Currently, it will fail on volume group creation because Storage Container require the virtual network to also be in the AKS Nodepool RG
+# The volume group (named: acstor) can be manually created and associated with AKS's virtual network
