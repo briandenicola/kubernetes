@@ -21,38 +21,32 @@ resource "azurerm_kubernetes_cluster_extension" "flux" {
   release_namespace = "flux-system"
 }
 
-resource "azapi_resource" "flux_config" {
+resource "azurerm_kubernetes_flux_configuration" "flux_config" {
   depends_on = [
     azurerm_kubernetes_cluster_extension.flux
   ]
 
-  type      = "Microsoft.KubernetesConfiguration/fluxConfigurations@2022-07-01"
-  name      = "aks-flux-extension"
-  parent_id = azurerm_kubernetes_cluster.this.id
+  name       = "aks-flux-extension"
+  cluster_id = azurerm_kubernetes_cluster.this.id
+  namespace  = "flux-system"
+  scope      = "cluster"
 
-  body = jsonencode({
-    properties : {
-      scope      = "cluster"
-      namespace  = "flux-system"
-      sourceKind = "GitRepository"
-      suspend    = false
-      gitRepository = {
-        url                   = local.flux_repository
-        timeoutInSeconds      = 600
-        syncIntervalInSeconds = 300
-        repositoryRef = {
-          branch = "main"
-        }
-      }
-      kustomizations : {
-        apps = {
-          path = local.app_path
-          timeoutInSeconds       = 600
-          syncIntervalInSeconds  = 120
-          retryIntervalInSeconds = 300
-          prune                  = true
-        }
-      }
-    }
-  })
+  git_repository {
+    url                      = local.flux_repository
+    reference_type           = "branch"
+    reference_value          = "main"
+    timeout_in_seconds       = 600
+    sync_interval_in_seconds = 30
+  }
+
+  kustomizations {
+    name                       = "apps"
+    path                       = local.app_path
+    timeout_in_seconds         = 600
+    sync_interval_in_seconds   = 120
+    retry_interval_in_seconds  = 300
+    garbage_collection_enabled = true
+    depends_on                 = []
+  }
+
 }
