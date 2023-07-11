@@ -74,7 +74,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
         }
       }
 
-      infrastructureResourceGroup = "${local.aca_name}_aca_nodes_rg"
+      infrastructureResourceGroup = "${local.resource_name}_aca_nodes_rg"
 
       vnetConfiguration = {
         infrastructureSubnetId = azurerm_subnet.nodes.id
