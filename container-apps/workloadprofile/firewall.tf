@@ -52,7 +52,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "this" {
       destination_fqdns = [
         "production.cloudflare.docker.com",
         "hub.docker.com", 
-        "registry-1.docker.io",
+        "*.docker.io",
         "download.docker.com"
       ]
     }

@@ -20,16 +20,19 @@ resource "random_integer" "vnet_cidr" {
 }
 
 locals {
-  location             = var.region
-  resource_name        = "${random_pet.this.id}-${random_id.this.dec}"
-  aca_name             = "${local.resource_name}-environment"
-  fw_name             = "${local.resource_name}-fw"
-  container_image      = "bjd145/httpbin:1087"
-  vnet_cidr            = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
-  pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
-  compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 2)
-  fw_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 3)
-  nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 4, 2)
+  location              = var.region
+  resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
+  aca_name              = "${local.resource_name}-env"
+  app_name              = "httpbin"
+  workload_profile_name = "default"
+  workload_profile_size = "D4"
+  fw_name               = "${local.resource_name}-fw"
+  container_image       = "bjd145/httpbin:1087"
+  vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
+  pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)
+  compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 2)
+  fw_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 3)
+  nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 4, 2)
 }
 
 resource "azurerm_resource_group" "this" {
