@@ -31,6 +31,7 @@ tasks:
     - kubectl apply -f ./manifests/prometheus-config.yaml
     - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
     - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
+    - kubectl rollout restart deploy -n kube-system ama-metrics
 
   deploy-app:
     desc: Deploy Otel Demo Application
