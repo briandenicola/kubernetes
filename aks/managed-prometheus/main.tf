@@ -2,7 +2,6 @@ data "azurerm_client_config" "current" {}
 data "azurerm_subscription" "current" {}
 
 data "http" "myip" {
-#  url = "http://checkip.amazonaws.com/"
   url = "https://api64.ipify.org?format=json"
 
   request_headers = {
@@ -19,11 +18,6 @@ resource "random_pet" "this" {
   separator = ""
 }
 
-resource "random_password" "password" {
-  length  = 25
-  special = true
-}
-
 resource "random_integer" "vnet_cidr" {
   min = 10
   max = 250
@@ -31,6 +25,11 @@ resource "random_integer" "vnet_cidr" {
 
 resource "random_integer" "services_cidr" {
   min = 64
+  max = 127
+}
+
+resource "random_integer" "pod_cidr" {
+  min = 100
   max = 127
 }
 
@@ -42,6 +41,7 @@ locals {
   acr_name              = "${replace(local.resource_name,"-","")}acr"
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)
+  api_subnet_cidir      = cidrsubnet(local.vnet_cidr, 12, 1)
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
   pods_subnet_cidir     = cidrsubnet(local.vnet_cidr, 7, 2)
   compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 10)
