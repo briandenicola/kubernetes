@@ -28,7 +28,8 @@ tasks:
   deploy-configs:
     desc: Deploy Prometheus configmaps
     cmds:
-    - kubectl apply -f ./manifests/prometheus-config.yaml
+    - kubectl -n kube-system delete configmap ama-metrics-prometheus-config || true
+    - kubectl -n kube-system create configmap ama-metrics-prometheus-config --from-file=./manifests/prometheus-config 
     - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
     - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
     - kubectl rollout restart deploy -n kube-system ama-metrics
