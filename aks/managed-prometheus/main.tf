@@ -35,7 +35,7 @@ resource "random_integer" "pod_cidr" {
 
 locals {
   location              = var.region
-  ip_address            = "${jsondecode(data.http.myip.response_body).ip}"
+  ip_address            = ["${jsondecode(data.http.myip.response_body).ip}/32"]
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name              = "${local.resource_name}-aks"
   acr_name              = "${replace(local.resource_name,"-","")}acr"

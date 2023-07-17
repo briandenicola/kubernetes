@@ -4,7 +4,6 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 locals {
   kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
-  allowed_ip_range   = ["${chomp(data.http.myip.response_body)}/32"]
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
@@ -35,7 +34,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   api_server_access_profile {
     vnet_integration_enabled = true
     subnet_id                = azurerm_subnet.api.id
-    authorized_ip_ranges     = local.allowed_ip_range
+    authorized_ip_ranges     = local.ip_address
   }
 
   azure_active_directory_role_based_access_control {

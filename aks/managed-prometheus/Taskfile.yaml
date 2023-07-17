@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   up:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a complete Azure environment 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
