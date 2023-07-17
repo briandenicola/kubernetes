@@ -78,9 +78,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
-    #network_policy      = "azure"
-    load_balancer_sku = "standard"
-    ebpf_data_plane   = "cilium"
+    load_balancer_sku   = "standard"
+    ebpf_data_plane     = "cilium"
   }
 
   maintenance_window_auto_upgrade {
