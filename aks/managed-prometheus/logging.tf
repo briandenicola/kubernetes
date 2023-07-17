@@ -3,7 +3,7 @@ resource "azurerm_log_analytics_workspace" "this" {
   location                      = azurerm_resource_group.this.location
   resource_group_name           = azurerm_resource_group.this.name
   sku                           = "PerGB2018"
-  daily_quota_gb                = 0.5
+  daily_quota_gb                = 5
   local_authentication_disabled = true
 }
 
