@@ -57,13 +57,12 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                = "default"
+    name                = "system"
     node_count          = 1
     vm_size             = "Standard_B4ms"
     os_disk_size_gb     = 30
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    pod_subnet_id       = azurerm_subnet.pods.id
-    os_sku              = "CBLMariner"
+    os_sku              = "Mariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
