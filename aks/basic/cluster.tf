@@ -1,3 +1,12 @@
+data "azurerm_kubernetes_service_versions" "current" {
+  location = azurerm_resource_group.this.location
+}
+
+locals {
+  kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
+  allowed_ip_range   = ["${chomp(data.http.myip.response_body)}/32"]
+}
+
 resource "tls_private_key" "rsa" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -21,19 +30,23 @@ resource "azurerm_kubernetes_cluster" "this" {
   location                  = azurerm_resource_group.this.location
   node_resource_group       = "${local.resource_name}_k8s_nodes_rg"
   dns_prefix                = local.aks_name
-  sku_tier                  = "Standard"
-  automatic_channel_upgrade = "patch"
-  oidc_issuer_enabled       = true
-  workload_identity_enabled = true
-  azure_policy_enabled      = true
-  local_account_disabled    = false
-  open_service_mesh_enabled = false
-  run_command_enabled       = false
+  sku_tier                     = "Standard"
+  automatic_channel_upgrade    = "patch"
+  node_os_channel_upgrade      = "NodeImage"
+  oidc_issuer_enabled          = true
+  workload_identity_enabled    = true
+  azure_policy_enabled         = true
+  local_account_disabled       = true
+  open_service_mesh_enabled    = false
+  run_command_enabled          = false
+  kubernetes_version           = local.kubernetes_version
+  image_cleaner_enabled        = true
+  image_cleaner_interval_hours = 48
 
   api_server_access_profile {
     vnet_integration_enabled = true
     subnet_id                = azurerm_subnet.api.id
-    authorized_ip_ranges     = ["${chomp(data.http.myip.response_body)}/32"]
+    authorized_ip_ranges     = local.allowed_ip_range
   }
 
   azure_active_directory_role_based_access_control {
@@ -65,9 +78,9 @@ resource "azurerm_kubernetes_cluster" "this" {
     name                = "default"
     node_count          = var.node_count
     vm_size             = var.vm_size
-    os_disk_size_gb     = 60
+    os_disk_size_gb     = 100
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "CBLMariner"
+    os_sku              = "Mariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
@@ -84,19 +97,26 @@ resource "azurerm_kubernetes_cluster" "this" {
     pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_policy      = "calico"
-    network_plugin_mode = "Overlay"
+    network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
   }
 
-  maintenance_window {
-    allowed {
-      day   = "Friday"
-      hours = [21, 22, 22]
-    }
-    allowed {
-      day   = "Sunday"
-      hours = [1, 2, 3, 4, 5]
-    }
+  maintenance_window_auto_upgrade {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Friday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
+  }
+
+  maintenance_window_node_os {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Saturday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
   }
 
   auto_scaler_profile {
