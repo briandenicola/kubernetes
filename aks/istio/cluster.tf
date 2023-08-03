@@ -69,7 +69,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   service_mesh_profile {
-    mode = "Istio"
+    mode                             = "Istio"
+    internal_ingress_gateway_enabled = true
   }
 
   maintenance_window {
