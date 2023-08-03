@@ -23,6 +23,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   dns_prefix                = local.aks_name
   sku_tier                  = "Standard"
   automatic_channel_upgrade = "patch"
+  node_os_channel_upgrade   = "NodeImage"
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
   azure_policy_enabled      = true
@@ -40,7 +41,6 @@ resource "azurerm_kubernetes_cluster" "this" {
     managed                = true
     azure_rbac_enabled     = true
     tenant_id              = data.azurerm_client_config.current.tenant_id
-    admin_group_object_ids = [var.azure_rbac_group_object_id]
   }
 
   identity {
@@ -65,10 +65,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     name                = "system"
     node_count          = var.node_count
     vm_size             = var.vm_size
-    os_disk_size_gb     = 60
+    os_disk_size_gb     = 90
     zones               = ["1","2","3"]
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "CBLMariner"
+    os_sku              = "Mariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
@@ -85,19 +85,26 @@ resource "azurerm_kubernetes_cluster" "this" {
     pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_policy      = "calico"
-    network_plugin_mode = "Overlay"
+    network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
   }
 
-  maintenance_window {
-    allowed {
-      day   = "Friday"
-      hours = [21, 22, 22]
-    }
-    allowed {
-      day   = "Sunday"
-      hours = [1, 2, 3, 4, 5]
-    }
+  maintenance_window_auto_upgrade {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Friday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
+  }
+
+  maintenance_window_node_os {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Saturday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
   }
 
   auto_scaler_profile {
