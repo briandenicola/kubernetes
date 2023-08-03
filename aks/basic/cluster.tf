@@ -25,11 +25,11 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                      = local.aks_name
-  resource_group_name       = azurerm_resource_group.this.name
-  location                  = azurerm_resource_group.this.location
-  node_resource_group       = "${local.resource_name}_k8s_nodes_rg"
-  dns_prefix                = local.aks_name
+  name                         = local.aks_name
+  resource_group_name          = azurerm_resource_group.this.name
+  location                     = azurerm_resource_group.this.location
+  node_resource_group          = "${local.resource_name}_k8s_nodes_rg"
+  dns_prefix                   = local.aks_name
   sku_tier                     = "Standard"
   automatic_channel_upgrade    = "patch"
   node_os_channel_upgrade      = "NodeImage"
@@ -53,7 +53,6 @@ resource "azurerm_kubernetes_cluster" "this" {
     managed                = true
     azure_rbac_enabled     = true
     tenant_id              = data.azurerm_client_config.current.tenant_id
-    admin_group_object_ids = [var.azure_rbac_group_object_id]
   }
 
   identity {
@@ -102,21 +101,21 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   maintenance_window_auto_upgrade {
-    frequency = "Weekly"
-    interval  = 1
-    duration  = 4
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
     day_of_week = "Friday"
-    utc_offset = "-06:00"
-    start_time = "20:00"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
   }
 
   maintenance_window_node_os {
-    frequency = "Weekly"
-    interval  = 1
-    duration  = 4
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
     day_of_week = "Saturday"
-    utc_offset = "-06:00"
-    start_time = "20:00"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
   }
 
   auto_scaler_profile {
