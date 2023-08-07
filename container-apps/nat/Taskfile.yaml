@@ -2,7 +2,7 @@ version: '3'
 
 tasks:
   up:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a complete Azure Container App Environment with a NAT Gateway
     cmds:
     - task: init
     - task: apply

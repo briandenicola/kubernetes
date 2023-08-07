@@ -42,6 +42,12 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 |--------------- | --------------- |
 | Basic | A simple GKE cluster for testing and comparisons only. |
 
+# Demo Apps
+* httpbin - A simple web application to test various HTTP calls (http://httpbin.org/)
+* mssql - An example on how to deploy SQL Server in an Always On configuration _Outdated_
+* nodejs - A very basic Nodejs API container
+* otel-prometheus - An example app using Open Telemetry to export metrics to Prometheus 
+
 # Kubernetes Specific 
 * Namespace - Examples on Namespace configs
 * Network Policies - Example Network policies 
