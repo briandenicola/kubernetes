@@ -40,7 +40,7 @@ resource "null_resource" "container_insights_basic_plan" {
     azurerm_log_analytics_solution.this
   ]
   provisioner "local-exec" {
-    command = "az monitor log-analytics workspace table update --subscription ${data.azurerm_subscription.current.id} --resource-group ${azurerm_resource_group.this.name}  --workspace-name ${azurerm_log_analytics_workspace.this.name} --name ${each.key}  --plan Basic"
+    command = "az monitor log-analytics workspace table update --subscription ${data.azurerm_subscription.current.subscription_id} --resource-group ${azurerm_resource_group.this.name}  --workspace-name ${azurerm_log_analytics_workspace.this.name} --name ${each.key}  --plan Basic"
   }
 }
 
