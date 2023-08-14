@@ -13,6 +13,7 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | [Azure Files](/aks/azure-files/) | An example set of YAML definitions to integrate AKS with Azure Files |
 | [Azure ML Extensions](/aks/azureml-extension/) | An example Azure ML Studio connectedt to an AKS cluster with the Azure Machine Learning extension added |
 | [Basic](/aks/basic/) | An simple example AKS cluster for testing |
+| [Premium](/aks/premium/) | A Quick and Dirty method to upgrade an AKS cluster to Premium Tier for Long Term Support|
 | [Chaos Studio](/aks/chaos-studio/) | A set of ARM templates to onboard Chaos studio to an AKS cluster with a few experiments enabled  |
 | [Cilium](./aks/cilium/) | An example AKS cluster with Cilium enabled|
 | [Container Storage](./aks/container-storage/) | An example AKS cluster with Azure Managed Container Storage (Preview) created. |
