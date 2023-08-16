@@ -3,12 +3,6 @@ resource "tls_private_key" "rsa" {
   rsa_bits  = 4096
 }
 
-# SSH Key Rotation Example
-# resource "tls_private_key" "rsa2" {
-#   algorithm = "RSA"
-#   rsa_bits  = 4096
-# }
-
 resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     ignore_changes = [
@@ -23,6 +17,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   dns_prefix                = local.aks_name
   sku_tier                  = "Standard"
   automatic_channel_upgrade = "patch"
+  node_os_channel_upgrade   = "NodeImage"
   oidc_issuer_enabled       = true
   workload_identity_enabled = true
   azure_policy_enabled      = true
@@ -82,21 +77,28 @@ resource "azurerm_kubernetes_cluster" "this" {
     service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
     pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
     network_plugin      = "azure"
-    network_plugin_mode = "Overlay"
-    #network_policy      = "azure"
+    network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
     ebpf_data_plane     = "cilium"
+    //network_policy      = "cilium"
   }
   
-  maintenance_window {
-    allowed {
-      day   = "Friday"
-      hours = [21, 22, 22]
-    }
-    allowed {
-      day   = "Sunday"
-      hours = [1, 2, 3, 4, 5]
-    }
+  maintenance_window_auto_upgrade {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Friday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
+  }
+
+  maintenance_window_node_os {
+    frequency = "Weekly"
+    interval  = 1
+    duration  = 4
+    day_of_week = "Saturday"
+    utc_offset = "-06:00"
+    start_time = "20:00"
   }
 
   auto_scaler_profile {
