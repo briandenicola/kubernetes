@@ -5,3 +5,4 @@ metadata:
   name: bookstore
   labels:
     istio.io/rev: asm-1-17
+    deployed/on: 2023-09-01
