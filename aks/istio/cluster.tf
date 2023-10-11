@@ -47,7 +47,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     vm_size             = "Standard_B4ms"
     os_disk_size_gb     = 30
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "CBLMariner"
+    os_sku              = "Mariner"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
@@ -62,7 +62,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     dns_service_ip      = "100.${random_integer.services_cidr.id}.0.10"
     service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
     network_plugin      = "azure"
-    network_plugin_mode = "Overlay"
+    network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
     pod_cidr            = "192.168.0.0/16"
   }
@@ -93,6 +93,10 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   microsoft_defender {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+  }
+
+  key_vault_secrets_provider {
+    secret_rotation_enabled = true
   }
 
 }
