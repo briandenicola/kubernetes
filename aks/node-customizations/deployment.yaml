@@ -23,16 +23,14 @@ data:
   entrypoint.sh: |
     #!/bin/bash
     
+    echo Disable Chrony service
     cat << EOF | chroot ${ROOT_MOUNT_DIR}
-      echo Disable Chrony service
       
       #
       #ERROR: Failed to connect to bus: No data available
-      #systemctl status chronyd.service 
       #systemctl stop chronyd.service
       #systemctl disable chronyd.service
       #systemctl status chronyd.service
-      #
 
       mv /lib/systemd/system/chrony-wait.service /lib/systemd/system/chrony-wait.service.disable || true
       mv /lib/systemd/system/chronyd.service /lib/systemd/system/chronyd.service.disable || true 
@@ -70,7 +68,7 @@ spec:
             - name: entrypoint
               mountPath: /scripts
       containers:
-        - image: gcr.io/google-containers/pause:2.0
+        - image: registry.k8s.io/pause:3.2
           name: pause
       volumes:
         - name: entrypoint
