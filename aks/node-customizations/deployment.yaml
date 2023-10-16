@@ -25,16 +25,9 @@ data:
     
     echo Disable Chrony service
     cat << EOF | chroot ${ROOT_MOUNT_DIR}
-      
-      #
-      #ERROR: Failed to connect to bus: No data available
-      #systemctl stop chronyd.service
-      #systemctl disable chronyd.service
-      #systemctl status chronyd.service
-
-      mv /lib/systemd/system/chrony-wait.service /lib/systemd/system/chrony-wait.service.disable || true
-      mv /lib/systemd/system/chronyd.service /lib/systemd/system/chronyd.service.disable || true 
-      ls /lib/systemd/system/chrony*
+      systemctl stop chronyd.service || true
+      systemctl disable chronyd.service || true
+      systemctl status chronyd.service || true
     EOF
 ---
 apiVersion: apps/v1
@@ -53,6 +46,7 @@ spec:
       labels:
         app: node-customization-initializer
     spec:
+      hostPID: true
       initContainers:
         - image: mcr.microsoft.com/cbl-mariner/base/azure-cli:2
           name: node-customization-initializer
