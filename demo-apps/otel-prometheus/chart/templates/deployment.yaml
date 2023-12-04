@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: otel-promtheus-demo
+  namespace: {{ .Values.NAMESPACE }}
 spec:
   replicas: 2
   selector:
@@ -17,17 +18,19 @@ spec:
     metadata:
       labels:
         app: otel-demo
+        azure.workload.identity/use: "true"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "9090"
         prometheus.io/path: "/metrics"
     spec:
+      serviceAccountName: {{ .Values.WORKLOAD_ID.NAME }}
       containers:
       - name: otel-demo
-        image: bjd145/otel-promtheus-demo:2a82b185
+        image: {{ print .Values.ACR.NAME "/otel-promtheus-demo:" .Values.GIT_COMMIT_VERSION }}
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000
+        - containerPort: {{ .Values.SERVICE_PORT }}
         resources:
           limits:
             memory: "512Mi"
@@ -40,6 +43,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: otel-demo-svc
+  namespace: {{ .Values.NAMESPACE }}
   annotations:
    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
@@ -47,5 +51,5 @@ spec:
     app: otel-demo
   ports:
   - port: 80
-    targetPort: 5000
+    targetPort: {{ .Values.SERVICE_PORT }}
   type: LoadBalancer

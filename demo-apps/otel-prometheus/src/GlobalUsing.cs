@@ -1,4 +1,5 @@
 global using Microsoft.Extensions.DependencyInjection;
+global using Azure.Monitor.OpenTelemetry.AspNetCore;
 global using OpenTelemetry.Exporter.Prometheus;
 global using OpenTelemetry;
 global using OpenTelemetry.Exporter;

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: otel-demo
+description: A Helm chart for Kubernetes
+type: application
+version: 1.0.0
+appVersion: "2.0.0"

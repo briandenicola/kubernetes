@@ -1,0 +1,14 @@
+NAMESPACE                               : "otel-demo"
+GIT_COMMIT_VERSION                      : "2a82b185"
+SERVICE_PORT                            : 5000
+
+ACR:
+  NAME                                  : "bjd145"
+
+WORKLOAD_ID:
+  NAME                                  : ""
+  CLIENT_ID                             : ""
+  TENANT_ID                             : ""
+
+APP_INSIGHTS:
+  INSTRUMENTION_KEY                     : ""
