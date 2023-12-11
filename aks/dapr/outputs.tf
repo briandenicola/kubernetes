@@ -22,3 +22,8 @@ output "APP_NAME" {
     value = local.resource_name
     sensitive = false
 }
+
+output "AZURE_SUBCRIPTION_ID" {
+    value = data.azurerm_subscription.current.subscription_id
+    sensitive = false
+}

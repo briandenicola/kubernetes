@@ -23,32 +23,40 @@ tasks:
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
 
-  # radius:
-  #   desc: Initialize Radius 
-  #   cmds:
-  #   - rad install kubernetes
-  #   - rad group create -g {{.RG}}
-  #   - rad credential register azure --client-id $ARM_CLIENT_ID --client-secret $ARM_CLIENT_SECRET --tenant-id $ARM_TENANT_ID
-  #   - rad workspace create kubernetes -w {{.APP_NAME}} --force
-  #   - rad env create {{.APP_NAME}} -g {{.RG}} -n {{.APP_NAME}} -w {{.APP_NAME}}
-  #   vars:
-  #     RG: 
-  #       sh: terraform output -raw AKS_RESOURCE_GROUP
-  #     APP_NAME:
-  #       sh: terraform output -raw APP_NAME
+  radius:
+     desc: Initialize Radius
+     dir: ../../demo-apps/eshop
+     cmds:
 
-  # eshop:
-  #   desc: Deploys eshop-dapr via Project Radius
-  #   dir: ./app
-  #   cmds:
-  #   - rad run dapr.bicep --application {{.APP_NAME}}
-  #   vars:
-  #     OIDC:
-  #       sh: terraform -chdir=../. output -raw AKS_OIDC_ISSUER
-  #     RG: 
-  #       sh: terraform -chdir=../. output -raw AKS_RESOURCE_GROUP
-  #     APP_NAME:
-  #       sh: terraform -chdir=../. output -raw APP_NAME
+     - rad install kubernetes
+     - rad group create -g {{.RG}}
+     - rad credential register azure --client-id $ARM_CLIENT_ID --client-secret $ARM_CLIENT_SECRET --tenant-id $ARM_TENANT_ID
+     - rad workspace create kubernetes -w {{.APP_NAME}} --force
+     - rad env create {{.APP_NAME}} -n {{.APP_NAME}} -g {{.RG}}  -w {{.APP_NAME}}
+     - rad env update {{.APP_NAME}} --azure-subscription-id {{.AZURE_SUBCRIPTION_ID}} --azure-resource-group {{.RG}} -g {{.RG}}
+     - az group create -n {{.RG}} -l {{.REGION}}
+     vars:
+      APP_NAME:
+        sh: terraform -chdir=../../aks/dapr output -raw APP_NAME
+      AZURE_SUBCRIPTION_ID:
+        sh: terraform -chdir=../../aks/dapr output -raw AZURE_SUBCRIPTION_ID
+      RG: 
+        sh: echo $(terraform -chdir=../../aks/dapr output -raw APP_NAME)-eshop
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  eshop:
+    desc: Deploys eshop-dapr via Project Radius
+    dir: ../../demo-apps/eshop
+    cmds:
+    - rad deploy main.bicep -p oidcIssuer={{.OIDC}} -g {{.RG}} -e {{.APP_NAME}}
+    vars:
+      OIDC:
+        sh: terraform -chdir=../../aks/dapr output -raw AKS_OIDC_ISSUER
+      RG: 
+        sh: echo $(terraform -chdir=../../aks/dapr output -raw APP_NAME)-eshop
+      APP_NAME:
+        sh: terraform -chdir=../../aks/dapr output -raw APP_NAME
+
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
