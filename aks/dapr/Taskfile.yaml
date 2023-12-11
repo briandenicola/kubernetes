@@ -27,6 +27,7 @@ tasks:
     desc: Deploys eshop-dapr via Project Radius
     dir: ./eshop-dapr
     cmds:
+    #-rad credential register azure --client-id $ARM_CLIENT_ID --client-secret $ARM_CLIENT_SECRET --tenant-id $ARM_TENANT_ID
     - rad init
     - rad deploy main.bicep -p oidcIssuer={{.OIDC}}
     vars:
