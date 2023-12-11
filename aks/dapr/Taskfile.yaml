@@ -1,0 +1,43 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Creates a complete Azure ML environment 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    - task: creds
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  creds:
+    desc: Gets AKS credential file
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  eshop:
+    desc: Deploys eshop-dapr via Project Radius
+    dir: ./eshop-dapr
+    cmds:
+    - rad init
+    - rad deploy main.bicep -p oidcIssuer={{.OIDC}}
+    vars:
+      OIDC:
+        sh: terraform -chdir=../. output -raw AKS_OIDC_ISSUER
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform  output -raw AKS_RESOURCE_GROUP
