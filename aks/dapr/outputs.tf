@@ -17,3 +17,8 @@ output "AKS_OIDC_ISSUER" {
     value = azurerm_kubernetes_cluster.this.oidc_issuer_url
     sensitive = false
 }
+
+output "APP_NAME" {
+    value = local.resource_name
+    sensitive = false
+}
