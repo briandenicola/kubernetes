@@ -75,7 +75,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
       }
 
       infrastructureResourceGroup = "${local.resource_name}_aca_nodes_rg"
-
+      zoneRedundant               = true
       vnetConfiguration = {
         infrastructureSubnetId = azurerm_subnet.nodes.id
         internal               = true

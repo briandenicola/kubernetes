@@ -14,14 +14,14 @@ tasks:
     - terraform workspace select {{.REGION}}
     - terraform init
     vars: 
-      REGION: '{{default "eastus" .CLI_ARGS}}'
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
   
   apply:
     desc: Applies Terraform 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     vars: 
-      REGION: '{{default "eastus" .CLI_ARGS}}'
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   validate:
     desc: Validates proper deployment 
