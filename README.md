@@ -29,6 +29,8 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | [SPN Auth](./aks/spn-auth-example) | An example how to authenticate to an AKS cluster using Service Principals. _Outdated_ |
 | [Storage Class Removal](./aks/storageclass-removal/) | An example how to remove storage classes from an AKS cluster. _Outdated_ |
 | [Windows 2022](./aks/windows2022/) | An example AKS cluster with Windows 2022 node pools |
+| [Node Customizations](./aks/node-customizations/) | An example AKS cluster with customizations made to the underlying VMs in the node pools |
+| [Dapr](./aks/dapr/) | An example AKS cluster with Dapr Extension installed |
 
 # Container Apps
 | Directory | Description |
@@ -36,7 +38,7 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | [Basic](./container-apps/basic/) | A basic Container App Environment |
 | [Jobs](./container-apps/jobs) | A Container App Environment for jobs - TBD |
 | [NAT](./container-apps/nat) | An internal Container App Environment with a NAT Gateway for Egress control |
-| [Workload Profile](./container-apps/) | A workload profile Container App Environment with an Azure Firewall for egress control (preview) |
+| [Workload Profile](./container-apps/workloadprofile) | A workload profile Container App Environment with an Azure Firewall for egress control (preview) |
 
 # GKE
 | Directory | Description |
@@ -44,6 +46,7 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | Basic | A simple GKE cluster for testing and comparisons only. |
 
 # Demo Apps
+* eshop - A sample application from Microsoft to demonstrate various Azure services 
 * httpbin - A simple web application to test various HTTP calls (http://httpbin.org/)
 * mssql - An example on how to deploy SQL Server in an Always On configuration _Outdated_
 * nodejs - A very basic Nodejs API container
