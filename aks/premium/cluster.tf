@@ -36,8 +36,8 @@ resource "azapi_resource" "aks" {
       disableLocalAccounts = true
       enableRBAC           = true
       dnsPrefix            = local.aks_name
-      
-      supportPlan          = "AKSLongTermSupport"
+
+      supportPlan = "AKSLongTermSupport"
       aadProfile = {
         enableAzureRBAC = true
         managed         = true
