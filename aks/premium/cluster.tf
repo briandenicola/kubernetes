@@ -3,7 +3,8 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 locals {
-  kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
+  #kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
+  kubernetes_version = "1.27.7"
   allowed_ip_range   = ["${chomp(data.http.myip.response_body)}/32"]
 }
 
@@ -34,8 +35,9 @@ resource "azapi_resource" "aks" {
       kubernetesVersion    = local.kubernetes_version
       disableLocalAccounts = true
       enableRBAC           = true
-      fqdnSubdomain        = local.aks_name
-
+      dnsPrefix            = local.aks_name
+      
+      supportPlan          = "AKSLongTermSupport"
       aadProfile = {
         enableAzureRBAC = true
         managed         = true
@@ -66,7 +68,8 @@ resource "azapi_resource" "aks" {
 
       agentPoolProfiles = [
         {
-          name              = "default"
+          name              = "systempool"
+          mode              = "System"
           enableAutoScaling = true
           vmSize            = "Standard_B4ms"
           vnetSubnetID      = azurerm_subnet.nodes.id
@@ -114,8 +117,8 @@ resource "azapi_resource" "aks" {
         loadBalancerSku   = "standard"
         networkPlugin     = "azure"
         networkPluginMode = "overlay"
-        podCidr           = "100.${random_integer.services_cidr.id}.0.0/16"
-        serviceCidr       = "100.${random_integer.pod_cidr.id}.0.0/16"
+        podCidr           = "100.${random_integer.pod_cidr.id}.0.0/16"
+        serviceCidr       = "100.${random_integer.services_cidr.id}.0.0/16"
       }
 
       oidcIssuerProfile = {
