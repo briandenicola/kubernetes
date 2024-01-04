@@ -1,0 +1,51 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Builds end to end an AKS environment with Fleet for Patch Management Demo
+    cmds:
+    - task: init
+    - task: apply
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  init: 
+    desc: Initializes Terraform
+    cmds:
+    - terraform -chdir=./infrastructure/patch-demo workspace new {{.REGION}} || true
+    - terraform -chdir=./infrastructure/patch-demo workspace select {{.REGION}}
+    - terraform -chdir=./infrastructure/patch-demo init
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  apply: 
+    desc: Applies Terraform configuration
+    cmds:
+    - terraform -chdir=./infrastructure/patch-demo apply -auto-approve -var "region={{.REGION}}"
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  plan:
+    desc: Reviews Terraform plan
+    cmds:
+    - terraform -chdir=./infrastructure/patch-demo plan -var "region={{.REGION}}"
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+    
+  save-creds:
+    desc: Grab AKS credentials 
+    cmds:
+    - az fleet get-credentials --name {{.FLEET}} --resource-group {{.RG}} --file fleet
+    - sed -i s/devicecode/azurecli/g fleet 
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure/patch-demo output -raw FLEET_RESOURCE_GROUP
+      FLEET: 
+        sh: terraform -chdir=./infrastructure/patch-demo output -raw FLEET_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="AKS Fleet Demo Cluster" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
+    - az group list --tag Application="AKS Fleet Patch Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
+    - cd ./infrastructure/patch; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info

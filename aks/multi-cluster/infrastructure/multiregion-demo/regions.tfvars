@@ -1,0 +1,1 @@
+regions = ["southcentralus","westus3"]
