@@ -26,7 +26,6 @@ spec:
     spec:
       containers:
       - name: httpbin
-        #image: bjd145/httpbin:1087
         image: bjd145/whatos:e7fbcf6f2122
         imagePullPolicy: Always
         ports:

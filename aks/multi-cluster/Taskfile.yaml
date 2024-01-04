@@ -1,0 +1,10 @@
+version: '3'
+
+includes:
+  patch:
+    taskfile: ./infrastructure/Taskfile.patch.yaml
+    internal: false
+
+  multiregion:
+    taskfile: ./infrastructure/Taskfile.regional.yaml
+    internal: false
