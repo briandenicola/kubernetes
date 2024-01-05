@@ -46,6 +46,6 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="AKS Fleet Demo Cluster" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
+    - az group list --tag Application="AKS Fleet Demo Clustesr" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
     - az group list --tag Application="AKS Fleet Patch Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
     - cd ./infrastructure/patch; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
