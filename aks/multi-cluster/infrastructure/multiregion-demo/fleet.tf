@@ -16,9 +16,10 @@ resource "azapi_resource" "fleet_members" {
 
   for_each  = toset(var.regions)
   type      = "Microsoft.ContainerService/fleets/members@2023-06-15-preview"
-  name      = "${module.cluster_resources[each.key].AKS_CLUSTER_NAME}-member"
+  name      = module.cluster_resources[each.key].AKS_CLUSTER_NAME
   parent_id = azurerm_kubernetes_fleet_manager.this.id
-  body = jsonencode({
+  
+  body      = jsonencode({
     properties = {
       clusterResourceId = module.cluster_resources[each.key].AKS_CLUSTER_ID
       group             = each.key

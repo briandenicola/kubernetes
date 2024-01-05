@@ -34,7 +34,7 @@ KUBECONFIG=fleet kubectl apply -f ./deploy/fleet-cluster-placement.yaml
 ```
 ## Primary Cluster
 ```bash
-KUBECONFIG=primary kubectl apply -f ./deploy/cluster-app-multi-cluster-service.yaml
+KUBECONFIG={primary} kubectl apply -f ./deploy/cluster-app-multi-cluster-service.yaml
 ```
 
 # Test
@@ -42,13 +42,13 @@ KUBECONFIG=primary kubectl apply -f ./deploy/cluster-app-multi-cluster-service.y
 ```bash
 KUBECONFIG=fleet kubectl get clusterresourceplacements
 
-KUBECONFIG=primary kubectl get multiclusterservice httpbin --namespace app
-KUBECONFIG=primary kubectl get serviceexport httpbin --namespace app
-KUBECONFIG=primary kubectl get serviceimport httpbin --namespace app
-KUBECONFIG=primary kubectl get pods -o wide --namespace app
+KUBECONFIG={primary} kubectl get multiclusterservice httpbin --namespace app
+KUBECONFIG={primary} kubectl get serviceexport httpbin --namespace app
+KUBECONFIG={primary} kubectl get serviceimport httpbin --namespace app
+KUBECONFIG={primary} kubectl get pods -o wide --namespace app
 
-KUBECONFIG=secondary kubectl get serviceexport httpbin --namespace app
-KUBECONFIG=secondary kubectl get pods -o wide --namespace app
+KUBECONFIG={secondary} kubectl get serviceexport httpbin --namespace app
+KUBECONFIG={secondary} kubectl get pods -o wide --namespace app
 ```
 
 ## Application Load Balancing

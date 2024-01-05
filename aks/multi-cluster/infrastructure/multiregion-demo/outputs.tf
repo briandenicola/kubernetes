@@ -6,6 +6,10 @@ output "AKS_CLUSTER_IDS" {
   value = [ for aks in module.cluster_resources : aks.AKS_CLUSTER_ID ]
 }
 
+output "AKS_RESOURCE_GROUPS" {
+  value = [ for aks in module.cluster_resources : aks.AKS_RESOURCE_GROUP ]
+}
+
 output "FLEET_NAME" {
   value = local.fleet_name
 }
