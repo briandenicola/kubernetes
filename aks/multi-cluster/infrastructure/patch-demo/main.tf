@@ -21,6 +21,7 @@ module "cluster_resources" {
   resource_name         = "${local.resource_name}-${each.value}"
   public_key_openssh    = tls_private_key.rsa.public_key_openssh
   sdlc_environment      = each.value
+  kubernetes_version    = "1.26.10"
 }
 
 resource "azurerm_resource_group" "this" {

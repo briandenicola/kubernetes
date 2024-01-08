@@ -3,11 +3,14 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 locals {
-  kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
   zones              = var.region == "northcentralus" ? null : ["1", "2", "3"]
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
+  depends_on = [ 
+    azurerm_role_assignment.aks_role_assignemnt_dns
+  ]
+
   lifecycle {
     ignore_changes = [
       default_node_pool.0.node_count,
@@ -15,28 +18,31 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                         = local.aks_name
-  resource_group_name          = azurerm_resource_group.this.name
-  location                     = azurerm_resource_group.this.location
-  node_resource_group          = "${var.resource_name}_k8s_nodes_rg"
-  dns_prefix                   = local.aks_name
-  sku_tier                     = "Standard"
-  automatic_channel_upgrade    = "patch"
-  node_os_channel_upgrade      = "NodeImage"
-  oidc_issuer_enabled          = true
-  workload_identity_enabled    = true
-  azure_policy_enabled         = true
-  local_account_disabled       = false
-  open_service_mesh_enabled    = false
-  run_command_enabled          = false
-  kubernetes_version           = local.kubernetes_version
-  image_cleaner_enabled        = true
-  image_cleaner_interval_hours = 48
+  name                                = local.aks_name
+  resource_group_name                 = azurerm_resource_group.this.name
+  location                            = azurerm_resource_group.this.location
+  node_resource_group                 = "${var.resource_name}_k8s_nodes_rg"
+  dns_prefix_private_cluster          = local.aks_name
+  private_cluster_enabled             = true
+  private_cluster_public_fqdn_enabled = false
+  private_dns_zone_id                 = azurerm_private_dns_zone.aks_private_zone.id
+  sku_tier                            = "Standard"
+  automatic_channel_upgrade           = "patch"
+  node_os_channel_upgrade             = "NodeImage"
+  oidc_issuer_enabled                 = true
+  workload_identity_enabled           = true
+  azure_policy_enabled                = true
+  local_account_disabled              = false
+  open_service_mesh_enabled           = false
+  run_command_enabled                 = false
+  kubernetes_version                  = var.kubernetes_version
+  image_cleaner_enabled               = true
+  image_cleaner_interval_hours        = 48
 
   api_server_access_profile {
     vnet_integration_enabled = true
     subnet_id                = azurerm_subnet.api.id
-    authorized_ip_ranges     = [ var.authorized_ip_ranges ]
+    //authorized_ip_ranges     = [var.authorized_ip_ranges]
   }
 
   azure_active_directory_role_based_access_control {

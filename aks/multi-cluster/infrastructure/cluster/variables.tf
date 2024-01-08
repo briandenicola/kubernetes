@@ -23,3 +23,7 @@ variable "vm_sku" {
 variable "sdlc_environment" {
   description = "The value for the sdlc environment"
 }
+
+variable kubernetes_version {
+  description = "The version of Kubernetes to deploy"
+}
