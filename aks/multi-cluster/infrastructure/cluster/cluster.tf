@@ -27,8 +27,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   private_cluster_public_fqdn_enabled = false
   private_dns_zone_id                 = azurerm_private_dns_zone.aks_private_zone.id
   sku_tier                            = "Standard"
-  automatic_channel_upgrade           = "patch"
-  node_os_channel_upgrade             = "NodeImage"
   oidc_issuer_enabled                 = true
   workload_identity_enabled           = true
   azure_policy_enabled                = true
@@ -38,6 +36,9 @@ resource "azurerm_kubernetes_cluster" "this" {
   kubernetes_version                  = var.kubernetes_version
   image_cleaner_enabled               = true
   image_cleaner_interval_hours        = 48
+
+  automatic_channel_upgrade           = var.automatic_channel_upgrade
+  node_os_channel_upgrade             = var.node_os_channel_upgrade
 
   api_server_access_profile {
     vnet_integration_enabled = true
@@ -74,36 +75,18 @@ resource "azurerm_kubernetes_cluster" "this" {
     node_count          = 1
     vm_size             = var.vm_sku
     zones               = local.zones
-    os_disk_size_gb     = 100
+    os_disk_size_gb     = 127
     vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = "Mariner"
     os_disk_type        = "Ephemeral"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 3
-    max_pods            = 60
+    max_count           = 1
+    max_pods            = 90
     upgrade_settings {
       max_surge = "25%"
     }
-  }
-
-  maintenance_window_auto_upgrade {
-    frequency   = "Weekly"
-    interval    = 1
-    duration    = 4
-    day_of_week = "Friday"
-    utc_offset  = "-06:00"
-    start_time  = "20:00"
-  }
-
-  maintenance_window_node_os {
-    frequency   = "Weekly"
-    interval    = 1
-    duration    = 4
-    day_of_week = "Saturday"
-    utc_offset  = "-06:00"
-    start_time  = "20:00"
   }
 
   network_profile {
@@ -118,17 +101,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   service_mesh_profile {
     mode                             = "Istio"
     internal_ingress_gateway_enabled = true
-  }
-
-  maintenance_window {
-    allowed {
-      day   = "Friday"
-      hours = [21, 22, 22]
-    }
-    allowed {
-      day   = "Sunday"
-      hours = [1, 2, 3, 4, 5]
-    }
   }
 
   auto_scaler_profile {

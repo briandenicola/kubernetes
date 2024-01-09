@@ -21,14 +21,14 @@ tasks:
   apply: 
     desc: Applies Terraform configuration
     cmds:
-    - terraform -chdir=./infrastructure/patch-demo apply -auto-approve -var "region={{.REGION}}"
+    - terraform -chdir=./infrastructure/patch-demo apply -auto-approve -var "region={{.REGION}}" -var-file="environments.tfvars"
     vars:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   plan:
     desc: Reviews Terraform plan
     cmds:
-    - terraform -chdir=./infrastructure/patch-demo plan -var "region={{.REGION}}"
+    - terraform -chdir=./infrastructure/patch-demo plan -var "region={{.REGION}}" -var-file="environments.tfvars"
     vars:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
     

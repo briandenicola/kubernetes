@@ -8,3 +8,11 @@ variable "region" {
   description = "Azure region to deploy to"
   default     = "southcentralus"
 }
+
+variable automatic_channel_upgrade {
+  description = "The value for the automatic channel upgrade"
+}
+
+variable node_os_channel_upgrade {
+  description = "The value for the node OS channel upgrade"
+}
