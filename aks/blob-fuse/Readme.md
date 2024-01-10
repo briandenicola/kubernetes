@@ -19,5 +19,7 @@ task down
 
 # Validate 
 ```
-    kubectl exec -it blobfuse01 -- ls /mnt/blob/sample.txt
+kubectl -n kube-system get pod -l "app=csi-blob-node" -o json | jq ".items[].spec.containers[].image"
+kubectl describe pod blobfuse01 
+kubectl -n default exec -it blobfuse01 -- ls /mnt/blob/sample.txt
 ```
