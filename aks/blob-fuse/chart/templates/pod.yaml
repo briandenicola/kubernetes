@@ -1,0 +1,20 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: blobfuse01
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: blobfuse-test
+    volumeMounts:
+      - name: blob01
+        mountPath: "/mnt/blob"
+        readOnly: false
+  volumes:
+  - name: blob01
+    persistentVolumeClaim:
+      claimName: pvc-blob
