@@ -131,5 +131,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }
 
+  storage_profile {
+    blob_driver_enabled = true
+    disk_driver_enabled = true
+    disk_driver_version = "v2"
+    file_driver_enabled = true
+  }
+
 }
 
