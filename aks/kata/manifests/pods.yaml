@@ -1,0 +1,24 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: kata-isolation
+  labels: 
+    app: kata-demo
+spec:
+  runtimeClassName: kata-mshv-vm-isolation
+  containers:
+  - name: untrusted
+    image: mcr.microsoft.com/aks/fundamental/base-ubuntu:v0.0.11
+    command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: default-isolation
+  labels: 
+    app: kata-demo
+spec:
+  containers:
+  - name: regular
+    image: mcr.microsoft.com/aks/fundamental/base-ubuntu:v0.0.11
+    command: ["/bin/sh", "-ec", "while :; do echo '.'; sleep 5 ; done"]

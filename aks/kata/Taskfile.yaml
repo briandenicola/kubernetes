@@ -6,7 +6,8 @@ vars:
 
 tasks:
   up:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a complete AKS cluster with Pod Sandboxing enabled
+
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
@@ -23,6 +24,13 @@ tasks:
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
+  deploy:
+    cmds:
+    - kubectl apply -f manifests/pods.yaml
+    - kubectl wait --for=condition=ready pod -l app=kata-demo
+    - kubectl get pods
+    - kubectl exec -it kata-isolation -- uname -r
+    - kubectl exec -it default-isolation -- uname -r
   creds:
     desc: Gets AKS credential file
     cmds:
