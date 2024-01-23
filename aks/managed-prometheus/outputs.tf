@@ -17,3 +17,18 @@ output "AKS_CLUSTER_ID" {
     value = module.aks_cluster.AKS_CLUSTER_ID
     sensitive = false
 }
+
+output "WORKLOAD_ID_NAME" {
+    value = azurerm_user_assigned_identity.app_identity.name
+    sensitive = false
+}
+
+output "WORKLOAD_ID_CLIENT_ID" {
+    value = azurerm_user_assigned_identity.app_identity.client_id
+    sensitive = false
+}
+
+output "WORKLOAD_ID_TENANT_ID" {
+    value = azurerm_user_assigned_identity.app_identity.tenant_id
+    sensitive = false
+}

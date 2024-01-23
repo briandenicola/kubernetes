@@ -38,12 +38,19 @@ tasks:
     - kubectl -n kube-system create configmap ama-metrics-prometheus-config --from-file=./manifests/prometheus-config 
     - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
     - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
-    - kubectl -n kube-system rollout restart deploy  ama-metrics
+    - kubectl -n kube-system rollout restart deploy ama-metrics
 
   deploy-app:
     desc: Deploy Otel Demo Application
     cmds:
-    - kubectl apply -f ../../demo-apps/otel-prometheus/deployment.yaml
+    - helm upgrade -i otel-demo --set WORKLOAD_ID.NAME="{{.WORKLOAD_ID_NAME}}" --set WORKLOAD_ID.CLIENT_ID="{{.WORKLOAD_ID.CLIENT_ID}}"  --set WORKLOAD_ID.TENANT_ID="{{.WORKLOAD_ID.TENANT_ID}}" ../../demo-apps/otel-prometheus/chart/
+    vars:
+      WORKLOAD_ID_NAME: 
+        sh: terraform output -raw WORKLOAD_ID_NAME
+      WORKLOAD_ID_CLIENT_ID: 
+        sh: terraform output -raw WORKLOAD_ID_CLIENT_ID
+      WORKLOAD_ID_TENANT_IDAKS: 
+        sh: terraform output -raw WORKLOAD_ID_TENANT_ID
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
