@@ -113,6 +113,9 @@ resource "azurerm_kubernetes_cluster" "this" {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }
 
+  monitor_metrics {
+  }
+
   microsoft_defender {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
   }
