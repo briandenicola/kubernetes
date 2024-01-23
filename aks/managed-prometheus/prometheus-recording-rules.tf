@@ -1,7 +1,8 @@
 #Data Collection Prometheus Node Rule Group
 resource "azapi_resource" "prometheus_node_recording_rule_group" {
   depends_on = [
-    azurerm_monitor_data_collection_rule.azuremonitor
+    azurerm_monitor_data_collection_rule.azuremonitor,
+    module.aks_cluster
   ]
 
   type      = "Microsoft.AlertsManagement/prometheusRuleGroups@2021-07-22-preview"
@@ -13,7 +14,7 @@ resource "azapi_resource" "prometheus_node_recording_rule_group" {
     properties = {
       scopes  = [ local.am_workspace_id ]
       enabled = true,
-      clusterName = local.aks_name
+      clusterName = module.aks_cluster.AKS_CLUSTER_NAME
       interval = "PT1M"
       rules = [
         {
@@ -68,7 +69,8 @@ resource "azapi_resource" "prometheus_node_recording_rule_group" {
 #Data Collection Prometheus Kubernetes Rule Group
 resource "azapi_resource" "prometheus_kubernetes_rule_groups" {
   depends_on = [
-    azurerm_monitor_data_collection_rule.azuremonitor
+    azurerm_monitor_data_collection_rule.azuremonitor,
+    module.aks_cluster
   ]
 
   type      = "Microsoft.AlertsManagement/prometheusRuleGroups@2021-07-22-preview"
@@ -80,7 +82,7 @@ resource "azapi_resource" "prometheus_kubernetes_rule_groups" {
     properties = {
       scopes  = [ local.am_workspace_id ]
       enabled = true,
-      clusterName = local.aks_name
+      clusterName = module.aks_cluster.AKS_CLUSTER_NAME
       interval = "PT1M"
       rules = [
           {

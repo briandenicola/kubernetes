@@ -7,6 +7,12 @@ tasks:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
+    - task: apply
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  apply:
+    cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     - task: creds
     - task: deploy-configs
@@ -32,7 +38,7 @@ tasks:
     - kubectl -n kube-system create configmap ama-metrics-prometheus-config --from-file=./manifests/prometheus-config 
     - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
     - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
-    - kubectl rollout restart deploy -n kube-system ama-metrics
+    - kubectl -n kube-system rollout restart deploy  ama-metrics
 
   deploy-app:
     desc: Deploy Otel Demo Application
@@ -43,7 +49,7 @@ tasks:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes || true
+    - az group delete -n {{.RG}} --yes --nowait || true
     vars:
       RG: 
-        sh: terraform  output -raw AKS_RESOURCE_GROUP
+        sh: terraform  output -raw RESOURCE_GROUP
