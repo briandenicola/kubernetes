@@ -32,8 +32,8 @@ resource "azurerm_resource_group" "this" {
 
   tags = {
     Application = var.tags
-    Components  = "aks"
-    Envrionment = var.sdlc_environment
+    Components  = "AKS; Virtual Network; NSG"
+    Environment = var.sdlc_environment
     DeployedOn  = timestamp()
   }
 }

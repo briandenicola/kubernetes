@@ -10,7 +10,7 @@ resource "random_pet" "this" {
 locals {
   location              = var.region
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
-  tags                  = "aks; prometheus"
+  tags                  = "Azure Managed Prometheus Demo"
 }
 
 resource "azurerm_resource_group" "this" {
@@ -18,8 +18,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "otel"
-    Components  = local.tags
+    Application = local.tags
+    Components  = "AKS; Managed Prometheus; Azure Monitor; Azure Grafana"
     DeployedOn  = timestamp()
   }
 }
