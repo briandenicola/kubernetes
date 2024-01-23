@@ -12,4 +12,5 @@ module "aks_cluster" {
   sdlc_environment      = "Production"
   kubernetes_version    = local.kubernetes_version
   tags                  = local.tags
+  enable_mesh           = true
 }

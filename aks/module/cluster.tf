@@ -92,9 +92,13 @@ resource "azurerm_kubernetes_cluster" "this" {
     pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
   }
 
-  service_mesh_profile {
-    mode                             = "Istio"
-    internal_ingress_gateway_enabled = true
+  dynamic "service_mesh_profile" {
+    for_each = var.enable_mesh == true ? [true] : []
+
+    content {
+      mode                             = "Istio"
+      internal_ingress_gateway_enabled = true
+    }
   }
 
   auto_scaler_profile {

@@ -41,3 +41,8 @@ variable node_os_channel_upgrade {
 variable "tags" {
   description = "Tags to apply for this resource"
 }
+
+variable "enable_mesh" {
+  description = "Enable service mesh"
+  default     = true
+}
