@@ -43,13 +43,13 @@ tasks:
   deploy-app:
     desc: Deploy Otel Demo Application
     cmds:
-    - helm upgrade -i otel-demo --set WORKLOAD_ID.NAME="{{.WORKLOAD_ID_NAME}}" --set WORKLOAD_ID.CLIENT_ID="{{.WORKLOAD_ID.CLIENT_ID}}"  --set WORKLOAD_ID.TENANT_ID="{{.WORKLOAD_ID.TENANT_ID}}" ../../demo-apps/otel-prometheus/chart/
+    - helm upgrade -i otel-demo --set WORKLOAD_ID.NAME="{{.WORKLOAD_ID_NAME}}" --set WORKLOAD_ID.CLIENT_ID="{{.WORKLOAD_ID_CLIENT_ID}}"  --set WORKLOAD_ID.TENANT_ID="{{.WORKLOAD_ID_TENANT_ID}}" ../../demo-apps/otel-prometheus/chart/
     vars:
       WORKLOAD_ID_NAME: 
         sh: terraform output -raw WORKLOAD_ID_NAME
       WORKLOAD_ID_CLIENT_ID: 
         sh: terraform output -raw WORKLOAD_ID_CLIENT_ID
-      WORKLOAD_ID_TENANT_IDAKS: 
+      WORKLOAD_ID_TENANT_ID: 
         sh: terraform output -raw WORKLOAD_ID_TENANT_ID
 
   down:
