@@ -1,0 +1,43 @@
+version: '3'
+
+env:
+  ACR_NAME: bjdcsa
+  ACR_RG: Core_ContainerRepo_RG
+  AKS_NAME: opossum-23807-aks
+  AKS_RG: opossum-23807_rg
+  AKS_EGRESS_IP: 52.248.98.206
+  AI_NAME: opossum-23807-appinsights
+  AI_RG: opossum-23807_rg
+  COMMIT_VERSION: workloadid-9cc7fb7f16eg
+  
+tasks:
+  up:
+    desc: Creates Azure infrastructure and deploys application code
+    cmds:
+    - terraform -chdir=./infrastructure init
+    - terraform -chdir=./infrastructure apply  -var "aks_name={{.AKS_NAME}}"  -var "aks_rg_name={{.AKS_RG}}"  -var "aks_ip_address={{.AKS_EGRESS_IP}}" -var "ai_name={{.AI_NAME}}"  -var "ai_rg_name={{.AI_RG}}" -auto-approve
+    - task: deploy
+
+  deploy:
+    desc: Deploys Todo application via Helm
+    cmds:
+    - helm upgrade -i workloadid --set ACR_NAME="{{.ACR_NAME}}" --set COMMIT_VERSION={{.COMMIT_VERSION}} --set APP_NAME={{.APP_NAME}} --set ARM_WORKLOAD_APP_ID={{.ARM_WORKLOAD_APP_ID}} --set ARM_TENANT_ID={{.ARM_TENANT_ID}} --set APP_INSIGHTS="{{.APP_INSIGHTS}}" ./chart
+    vars:
+      APP_NAME: 
+        sh: terraform -chdir=./infrastructure output -raw APP_NAME
+      ARM_WORKLOAD_APP_ID: 
+        sh: terraform -chdir=./infrastructure output -raw ARM_WORKLOAD_APP_ID
+      ARM_TENANT_ID:
+        sh: terraform -chdir=./infrastructure output -raw ARM_TENANT_ID
+      APP_INSIGHTS:
+        sh: terraform -chdir=./infrastructure output -raw APP_INSIGHTS
+
+  down:
+    desc: Destorys Azure infrastructure and cleans up terraform state files
+    cmds:
+    - cd infrastructure ;
+      rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP

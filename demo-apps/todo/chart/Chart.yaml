@@ -1,0 +1,6 @@
+apiVersion: v2
+name: Todo-with-Workload-Identities
+description: A demo todo application that utlizies Azure Workload Identities for authentication to Azure resources
+type: application
+version: 0.0.1
+appVersion: "1.0.0"
