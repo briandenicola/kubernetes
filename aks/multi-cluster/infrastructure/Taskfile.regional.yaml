@@ -35,8 +35,6 @@ tasks:
   save-creds:
     desc: Grab AKS credentials 
     cmds:
-    #- az fleet get-credentials --name {{.FLEET}} --resource-group {{.RG}} --file fleet
-    #- sed -i s/devicecode/azurecli/g fleet
     - az fleet member list -f {{.FLEET}} -g {{.RG}} -o tsv --query '[].clusterResourceId' | awk -F/ '{ print "az aks get-credentials -g " $5 " -n " $9 " -f " $9 }' | xargs -n 1 -d '\n' bash -c "$@"
     - az fleet member list -f {{.FLEET}} -g {{.RG}} -o tsv --query '[].name' | xargs bash -c 'sed -i s/devicecode/azurecli/g $0'
     vars:
@@ -48,6 +46,6 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="AKS Fleet Demo Clusters" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
-    - az group list --tag Application="AKS Fleet multiregion Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose -n
+    - az group list --tag Application="AKS Fleet Demo Clusters" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait --verbose -n
+    - az group list --tag Application="AKS Fleet multiregion Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait --verbose -n
     - cd ./infrastructure/multiregion-demo; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
