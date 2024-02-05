@@ -59,7 +59,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
     azapi_update_resource.nodes_delegation
   ]
 
-  type      = "Microsoft.App/managedEnvironments@2022-11-01-preview"
+  type      = "Microsoft.App/managedEnvironments@2023-04-01-preview"
   name      = local.aca_name
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_resource_group.this.id
@@ -81,12 +81,17 @@ resource "azapi_resource" "azurerm_container_app_environment" {
         internal               = true
       }
 
-      workloadProfiles = [{
-        minimumCount        = 3
-        maximumCount        = 5
-        name                = local.workload_profile_name
-        workloadProfileType = local.workload_profile_size
-      }]
+      workloadProfiles = [
+        {
+          workloadProfileType = "Consumption",
+          name                = "Consumption"
+        },
+        {
+          minimumCount        = 3
+          maximumCount        = 5
+          name                = local.workload_profile_name
+          workloadProfileType = local.workload_profile_size
+        }]
     }
   })
 }
@@ -101,7 +106,7 @@ data "azurerm_container_app_environment" "this" {
 
 resource "azapi_resource" "azurerm_container_app_httpbin" {
   name      = local.app_name
-  type      = "Microsoft.App/containerApps@2022-11-01-preview"
+  type      = "Microsoft.App/containerApps@2023-04-01-preview"
   parent_id = azurerm_resource_group.this.id
   location  = azurerm_resource_group.this.location
 
