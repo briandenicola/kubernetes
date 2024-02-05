@@ -26,11 +26,12 @@ tasks:
   validate:
     desc: Validates proper deployment 
     cmds:
-    - curl -vvv {{.APP_URL}}/{{.URI}}
+    - echo "Running abritary commands with options is not supported by - az containerapp exec"
+    - echo "Try the following inside the container - nslookup httpbin ; curl http://httpbin/html"
+    - az containerapp exec --name utils --resource-group {{.RG}} --command bash
     vars:
-      APP_URL: 
-        sh: terraform  output -raw APP_URL
-      URI: '{{default "/" .CLI_ARGS}}'
+      RG: 
+        sh: terraform  output -raw RESOURCE_GROUP
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
