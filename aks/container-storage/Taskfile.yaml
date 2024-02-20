@@ -11,8 +11,22 @@ tasks:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    - task: apply
     - task: creds
+    vars: 
+      REGION: '{{default "westus3" .CLI_ARGS}}'
+
+  plan:
+    desc: Creates a complete Azure ML environment 
+    cmds:
+    - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    vars: 
+      REGION: '{{default "westus3" .CLI_ARGS}}'
+
+  apply:
+    desc: Creates a complete Azure ML environment 
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
       REGION: '{{default "westus3" .CLI_ARGS}}'
 
@@ -20,7 +34,7 @@ tasks:
     desc: Gets AKS credential file
     cmds:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
-    - kubelogin convert-kubeconfig -l azurecli
+    - sed -i s/devicecode/azurecli/g ~/.kube/config
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP

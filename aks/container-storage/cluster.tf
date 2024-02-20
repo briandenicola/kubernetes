@@ -89,7 +89,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_policy      = "calico"
-    network_plugin_mode = "Overlay"
+    network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
   }
 
