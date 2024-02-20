@@ -5,7 +5,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: acstor-acstor-azuredisk
+  storageClassName: acstor-azuredisk
   resources:
     requests:
       storage: 100Gi
