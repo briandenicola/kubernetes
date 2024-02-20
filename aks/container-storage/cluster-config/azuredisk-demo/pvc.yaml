@@ -2,11 +2,10 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: azurediskpvc
-  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: acstor-azuredisk 
+  storageClassName: acstor-acstor-azuredisk
   resources:
     requests:
       storage: 100Gi
