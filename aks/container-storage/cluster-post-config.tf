@@ -7,7 +7,7 @@ resource "azurerm_kubernetes_cluster_extension" "storage" {
   cluster_id        = azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.azurecontainerstorage"
   release_train     = "stable"
-  release_namespace = "acstor-system"
+  release_namespace = "acstor"
 }
 
 resource "azurerm_kubernetes_cluster_extension" "flux" {

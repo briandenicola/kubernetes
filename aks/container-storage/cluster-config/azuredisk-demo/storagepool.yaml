@@ -2,7 +2,7 @@ apiVersion: containerstorage.azure.com/v1beta1
 kind: StoragePool
 metadata:
   name: acstor-azuredisk 
-  namespace: acstor-system
+  namespace: acstor
 spec:
   poolType:
     azureDisk:
