@@ -2,7 +2,7 @@ apiVersion: containerstorage.azure.com/v1alpha1
 kind: StoragePool
 metadata:
   name: esan
-  namespace: acstor-system
+  namespace: acstor
 spec:
   poolType:
     elasticSan: {}
