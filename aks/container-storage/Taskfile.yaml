@@ -14,21 +14,21 @@ tasks:
     - task: apply
     - task: creds
     vars: 
-      REGION: '{{default "westus3" .CLI_ARGS}}'
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   plan:
     desc: Creates a complete Azure ML environment 
     cmds:
     - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
-      REGION: '{{default "westus3" .CLI_ARGS}}'
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   apply:
     desc: Creates a complete Azure ML environment 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
-      REGION: '{{default "westus3" .CLI_ARGS}}'
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   creds:
     desc: Gets AKS credential file
@@ -44,8 +44,5 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group delete -n {{.RG}} --yes --no-wait || true
+    - az group list --tag Application="Azure Container Storage Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    vars:
-      RG: 
-        sh: terraform  output -raw AKS_RESOURCE_GROUP

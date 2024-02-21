@@ -1,12 +1,7 @@
-variable "namespace" {
-  description = "The namespace for the workload identity"
+variable "nodepool_name" {
+  description = "The name of the node pool"
   type        = string
-  default     = "default"
-}
-
-variable "service_mesh_type" {
-  description = "Type of Service Mesh for cluster"
-  default     = "istio"
+  default     = "system"
 }
 
 variable "region" {
@@ -15,11 +10,9 @@ variable "region" {
 }
 
 variable "vm_size" {
-  description = "The SKU for the default node pool"
-  default     = "Standard_B4ms"
-}
+  description = "The value for the VM SKU"
+} 
 
 variable "node_count" {
-  description = "The default number of nodes to scale the cluster to"
-  default     = 1
+  description = "The node count for the default node pool"
 }

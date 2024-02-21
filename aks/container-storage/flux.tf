@@ -1,22 +1,10 @@
-resource "azurerm_kubernetes_cluster_extension" "storage" {
-  depends_on = [
-    azurerm_kubernetes_cluster.this
-  ]
-
-  name              = "azurecontainerstorage"
-  cluster_id        = azurerm_kubernetes_cluster.this.id
-  extension_type    = "microsoft.azurecontainerstorage"
-  release_train     = "stable"
-  release_namespace = "acstor"
-}
-
 resource "azurerm_kubernetes_cluster_extension" "flux" {
   depends_on = [
-    azurerm_kubernetes_cluster.this
+    azurerm_kubernetes_cluster_extension.storage
   ]
 
   name              = "flux"
-  cluster_id        = azurerm_kubernetes_cluster.this.id
+  cluster_id        = data.azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.flux"
   release_namespace = "flux-system"
 }
@@ -27,7 +15,7 @@ resource "azurerm_kubernetes_flux_configuration" "flux_config" {
   ]
 
   name       = "aks-flux-extension"
-  cluster_id = azurerm_kubernetes_cluster.this.id
+  cluster_id = data.azurerm_kubernetes_cluster.this.id
   namespace  = "flux-system"
   scope      = "cluster"
 
@@ -48,5 +36,4 @@ resource "azurerm_kubernetes_flux_configuration" "flux_config" {
     garbage_collection_enabled = true
     depends_on                 = []
   }
-
 }
