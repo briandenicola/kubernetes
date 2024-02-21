@@ -16,6 +16,10 @@ spec:
       args:
         - sleep
         - "1000000"
+      resources:
+        limits:
+          cpu: "2"
+          memory: "2Gi"
       volumeMounts:
         - mountPath: "/volume"
           name: azurediskpv
