@@ -20,6 +20,11 @@ variable "vm_sku" {
   default     = "Standard_D4ads_v5"
 } 
 
+variable "vm_os" {
+  description = "The value for the VM OS"
+  default = "AzureLinux"
+}
+
 variable "sdlc_environment" {
   description = "The value for the sdlc environment"
 }
@@ -45,4 +50,15 @@ variable "tags" {
 variable "enable_mesh" {
   description = "Enable service mesh"
   default     = true
+}
+
+variable "node_labels" {
+  description = "The labels to apply to the nodes"
+  type        = map(string)
+  default     = {}
+}
+
+variable "node_count" {
+  description = "The node count for the default node pool"
+  default     = 1
 }

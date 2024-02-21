@@ -15,24 +15,24 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                                = local.aks_name
-  resource_group_name                 = azurerm_resource_group.this.name
-  location                            = azurerm_resource_group.this.location
-  node_resource_group                 = "${var.resource_name}_k8s_nodes_rg"
-  dns_prefix                          = local.aks_name
-  sku_tier                            = "Standard"
-  oidc_issuer_enabled                 = true
-  workload_identity_enabled           = true
-  azure_policy_enabled                = true
-  local_account_disabled              = false
-  open_service_mesh_enabled           = false
-  run_command_enabled                 = false
-  kubernetes_version                  = var.kubernetes_version
-  image_cleaner_enabled               = true
-  image_cleaner_interval_hours        = 48
+  name                         = local.aks_name
+  resource_group_name          = azurerm_resource_group.this.name
+  location                     = azurerm_resource_group.this.location
+  node_resource_group          = local.aks_node_rg_name
+  dns_prefix                   = local.aks_name
+  sku_tier                     = "Standard"
+  oidc_issuer_enabled          = true
+  workload_identity_enabled    = true
+  azure_policy_enabled         = true
+  local_account_disabled       = false
+  open_service_mesh_enabled    = false
+  run_command_enabled          = false
+  kubernetes_version           = var.kubernetes_version
+  image_cleaner_enabled        = true
+  image_cleaner_interval_hours = 48
 
-  automatic_channel_upgrade           = "patch"
-  node_os_channel_upgrade             = "NodeImage"
+  automatic_channel_upgrade = "patch"
+  node_os_channel_upgrade   = "NodeImage"
 
   api_server_access_profile {
     vnet_integration_enabled = true
@@ -66,18 +66,20 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   default_node_pool {
     name                = "system"
-    node_count          = 1
+    node_count          = var.node_count
     vm_size             = var.vm_sku
     zones               = local.zones
     os_disk_size_gb     = 127
     vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "Mariner"
-    os_disk_type        = "Ephemeral"
+    os_sku              = var.vm_os
+    #os_disk_type        = "Ephemeral"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 1
+    max_count           = var.node_count
     max_pods            = 90
+    node_labels         = tomap(var.node_labels)
+
     upgrade_settings {
       max_surge = "25%"
     }
