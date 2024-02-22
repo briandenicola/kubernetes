@@ -67,7 +67,9 @@ resource "azurerm_firewall_policy_rule_collection_group" "this" {
       ]
       destination_fqdns = [
         "management.microsoft.com",
-        "login.microsoftonline.com"
+        "login.microsoftonline.com",
+        "login.windows.net",
+        "sts.windows.net"
       ]
     }
   }
