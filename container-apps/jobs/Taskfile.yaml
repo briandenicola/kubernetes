@@ -1,0 +1,43 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Creates a complete Azure Container App Environment with Workload Profile
+    cmds:
+    - task: init
+    - task: apply
+
+  init:
+    desc: Initializes Terraform 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+  
+  apply:
+    desc: Applies Terraform 
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  validate:
+    desc: Validates proper deployment 
+    cmds:
+    - az containerapp job execution list --name {{.JOB}} --resource-group {{.RG}} -o table
+    vars:
+      RG: 
+        sh: terraform  output -raw RESOURCE_GROUP
+      JOB: 
+        sh: terraform  output -raw JOB_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group delete -n {{.RG}} --yes --no-wait || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    vars:
+      RG: 
+        sh: terraform  output -raw RESOURCE_GROUP
