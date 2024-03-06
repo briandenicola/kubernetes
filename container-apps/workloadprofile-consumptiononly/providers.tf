@@ -7,7 +7,7 @@ terraform {
     }
     azapi = {
       source  = "Azure/azapi"
-      version = "1.7.0"
+      version = "~> 1"
     }
     tls = {
       source = "hashicorp/tls"
