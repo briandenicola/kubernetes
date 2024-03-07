@@ -11,18 +11,22 @@ resource "azapi_resource" "azurerm_container_app_environment" {
   body = jsonencode({
     properties = {
       appLogsConfiguration = {
-        destination = "log-analytics"
-        logAnalyticsConfiguration = {
-          customerId = azurerm_log_analytics_workspace.this.workspace_id
-          sharedKey  = azurerm_log_analytics_workspace.this.primary_shared_key
-        }
+        destination = "azure-monitor"
       }
 
+      daprAIConnectionString      = azurerm_application_insights.this.connection_string
       infrastructureResourceGroup = "${local.resource_name}_aca_nodes_rg"
       zoneRedundant               = true
+      
       vnetConfiguration = {
         infrastructureSubnetId = azurerm_subnet.nodes.id
         internal               = true
+      }
+
+     peerAuthentication = {
+        mtls = {
+          enabled = true
+        }
       }
 
       workloadProfiles = [
