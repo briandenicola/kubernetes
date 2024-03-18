@@ -77,7 +77,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     enable_auto_scaling = true
     min_count           = 1
     max_count           = var.node_count
-    max_pods            = 90
+    max_pods            = 250 
     node_labels         = tomap(var.node_labels)
 
     upgrade_settings {
