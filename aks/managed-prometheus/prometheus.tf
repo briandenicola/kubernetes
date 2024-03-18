@@ -13,7 +13,7 @@ locals {
 }
 
 resource "azurerm_monitor_data_collection_endpoint" "this" {
-  name                          = "${local.resource_name}-azuremonitor-datacollection-ep"
+  name                          = "${local.resource_name}-monitor-datacollection-ep"
   resource_group_name           = azurerm_resource_group.this.name
   location                      = azurerm_resource_group.this.location
   kind                          = "Linux"
@@ -21,7 +21,7 @@ resource "azurerm_monitor_data_collection_endpoint" "this" {
 }
 
 resource "azurerm_monitor_data_collection_rule" "azuremonitor" {
-  name                = "${local.resource_name}-azuremonitor-datacollection-rules"
+  name                = "${local.resource_name}-monitor-datacollection-rules"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
   depends_on = [
