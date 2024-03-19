@@ -1,19 +1,11 @@
-resource "azapi_resource" "azure_monitor_workspace" {
-  type      = "microsoft.monitor/accounts@2021-06-03-preview"
-  name      = "${local.resource_name}-workspace"
-  parent_id = azurerm_resource_group.this.id
-  location = azurerm_resource_group.this.location
-
-  body = jsonencode({
-  })
-}
-
-locals {
-  am_workspace_id = "${data.azurerm_subscription.current.id}/resourcegroups/${azurerm_resource_group.this.name}/providers/microsoft.monitor/accounts/${local.resource_name}-workspace"
+resource "azurerm_monitor_workspace" "this" {
+  name                = "${local.resource_name}-workspace"
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
 }
 
 resource "azurerm_monitor_data_collection_endpoint" "this" {
-  name                          = "${local.resource_name}-monitor-datacollection-ep"
+  name                          = "${local.resource_name}-ama-datacollection-ep"
   resource_group_name           = azurerm_resource_group.this.name
   location                      = azurerm_resource_group.this.location
   kind                          = "Linux"
@@ -21,25 +13,26 @@ resource "azurerm_monitor_data_collection_endpoint" "this" {
 }
 
 resource "azurerm_monitor_data_collection_rule" "azuremonitor" {
-  name                = "${local.resource_name}-monitor-datacollection-rules"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
   depends_on = [
-    azapi_resource.azure_monitor_workspace,
+    azurerm_monitor_workspace.this,
     azurerm_monitor_data_collection_endpoint.this
   ]
-  kind                        = "Linux"
-  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.this.id
+
+  name                          = "${local.resource_name}-ama-datacollection-rules"
+  resource_group_name           = azurerm_resource_group.this.name
+  location                      = azurerm_resource_group.this.location
+  kind                          = "Linux"
+  data_collection_endpoint_id   = azurerm_monitor_data_collection_endpoint.this.id
 
   destinations {
     monitor_account {
-      monitor_account_id = local.am_workspace_id
-      name               = "MonitoringAccount1"
+      monitor_account_id = azurerm_monitor_workspace.this.id
+      name               = "MonitoringAccount"
     }
   }
 
   data_flow {
-    destinations = ["MonitoringAccount1"]
+    destinations = ["MonitoringAccount"]
     streams      = ["Microsoft-PrometheusMetrics"]
   }
 
@@ -52,7 +45,7 @@ resource "azurerm_monitor_data_collection_rule" "azuremonitor" {
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "this" {
-  name                    = "${local.resource_name}-monitor-datacollection-rules-association"
+  name                    = "${local.resource_name}-ama-datacollection-rules-association"
   target_resource_id      = module.aks_cluster.AKS_CLUSTER_ID
   data_collection_rule_id = azurerm_monitor_data_collection_rule.azuremonitor.id
 }

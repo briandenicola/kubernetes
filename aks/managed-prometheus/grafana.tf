@@ -1,6 +1,6 @@
 resource "azurerm_dashboard_grafana" "this" {
   depends_on = [
-    azapi_resource.azure_monitor_workspace
+    azurerm_monitor_workspace.this
   ]
 
   name                              = "${local.resource_name}-grafana"
@@ -17,6 +17,6 @@ resource "azurerm_dashboard_grafana" "this" {
   }
 
   azure_monitor_workspace_integrations {
-    resource_id = local.am_workspace_id
+    resource_id = azurerm_monitor_workspace.this.id
   }
 }
