@@ -12,3 +12,15 @@ variable "node_count" {
   description = "The default number of nodes to scale the cluster to"
   default     = 1
 }
+
+variable "nodepool_name" {
+  description = "The name of the node pool"
+  type        = string
+  default     = "system"
+}
+
+variable "tags" {
+  description = "The name of the node pool"
+  type        = string
+  default     = "Basic AKS Cluster"
+}
