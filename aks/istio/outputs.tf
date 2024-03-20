@@ -1,14 +1,14 @@
 output "AKS_RESOURCE_GROUP" {
-    value = azurerm_kubernetes_cluster.this.resource_group_name
+    value = module.cluster.AKS_RESOURCE_GROUP
     sensitive = false
 }
 
 output "AKS_CLUSTER_NAME" {
-    value = azurerm_kubernetes_cluster.this.name
+    value = module.cluster.AKS_CLUSTER_NAME
     sensitive = false
 }
 
 output "AKS_CLUSTER_ID" {
-    value = azurerm_kubernetes_cluster.this.id
+    value = module.cluster.AKS_CLUSTER_ID
     sensitive = false
 }
