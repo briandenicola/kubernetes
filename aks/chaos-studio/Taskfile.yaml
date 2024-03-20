@@ -1,14 +1,28 @@
 version: '3'
 
+vars:
+  CHAOS_TAG: "Chaos Studio"
+
 includes:
   infra:
     taskfile: ../basic/Taskfile.yaml
     dir: ../basic
-    optional: true
+    internal: true
 
 tasks:
-  deploy:
+  up: 
     desc: Creates a complete Azure Chaos Experiment
+    cmds:
+    - task: 'infra:up' 
+      vars:
+        TAGS: '{{.CHAOS_TAG}}'
+        REGION: '{{.REGION}}'
+    - task: deploy
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  deploy:
+    desc: Deploys Azure Chaos Experiments
     cmds:
     - task: creds
     - task: extensions
@@ -21,7 +35,8 @@ tasks:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
     - sed -i s/devicecode/azurecli/g ~/.kube/config
     vars:
-      AKS: '{{.CLI_ARGS}}'
+      AKS:
+        sh: terraform -chdir=../basic output -raw AKS_CLUSTER_NAME
       RG: 
         sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
   
