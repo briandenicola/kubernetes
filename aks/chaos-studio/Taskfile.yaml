@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   CHAOS_TAG: "Chaos Studio"
-
+  CHAOS_NODE_COUNT: 3
 includes:
   infra:
     taskfile: ../basic/Taskfile.yaml
@@ -17,6 +17,7 @@ tasks:
       vars:
         TAGS: '{{.CHAOS_TAG}}'
         REGION: '{{.REGION}}'
+        COUNT: '{{.CHAOS_NODE_COUNT}}'
     - task: deploy
     vars:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
@@ -48,7 +49,8 @@ tasks:
     - kubectl create ns chaos-testing
     - helm install chaos-mesh chaos-mesh/chaos-mesh --namespace=chaos-testing --set chaosDaemon.runtime=containerd --set chaosDaemon.socketPath=/run/containerd/containerd.sock
     vars:
-      AKS: '{{.CLI_ARGS}}'
+      AKS:
+        sh: terraform -chdir=../basic output -raw AKS_CLUSTER_NAME
       RG: 
         sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
 
@@ -57,7 +59,8 @@ tasks:
     cmds:
     - az group deployment create -n ChaosExperiment -g {{.RG}} --template-file ./azuredeploy.deployment.json --parameters resourceName={{.AKS}} 
     vars:
-      AKS: '{{.CLI_ARGS}}'
+      AKS:
+        sh: terraform -chdir=../basic output -raw AKS_CLUSTER_NAME
       RG: 
         sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
 
@@ -69,3 +72,10 @@ tasks:
       AKS: '{{.CLI_ARGS}}'
       RG: 
         sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
+
+  down: 
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - task: 'infra:down' 
+      vars:
+        TAGS: '{{.CHAOS_TAG}}'

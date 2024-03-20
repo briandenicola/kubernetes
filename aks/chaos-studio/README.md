@@ -2,8 +2,7 @@
 ## Complete Environment
 ```bash
     az login --scope https://graph.microsoft.com/.default
-    task infra:up
-    task deploy
+    task up
 ```
 
 ## Clean up
