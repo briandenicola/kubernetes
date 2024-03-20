@@ -31,8 +31,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_channel_upgrade = "patch"
-  node_os_channel_upgrade   = "NodeImage"
+  automatic_channel_upgrade    = "patch"
+  node_os_channel_upgrade      = "SecurityPatch"
 
   api_server_access_profile {
     vnet_integration_enabled = true
