@@ -1,20 +1,26 @@
-variable "namespace" {
-  description   = "The namespace for the workload identity"
-  type          = string
-  default       = "default"
-}
-
-variable "service_mesh_type" {
-  description = "Type of Service Mesh for cluster"
-  default     = "istio"
-}
-
 variable "region" {
   description = "Azure region to deploy to"
   default     = "southcentralus"
 }
 
-variable "vm_sku" {
-  description = "The VM type for the system node pool"
-  default     = "Standard_D4ads_v5"
+variable "vm_size" {
+  description = "The SKU for the default node pool"
+  default     = "Standard_B4ms"
+}
+
+variable "node_count" {
+  description = "The default number of nodes to scale the cluster to"
+  default     = 1
+}
+
+variable "nodepool_name" {
+  description = "The name of the node pool"
+  type        = string
+  default     = "system"
+}
+
+variable "tags" {
+  description = "The name of the node pool"
+  type        = string
+  default     = "Basic AKS Cluster"
 }

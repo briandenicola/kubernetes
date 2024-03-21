@@ -1,9 +1,9 @@
 resource "azurerm_kubernetes_cluster_extension" "flux" {
   depends_on = [
-    azurerm_kubernetes_cluster.this
+   module.cluster
   ]
   name           = "flux"
-  cluster_id     = azurerm_kubernetes_cluster.this.id
+  cluster_id     = module.cluster.AKS_CLUSTER_ID
   extension_type = "microsoft.flux"
 }
 
@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_flux_configuration" "flux_config" {
   ]
 
   name       = "aks-flux-extension"
-  cluster_id = azurerm_kubernetes_cluster.this.id
+  cluster_id = module.cluster.AKS_CLUSTER_ID
   namespace  = "flux-system"
   scope      = "cluster"
 
@@ -27,7 +27,7 @@ resource "azurerm_kubernetes_flux_configuration" "flux_config" {
 
   kustomizations {
     name                       = "apps"
-    path                       = local.cluster_path
+    path                       = local.app_path
     timeout_in_seconds         = 600
     sync_interval_in_seconds   = 120
     retry_interval_in_seconds  = 300

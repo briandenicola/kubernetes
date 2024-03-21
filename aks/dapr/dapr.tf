@@ -3,7 +3,7 @@ resource "azurerm_kubernetes_cluster_extension" "dapr" {
     azurerm_kubernetes_cluster_extension.flux,
   ]
   name              = "dapr"
-  cluster_id        = azurerm_kubernetes_cluster.this.id
+  cluster_id        = module.cluster.AKS_CLUSTER_ID
   extension_type    = "microsoft.dapr"
   release_namespace = "dapr-system"
 }

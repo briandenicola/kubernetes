@@ -1,13 +1,18 @@
 version: '3'
 
+vars:
+  TAGS: "Dapr Demo"
+  NODE_COUNT: 3
+  SKU: "Standard_D4ads_v5"
+
 tasks:
   up:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a complete environment 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "tags={{.TAGS}}" -var "node_count={{.NODE_COUNT}}" -compact-warnings
     - task: creds
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
@@ -16,53 +21,15 @@ tasks:
     desc: Gets AKS credential file
     cmds:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
-    - sed -i s/devicecode/azurecli/g ~/.kube/config
+    - kubelogin convert-kubeconfig -l azurecli
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
 
-  radius:
-     desc: Initialize Radius
-     dir: ../../demo-apps/eshop
-     cmds:
-
-     - rad install kubernetes
-     - rad group create -g {{.RG}}
-     - rad credential register azure --client-id $ARM_CLIENT_ID --client-secret $ARM_CLIENT_SECRET --tenant-id $ARM_TENANT_ID
-     - rad workspace create kubernetes -w {{.APP_NAME}} --force
-     - rad env create {{.APP_NAME}} -n {{.APP_NAME}} -g {{.RG}}  -w {{.APP_NAME}}
-     - rad env update {{.APP_NAME}} --azure-subscription-id {{.AZURE_SUBCRIPTION_ID}} --azure-resource-group {{.RG}} -g {{.RG}}
-     - az group create -n {{.RG}} -l {{.REGION}}
-     vars:
-      APP_NAME:
-        sh: terraform -chdir=../../aks/dapr output -raw APP_NAME
-      AZURE_SUBCRIPTION_ID:
-        sh: terraform -chdir=../../aks/dapr output -raw AZURE_SUBCRIPTION_ID
-      RG: 
-        sh: echo $(terraform -chdir=../../aks/dapr output -raw APP_NAME)-eshop
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
-
-  eshop:
-    desc: Deploys eshop-dapr via Project Radius
-    dir: ../../demo-apps/eshop
-    cmds:
-    - rad deploy main.bicep -p oidcIssuer={{.OIDC}} -g {{.RG}} -e {{.APP_NAME}}
-    vars:
-      OIDC:
-        sh: terraform -chdir=../../aks/dapr output -raw AKS_OIDC_ISSUER
-      RG: 
-        sh: echo $(terraform -chdir=../../aks/dapr output -raw APP_NAME)-eshop
-      APP_NAME:
-        sh: terraform -chdir=../../aks/dapr output -raw APP_NAME
-
-
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
+    - az group list --tag Application="{{.TAGS}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes || true
-    vars:
-      RG: 
-        sh: terraform  output -raw AKS_RESOURCE_GROUP
