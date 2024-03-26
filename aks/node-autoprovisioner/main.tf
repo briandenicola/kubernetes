@@ -53,7 +53,7 @@ resource "azurerm_resource_group" "this" {
 
   tags = {
     Application = var.tags
-    Components  = "aks;"
+    Components  = "aks; karpenter"
     DeployedOn  = timestamp()
   }
 }
