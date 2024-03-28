@@ -57,7 +57,7 @@ tasks:
   targets:
     desc: On boards Chaos Extension onto AKS Cluster Resource
     cmds:
-    - az group deployment create -n ChaosExperiment -g {{.RG}} --template-file ./azuredeploy.deployment.json --parameters resourceName={{.AKS}} 
+    - az group deployment create -n ChaosTargets -g {{.RG}} --template-file ./azuredeploy.deployment.json --parameters resourceName={{.AKS}} 
     vars:
       AKS:
         sh: terraform -chdir=../basic output -raw AKS_CLUSTER_NAME
@@ -69,7 +69,8 @@ tasks:
     cmds:
     - az group deployment create -n ChaosExperiment -g {{.RG}} --template-file ./azurechaos.experiment.json --parameters aksClusterName={{.AKS}}
     vars:
-      AKS: '{{.CLI_ARGS}}'
+      AKS:
+        sh: terraform -chdir=../basic output -raw AKS_CLUSTER_NAME
       RG: 
         sh: az aks list --query "[?name=='{{.AKS}}']" | jq -r ".[].resourceGroup"
 
