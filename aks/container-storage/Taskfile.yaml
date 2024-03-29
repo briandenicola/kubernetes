@@ -17,14 +17,14 @@ tasks:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   plan:
-    desc: Creates a complete Azure ML environment 
+    desc: Plans a complete AKS + Container Storage Environment
     cmds:
     - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
   apply:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a complete AKS + Container Storage Environment 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
