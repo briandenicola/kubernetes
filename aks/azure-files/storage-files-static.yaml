@@ -4,8 +4,8 @@ metadata:
   name: azfiles-secret
 type: Opaque 
 data:
- azurestorageaccountname: c2E3ODA1OGVjOGE5ZWY=
- azurestorageaccountkey: RnlyY0p6eFdPbWFsbVhBVVN==
+ azurestorageaccountname: Ympkc2hhcmVzMDAyCg==
+ azurestorageaccountkey: LzN3RUFJR1ZUVHJ......
 ---
 kind: Pod
 apiVersion: v1
@@ -24,4 +24,4 @@ spec:
     - name: volume
       azureFile:
         secretName: azfiles-secret
-        shareName: data
+        shareName: simple
