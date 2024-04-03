@@ -10,4 +10,5 @@ module "cluster" {
   vm_sku               = var.vm_size
   vm_os                = "Ubuntu"
   node_count           = var.node_count
+  enable_mesh          = false
 }
