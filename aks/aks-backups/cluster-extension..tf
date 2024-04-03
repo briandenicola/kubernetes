@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster_extension" "backups" {
   depends_on = [
     data.azurerm_kubernetes_cluster.this,
-    azurerm_data_protection_backup_policy_kubernetes_cluster.this
+    azurerm_storage_account.this
   ]
 
   name              = "azure-aks-backup"
