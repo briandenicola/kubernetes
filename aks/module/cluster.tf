@@ -7,6 +7,15 @@ locals {
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
+  depends_on = [ 
+    azurerm_user_assigned_identity.aks_identity,
+    azurerm_user_assigned_identity.aks_kubelet_identity,
+    azurerm_log_analytics_workspace.this,
+    azurerm_subnet.api,
+    azurerm_subnet.nodes,
+    azurerm_role_assignment.aks_role_assignemnt_network,
+    azurerm_role_assignment.aks_role_assignemnt_msi
+  ]
 
   lifecycle {
     ignore_changes = [

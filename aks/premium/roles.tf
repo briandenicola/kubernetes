@@ -1,4 +1,4 @@
-resource "azurerm_role_assignment" "aks_role_assignemnt_nework" {
+resource "azurerm_role_assignment" "aks_role_assignemnt_network" {
   scope                            = azurerm_virtual_network.this.id
   role_definition_name             = "Network Contributor"
   principal_id                     = azurerm_user_assigned_identity.aks_identity.principal_id
