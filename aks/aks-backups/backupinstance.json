@@ -1,0 +1,52 @@
+{
+  "backup_instance_name": "bobcat-13032-aks-bobcat-13032-aks-8b27dd40-f1e3-11ee-864f-00155d8b02ff",
+  "properties": {
+    "data_source_info": {
+      "datasource_type": "Microsoft.ContainerService/managedClusters",
+      "object_type": "Datasource",
+      "resource_id": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032-aks_rg/providers/Microsoft.ContainerService/managedClusters/bobcat-13032-aks",
+      "resource_location": "southcentralus",
+      "resource_name": "bobcat-13032-aks",
+      "resource_type": "Microsoft.ContainerService/managedclusters",
+      "resource_uri": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032-aks_rg/providers/Microsoft.ContainerService/managedClusters/bobcat-13032-aks"
+    },
+    "data_source_set_info": {
+      "datasource_type": "Microsoft.ContainerService/managedClusters",
+      "object_type": "DatasourceSet",
+      "resource_id": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032-aks_rg/providers/Microsoft.ContainerService/managedClusters/bobcat-13032-aks",
+      "resource_location": "southcentralus",
+      "resource_name": "bobcat-13032-aks",
+      "resource_type": "Microsoft.ContainerService/managedclusters",
+      "resource_uri": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032-aks_rg/providers/Microsoft.ContainerService/managedClusters/bobcat-13032-aks"
+    },
+    "datasource_auth_credentials": null,
+    "friendly_name": "bobcat-13032-aks/ecommercebackup",
+    "object_type": "BackupInstance",
+    "policy_info": {
+      "policy_id": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032_rg/providers/Microsoft.DataProtection/backupVaults/bobcat-13032-dpv/backupPolicies/Default-PT4H-backup-policy",
+      "policy_parameters": {
+        "backup_datasource_parameters_list": [
+          {
+            "backup_hook_references": null,
+            "excluded_namespaces": null,
+            "excluded_resource_types": null,
+            "include_cluster_scope_resources": true,
+            "included_namespaces": null,
+            "included_resource_types": null,
+            "label_selectors": null,
+            "object_type": "KubernetesClusterBackupDatasourceParameters",
+            "snapshot_volumes": true
+          }
+        ],
+        "data_store_parameters_list": [
+          {
+            "data_store_type": "OperationalStore",
+            "object_type": "AzureOperationalStoreParameters",
+            "resource_group_id": "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/bobcat-13032_rg"
+          }
+        ]
+      }
+    }
+  },
+  "tags": null
+}
