@@ -13,3 +13,12 @@ module "cluster" {
   enable_mesh          = false 
 }
 
+resource "azurerm_kubernetes_cluster_trusted_access_role_binding" "this" {
+  depends_on = [
+    azurerm_kubernetes_cluster_extension.backups,
+  ]
+  kubernetes_cluster_id            = data.azurerm_kubernetes_cluster.this.id
+  name                             = "backuprolebinding"
+  roles                            = ["Microsoft.DataProtection/backupVaults/backup-operator"]
+  source_resource_id               = azurerm_data_protection_backup_vault.this.id
+}
