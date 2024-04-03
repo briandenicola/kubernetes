@@ -29,6 +29,7 @@ resource "azurerm_data_protection_backup_policy_kubernetes_cluster" "this" {
 
 resource "azurerm_data_protection_backup_instance_kubernetes_cluster" "this" {
   depends_on = [
+    azurerm_kubernetes_cluster_extension.backups,
     azurerm_role_assignment.dvp_role_aks_reader,
     azurerm_role_assignment.dvp_role_rg_contributor,
     azurerm_role_assignment.dvp_role_blob_data_contributor,
