@@ -4,6 +4,10 @@ resource "azurerm_data_protection_backup_vault" "this" {
   location            = azurerm_resource_group.this.location
   datastore_type      = "VaultStore"
   redundancy          = "LocallyRedundant"
+
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_data_protection_backup_policy_kubernetes_cluster" "this" {
