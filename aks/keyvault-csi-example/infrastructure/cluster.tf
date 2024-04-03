@@ -23,9 +23,12 @@ resource "azurerm_kubernetes_cluster" "this" {
   open_service_mesh_enabled       = false
   run_command_enabled             = false
   kubernetes_version              = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions)-2]
-  api_server_authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   image_cleaner_enabled           = true
   image_cleaner_interval_hours    = 48
+
+  api_server_access_profile {
+    authorized_ip_ranges     = ["${chomp(data.http.myip.response_body)}/32"]
+  }
 
   azure_active_directory_role_based_access_control {
     managed                = true
@@ -65,7 +68,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   network_profile {
     dns_service_ip     = "100.${random_integer.services_cidr.id}.0.10"
     service_cidr       = "100.${random_integer.services_cidr.id}.0.0/16"
-    docker_bridge_cidr = "172.17.0.1/16"
     network_plugin     = "azure"
     network_policy     = "calico"
     load_balancer_sku  = "standard"
