@@ -36,19 +36,16 @@ tasks:
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
-  deploy:
-    desc: Attaches an AKS cluster with the AzureML extension to an Azure ML Workspace
+  creds:
+    desc: Gets AKS credential file
     cmds:
-    - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSPACE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
-      AKS_ID: 
-        sh: terraform output -raw AKS_CLUSTER_ID
-      WORKSPACE: 
-        sh: terraform output -raw ML_WORKSPACE_NAME
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
