@@ -6,6 +6,11 @@ vars:
   SKU: "Standard_D4ads_v5"
 
 tasks:
+  default:
+    desc: Calls `task --list` 
+    cmds:
+    - task --list
+    
   up:
     desc: Creates a complete Azure ML environment 
     cmds:

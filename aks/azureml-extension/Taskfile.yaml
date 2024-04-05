@@ -1,28 +1,42 @@
 version: '3'
 
+vars:
+  TAGS: "Azure ML with AKS Cluster Demo"
+  NODE_COUNT: 2
+  SKU: "Standard_D4ads_v5"
+
 tasks:
-  up:
-    desc: Creates a complete Azure ML environment 
+  default:
+    desc: Calls `task --list` 
     cmds:
+    - task --list
+
+  up:
+    desc: Creates a complete Azure environment 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    - task: apply
     - task: creds
-    - task: attach
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
-  creds:
-    desc: Gets AKS credential file
+  apply:
+    desc: Applies Terraform
     cmds:
-    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
-    - kubelogin convert-kubeconfig -l azurecli
-    vars:
-      RG: 
-        sh: terraform output -raw AKS_RESOURCE_GROUP
-      AKS: 
-        sh: terraform output -raw AKS_CLUSTER_NAME
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "tags={{.TAGS}}" -var "node_count={{.NODE_COUNT}}" -compact-warnings
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
-  attach:
+  plan:
+    desc: Display a Terraform plan
+    cmds:
+    - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "tags={{.TAGS}}" -var "node_count={{.NODE_COUNT}}" -compact-warnings
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  deploy:
     desc: Attaches an AKS cluster with the AzureML extension to an Azure ML Workspace
     cmds:
     - az ml compute attach --resource-group {{.RG}} --workspace-name {{.WORKSPACE}} --type Kubernetes --name k8s-compute --resource-id "{{.AKS_ID}}" --identity-type SystemAssigned --namespace mlns
@@ -39,8 +53,5 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes || true
-    vars:
-      RG: 
-        sh: terraform  output -raw AKS_RESOURCE_GROUP
+    - az group list --tag Application="{{.TAGS}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info

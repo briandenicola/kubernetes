@@ -1,23 +1,23 @@
 resource "azurerm_machine_learning_workspace" "this" {
-    name                            = "${local.resource_name}-amlworkspace"
-    location                        = azurerm_resource_group.this.location
-    resource_group_name             = azurerm_resource_group.this.name
-    application_insights_id         = azurerm_application_insights.this.id
-    key_vault_id                    = azurerm_key_vault.this.id
-    storage_account_id              = azurerm_storage_account.this.id
-    container_registry_id           = azurerm_container_registry.this.id
-    public_network_access_enabled   = true
+  name                          = local.aml_workspace_name
+  location                      = local.location
+  resource_group_name           = data.azurerm_resource_group.this.name
+  application_insights_id       = data.azurerm_application_insights.this.id
+  key_vault_id                  = azurerm_key_vault.this.id
+  storage_account_id            = azurerm_storage_account.this.id
+  container_registry_id         = azurerm_container_registry.this.id
+  public_network_access_enabled = true
 
-    identity {
-        type = "SystemAssigned"
-    }
+  identity {
+    type = "SystemAssigned"
+  }
 }
 
 resource "azurerm_private_endpoint" "mlw" {
-  name                = "ple-${local.resource_name}-amlworkspace"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.pe.id
+  name                = "ple-${local.aml_workspace_name}"
+  location            = local.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  subnet_id           = data.azurerm_subnet.pe.id
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"

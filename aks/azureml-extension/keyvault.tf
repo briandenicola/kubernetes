@@ -1,16 +1,16 @@
 resource "azurerm_key_vault" "this" {
-    name                = "${local.resource_name}-kv"
-    location            = azurerm_resource_group.this.location
-    resource_group_name = azurerm_resource_group.this.name
-    tenant_id           = data.azurerm_client_config.current.tenant_id
-    sku_name            = "premium"
+  name                = local.key_vault_name
+  location            = local.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = "premium"
 }
 
 resource "azurerm_private_endpoint" "kv" {
-  name                = "ple-${local.resource_name}-kv"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
-  subnet_id           = azurerm_subnet.pe.id
+  name                = "ple-${local.key_vault_name}"
+  location            = local.location
+  resource_group_name = data.azurerm_resource_group.this.name
+  subnet_id           = data.azurerm_subnet.pe.id
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"

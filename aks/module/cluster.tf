@@ -46,7 +46,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   api_server_access_profile {
     vnet_integration_enabled = true
     subnet_id                = azurerm_subnet.api.id
-    authorized_ip_ranges     = [var.authorized_ip_ranges]
+    authorized_ip_ranges     = var.authorized_ip_ranges
   }
 
   azure_active_directory_role_based_access_control {
@@ -81,7 +81,6 @@ resource "azurerm_kubernetes_cluster" "this" {
     os_disk_size_gb     = 127
     vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = var.vm_os
-    #os_disk_type        = "Ephemeral"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1

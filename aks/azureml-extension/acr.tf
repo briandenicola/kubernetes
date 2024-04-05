@@ -1,7 +1,7 @@
 resource "azurerm_container_registry" "this" {
   name                     = local.acr_name
-  resource_group_name      = azurerm_resource_group.this.name
-  location                 = azurerm_resource_group.this.location
+  resource_group_name      = data.azurerm_resource_group.this.name
+  location                 = local.location
   sku                      = "Premium"
   admin_enabled            = false
 
@@ -17,9 +17,9 @@ resource "azurerm_container_registry" "this" {
 
 resource "azurerm_private_endpoint" "acr" {
   name                      = "ple-${local.acr_name}"
-  resource_group_name       = azurerm_resource_group.this.name
-  location                  = azurerm_resource_group.this.location
-  subnet_id                 = azurerm_subnet.pe.id
+  resource_group_name       = data.azurerm_resource_group.this.name
+  location                  = local.location
+  subnet_id                 = data.azurerm_subnet.pe.id
 
   private_service_connection {
     name                           = "psc-${local.resource_name}"
