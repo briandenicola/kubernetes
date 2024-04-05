@@ -17,5 +17,4 @@ locals {
   key_vault_name            = "${local.resource_name}-kv"
   application_insights_name = "${local.resource_name}-appinsights"
   ip_address                = chomp(data.http.myip.response_body)
-  authorized_ip_ranges      = "0.0.0.0/0" #Azure ML control plane requries access to the AKS API endpoint
 }

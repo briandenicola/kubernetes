@@ -10,7 +10,7 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 # AKS
 | Directory | Description |
 |--------------- | --------------- |
-| [Azure Files](/aks/azure-files/) | An example set of YAML definitions to integrate AKS with Azure Files |
+| [Azure Backups](/aks/azure-backups/) | A demo of AKS Backups deployment|
 | [Azure ML Extensions](/aks/azureml-extension/) | An example Azure ML Studio connectedt to an AKS cluster with the Azure Machine Learning extension added |
 | [Basic](/aks/basic/) | An simple example AKS cluster for testing |
 | [Premium](/aks/premium/) | A Quick and Dirty method to upgrade an AKS cluster to Premium Tier for Long Term Support|
@@ -23,13 +23,13 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | [Keyvault CSI Example](./aks/keyvault-csi-example/) | An example AKS cluster with the Azure Keyvault CSI driver installed. Includes a demo app to mount the secrets |
 | [Keyvault Traefik Demo](./aks//keyvault-csi-traefik-demo/) | An example AKS cluster with the Azure Keyvault CSI driver to mount a certificate for Traefik Ingress Controller |
 | [Managed Prometheus](./aks/managed-prometheus/)| An example AKS cluster with Azure Managed Prometheus and Azure Managed Grafana |
-| [Multi-Cluster](./aks/multi-cluster/) | An example AKS Fleet Manager |
-| [Overlay](./aks/overlay/) | An example AKS cluster with Overlay network. _Outdated. Most example clusters have incorporated Overlay into its configuration_ |
+| [Multi-Cluster Multi-Region](./aks/multi-cluster/infrastructure/multiregion-demo) | An example AKS Fleet Manager for muliple regions|
+| [Multi-Cluster Patching](./aks/multi-cluster/infrastructure/patch-demo) | An example AKS Fleet Manager for patch managment|
+| [Node Auto Provisioner](./aks/node-autoprovisioner) | An example Karpenter with AKS|
 | [Proximity Groups](./aks/proximity-groups/)| An example AKS cluster deployed to a single AZ in an Azure region then grouped closely within the datacenter using Proximity Groups |
 | [SPN Auth](./aks/spn-auth-example) | An example how to authenticate to an AKS cluster using Service Principals. _Outdated_ |
 | [Storage Class Removal](./aks/storageclass-removal/) | An example how to remove storage classes from an AKS cluster. _Outdated_ |
 | [Windows 2022](./aks/windows2022/) | An example AKS cluster with Windows 2022 node pools |
-| [Node Customizations](./aks/node-customizations/) | An example AKS cluster with customizations made to the underlying VMs in the node pools |
 | [Dapr](./aks/dapr/) | An example AKS cluster with Dapr Extension installed |
 
 # Container Apps
@@ -38,7 +38,8 @@ A set of example Kubernetes clusters with a focus on Azure AKS and CNCF projects
 | [Basic](./container-apps/basic/) | A basic Container App Environment |
 | [Jobs](./container-apps/jobs) | A Container App Environment for jobs - TBD |
 | [NAT](./container-apps/nat) | An internal Container App Environment with a NAT Gateway for Egress control |
-| [Workload Profile](./container-apps/workloadprofile) | A workload profile Container App Environment with an Azure Firewall for egress control (preview) |
+| [Workload Profile](./container-apps/workloadprofile) | A workload profile Container App Environment with an Azure Firewall for egress control |
+| [Workload Profile - Consumption](./container-apps/workloadprofile-consumptiononly) | A workload profile Container App Environment with an Azure Firewall for egress control using Consumption plan only |
 
 # GKE
 | Directory | Description |
