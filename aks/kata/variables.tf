@@ -22,5 +22,4 @@ variable "nodepool_name" {
 variable "tags" {
   description = "The name of the node pool"
   type        = string
-  default     = "Azure ML Extension with AKS Cluster Demo"
 }
