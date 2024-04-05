@@ -96,10 +96,11 @@ resource "azurerm_kubernetes_cluster" "this" {
   network_profile {
     dns_service_ip      = "100.${random_integer.services_cidr.id}.0.10"
     service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
+    pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-    pod_cidr            = "100.${random_integer.pod_cidr.id}.0.0/16"
+
   }
 
   dynamic "service_mesh_profile" {
@@ -109,6 +110,24 @@ resource "azurerm_kubernetes_cluster" "this" {
       mode                             = "Istio"
       internal_ingress_gateway_enabled = true
     }
+  }
+
+  maintenance_window_auto_upgrade {
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
+    day_of_week = "Friday"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
+  }
+
+  maintenance_window_node_os {
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
+    day_of_week = "Saturday"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
   }
 
   auto_scaler_profile {
@@ -132,6 +151,7 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   key_vault_secrets_provider {
     secret_rotation_enabled = true
+    secret_rotation_interval = "2m"
   }
 
   storage_profile {
