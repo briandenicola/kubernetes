@@ -1,35 +1,22 @@
 version: '3'
 
 vars:
-  SKU: "Standard_D4s_v3"
-  COUNT: 1
+  TAGS: "Azure ML Extension with AKS Cluster Demo"
+  NODE_COUNT: 2
+  SKU: "Standard_D4ads_v5"
 
 tasks:
   up:
-    desc: Creates a complete AKS cluster with Pod Sandboxing enabled
-
+    desc: Creates a complete Azure ML environment 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - task: apply
-    vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
-      
-  apply:
-    cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "tags={{.TAGS}}" -var "node_count={{.NODE_COUNT}}" -compact-warnings
     - task: creds
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
-  deploy:
-    cmds:
-    - kubectl apply -f manifests/pods.yaml
-    - kubectl wait --for=condition=ready pod -l app=kata-demo
-    - kubectl get pods
-    - kubectl exec -it kata-isolation -- uname -r
-    - kubectl exec -it default-isolation -- uname -r
   creds:
     desc: Gets AKS credential file
     cmds:
@@ -41,11 +28,17 @@ tasks:
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
 
+  deploy:
+    cmds:
+    - kubectl apply -f manifests/pods.yaml
+    - kubectl wait --for=condition=ready pod -l app=kata-demo
+    - kubectl get pods
+    - kubectl exec -it kata-isolation -- uname -r
+    - kubectl exec -it default-isolation -- uname -r
+
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
+    - az group list --tag Application="{{.TAGS}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes || true
-    vars:
-      RG: 
-        sh: terraform  output -raw AKS_RESOURCE_GROUP
+
