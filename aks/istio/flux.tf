@@ -1,11 +1,3 @@
-data "azurerm_kubernetes_cluster" "this" {
-  depends_on = [
-    module.cluster
-  ]
-  name                = module.cluster.AKS_CLUSTER_NAME
-  resource_group_name = module.cluster.AKS_RESOURCE_GROUP
-}
-
 resource "azurerm_kubernetes_cluster_extension" "flux" {
   depends_on = [
     data.azurerm_kubernetes_cluster.this
