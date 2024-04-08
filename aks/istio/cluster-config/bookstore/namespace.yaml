@@ -4,4 +4,4 @@ kind: Namespace
 metadata:
   name: bookstore
   labels:
-    istio.io/rev: asm-1-17
+    istio.io/rev: asm-1-20

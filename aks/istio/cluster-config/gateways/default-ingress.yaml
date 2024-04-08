@@ -4,7 +4,7 @@ kind: Namespace
 metadata:
   name: default-ingress-backend
   labels:
-    istio.io/rev: asm-1-17
+    istio.io/rev: asm-1-20
 ---
 apiVersion: apps/v1
 kind: Deployment
