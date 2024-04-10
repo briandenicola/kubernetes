@@ -1,7 +1,3 @@
-var forecastMeter = new Meter("bjd.example.forecasts", "1.0.0");
-var countForecasts = forecastMeter.CreateCounter<int>("forecasts.count", description: "Counts the number of forecats sent");
-var forecastActivitySource = new ActivitySource("bjd.example");
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(serverOptions =>
@@ -10,33 +6,31 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.ListenAnyIP(5000);
 });
 
+var weatherMeter = new Meter("BJD.Example", "1.0.0");
+var countWeather = weatherMeter.CreateCounter<int>("weather.count", description: "Counts the number of weather forecasts sent");
+var weatherActivitySource = new ActivitySource("BJD.Example");
 var tracingOtlpEndpoint = builder.Configuration["OTLP_ENDPOINT_URL"];
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var otel = builder.Services.AddOpenTelemetry()
-    .UseAzureMonitor( o => {
-        o.SamplingRatio = 0.1F;
-    });
+var otel = builder.Services.AddOpenTelemetry();
+    // .UseAzureMonitor( o => {
+    //     o.SamplingRatio = 0.1F;
+    // });
 
 otel.ConfigureResource(resource => resource
-    .AddService(serviceName:"bjd-example"));
+    .AddService(serviceName: builder.Environment.ApplicationName));
 
 otel.WithMetrics(metrics => metrics
     .AddAspNetCoreInstrumentation()
-    .AddMeter(forecastMeter.Name)
+    .AddMeter(weatherMeter.Name)
     .AddMeter("Microsoft.AspNetCore.Hosting")
     .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
     .AddPrometheusExporter());
 
-// Add Tracing for ASP.NET Core and our custom ActivitySource and export to Jaeger
 otel.WithTracing(tracing =>
 {
     tracing.AddAspNetCoreInstrumentation();
     tracing.AddHttpClientInstrumentation();
-    tracing.AddSource(forecastActivitySource.Name);
+    tracing.AddSource(weatherActivitySource.Name);
     if (tracingOtlpEndpoint != null)
     {
         tracing.AddOtlpExporter(otlpOptions =>
@@ -50,10 +44,31 @@ otel.WithTracing(tracing =>
     }
 });
 
-
 var app = builder.Build();
-
+app.MapGet("/", () => "Hello World!");
+app.MapGet("/weather", SendWeatherForecast);
 app.UseOpenTelemetryPrometheusScrapingEndpoint( context =>  context.Connection.LocalPort == 9090 );
-app.MapControllers();
-
 app.Run();
+
+IEnumerable<WeatherForecast> SendWeatherForecast(Logger<Program> _logger)
+{
+    string[] Summaries = new[]
+    {
+        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+    };
+
+    var weatherType = Summaries[Random.Shared.Next(Summaries.Length)];
+
+    using var activity = weatherActivitySource.StartActivity("WeatherForecastActivity");
+    _logger.LogInformation("Sending Weather Forecast");
+    countWeather.Add(1);
+    activity?.SetTag("Weather Forecast", weatherType);
+
+    return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+    {
+        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+        TemperatureC = Random.Shared.Next(-20, 55),
+        Summary = weatherType
+    })
+    .ToArray();
+}

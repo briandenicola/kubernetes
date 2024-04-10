@@ -1,5 +1,3 @@
-namespace otel_prometheus;
-
 public class WeatherForecast
 {
     public DateOnly Date { get; set; }
