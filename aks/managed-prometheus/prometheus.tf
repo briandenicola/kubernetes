@@ -1,5 +1,5 @@
 resource "azurerm_monitor_workspace" "this" {
-  name                = "${local.resource_name}-workspace"
+  name                = local.azuremonitor_workspace_name
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
 }
@@ -45,6 +45,10 @@ resource "azurerm_monitor_data_collection_rule" "azuremonitor" {
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "this" {
+  depends_on = [ 
+    azurerm_monitor_data_collection_rule.azuremonitor,
+    module.aks_cluster
+  ]
   name                    = "${local.resource_name}-ama-datacollection-rules-association"
   target_resource_id      = module.aks_cluster.AKS_CLUSTER_ID
   data_collection_rule_id = azurerm_monitor_data_collection_rule.azuremonitor.id

@@ -1,5 +1,5 @@
 locals {
-  authorized_ip_ranges  = "${jsondecode(data.http.myip.response_body).ip}/32"
+  authorized_ip_ranges  = ["${jsondecode(data.http.myip.response_body).ip}/32"]
   kubernetes_version    = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
 }
 

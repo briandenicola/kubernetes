@@ -8,9 +8,11 @@ resource "random_pet" "this" {
 }
 
 locals {
-  location              = var.region
-  resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
-  tags                  = "Azure Managed Prometheus Demo"
+  location                    = var.region
+  resource_name               = "${random_pet.this.id}-${random_id.this.dec}"
+  app_identity_name           = "${local.resource_name}-identity"
+  azuremonitor_workspace_name = "${local.resource_name}-prometheus"
+  tags                        = "Azure Managed Prometheus Demo"
 }
 
 resource "azurerm_resource_group" "this" {
