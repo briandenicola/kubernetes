@@ -1,5 +1,5 @@
 NAMESPACE                               : "otel-demo"
-GIT_COMMIT_VERSION                      : "2a82b185"
+GIT_COMMIT_VERSION                      : "26a16614"
 SERVICE_PORT                            : 5000
 
 ACR:
