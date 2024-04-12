@@ -50,7 +50,7 @@ app.MapGet("/weather", SendWeatherForecast);
 app.UseOpenTelemetryPrometheusScrapingEndpoint( context =>  context.Connection.LocalPort == 9090 );
 app.Run();
 
-IEnumerable<WeatherForecast> SendWeatherForecast(Logger<Program> _logger)
+IEnumerable<WeatherForecast> SendWeatherForecast()
 {
     string[] Summaries = new[]
     {
@@ -60,7 +60,6 @@ IEnumerable<WeatherForecast> SendWeatherForecast(Logger<Program> _logger)
     var weatherType = Summaries[Random.Shared.Next(Summaries.Length)];
 
     using var activity = weatherActivitySource.StartActivity("WeatherForecastActivity");
-    _logger.LogInformation("Sending Weather Forecast");
     countWeather.Add(1);
     activity?.SetTag("Weather Forecast", weatherType);
 

@@ -6,9 +6,9 @@ ACR:
   NAME                                  : "bjd145"
 
 WORKLOAD_ID:
-  NAME                                  : ""
-  CLIENT_ID                             : ""
-  TENANT_ID                             : ""
+  NAME                                  : "husky-60996-otel-identity"
+  CLIENT_ID                             : "1a243266-8a11-40c0-a14f-d4f979e9bde1"
+  TENANT_ID                             : "16b3c013-d300-468d-ac64-7eda0820b6d3"
 
 APP_INSIGHTS:
-  INSTRUMENTION_KEY                     : ""
+  INSTRUMENTION_KEY                     : "fae25c56-3c49-4a72-9f9a-3f2b14f3130b"
