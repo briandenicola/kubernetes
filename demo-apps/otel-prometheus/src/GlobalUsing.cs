@@ -7,3 +7,7 @@ global using OpenTelemetry.Resources;
 global using System.Diagnostics.Metrics;
 global using System.Diagnostics;
 global using Microsoft.AspNetCore.Mvc;
+
+global using OpenTelemetry.Exporter.Prometheus;
+global using OpenTelemetry;
+global using OpenTelemetry.Exporter;
