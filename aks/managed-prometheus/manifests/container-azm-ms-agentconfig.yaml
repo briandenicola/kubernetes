@@ -22,16 +22,14 @@ data:
        [log_collection_settings.collect_all_kube_events]
           enabled = false
 
-
   prometheus-data-collection-settings: |-
     [prometheus_data_collection_settings.cluster]
         interval = "1m"
         monitor_kubernetes_pods = true
-        monitor_kubernetes_pods_namespaces = ["default"]
+        monitor_kubernetes_pods_namespaces = ["default", "otel-demo"]
 
     [prometheus_data_collection_settings.node]
         interval = "1m"
-
 
   metric_collection_settings: |-
     [metric_collection_settings.collect_kube_system_pv_metrics]
@@ -49,6 +47,7 @@ data:
     # Alertable metrics configuration settings for completed jobs count
     [alertable_metrics_configuration_settings.job_completion_threshold]
         job_completion_threshold_time_minutes = 360
+
   integrations: |-
     [integrations.azure_network_policy_manager]
         collect_basic_metrics = false
