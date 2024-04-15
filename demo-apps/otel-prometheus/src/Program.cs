@@ -18,11 +18,10 @@ otel.WithMetrics(metrics => metrics
     .AddConsoleExporter()
     .AddPrometheusExporter());
 
-
 var app = builder.Build();
 app.MapGet("/", () => "Hello World!");
 app.MapGet("/weather", SendWeatherForecast);
-app.UseOpenTelemetryPrometheusScrapingEndpoint( context =>  context.Connection.LocalPort == 9090 );
+app.MapPrometheusScrapingEndpoint().RequireHost("*:9090");
 app.Run();
 
 IEnumerable<WeatherForecast> SendWeatherForecast()
