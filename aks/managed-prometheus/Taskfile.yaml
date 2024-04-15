@@ -47,7 +47,7 @@ tasks:
   deploy-app:
     desc: Deploy Otel Demo Application
     cmds:
-    - helm upgrade -i otel-demo --set WORKLOAD_ID.NAME="{{.WORKLOAD_ID_NAME}}" --set WORKLOAD_ID.CLIENT_ID="{{.WORKLOAD_ID_CLIENT_ID}}"  --set WORKLOAD_ID.TENANT_ID="{{.WORKLOAD_ID_TENANT_ID}}" ../../demo-apps/otel-prometheus/chart/
+    - helm upgrade -i otel-demo --set APP_INSIGHTS.CONNECTION_STRING="{{.APP_INSIGHTS_CONNECTION_STRING}}" --set WORKLOAD_ID.NAME="{{.WORKLOAD_ID_NAME}}" --set WORKLOAD_ID.CLIENT_ID="{{.WORKLOAD_ID_CLIENT_ID}}"  --set WORKLOAD_ID.TENANT_ID="{{.WORKLOAD_ID_TENANT_ID}}" ../../demo-apps/otel-prometheus/chart/
     vars:
       WORKLOAD_ID_NAME: 
         sh: terraform output -raw WORKLOAD_ID_NAME
@@ -55,6 +55,8 @@ tasks:
         sh: terraform output -raw WORKLOAD_ID_CLIENT_ID
       WORKLOAD_ID_TENANT_ID: 
         sh: terraform output -raw WORKLOAD_ID_TENANT_ID
+      APP_INSIGHTS_CONNECTION_STRING:
+        sh: terraform output -raw APP_INSIGHTS_CONNECTION_STRING
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform

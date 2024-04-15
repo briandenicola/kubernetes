@@ -10,6 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddOpenTelemetry()
+    .UseAzureMonitor( o => {  
+        o.ConnectionString = builder.Configuration["APP_INSIGHTS_CONNECTION_STRING"];
+        o.SamplingRatio = 0.1F; 
+    })
     .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
     .WithMetrics(metrics => metrics
         .AddAspNetCoreInstrumentation()

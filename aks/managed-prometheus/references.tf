@@ -17,3 +17,11 @@ data "http" "myip" {
     Accept = "application/json"
   }
 }
+
+data "azurerm_application_insights" "this" {
+  depends_on = [
+    module.aks_cluster
+  ]
+  name                = local.app_insights_name
+  resource_group_name = module.aks_cluster.AKS_RESOURCE_GROUP
+}

@@ -32,3 +32,8 @@ output "WORKLOAD_ID_TENANT_ID" {
     value = azurerm_user_assigned_identity.app_identity.tenant_id
     sensitive = false
 }
+
+output "APP_INSIGHTS_CONNECTION_STRING" {
+    value = data.azurerm_application_insights.this.connection_string
+    sensitive = true 
+}

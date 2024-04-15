@@ -1,5 +1,5 @@
 NAMESPACE                               : "otel-demo"
-GIT_COMMIT_VERSION                      : "26a16615"
+GIT_COMMIT_VERSION                      : "26a16616"
 SERVICE_PORT                            : 5000
 
 ACR:
@@ -11,4 +11,4 @@ WORKLOAD_ID:
   TENANT_ID                             : ""
 
 APP_INSIGHTS:
-  INSTRUMENTION_KEY                     : ""
+  CONNECTION_STRING                     : ""

@@ -12,6 +12,7 @@ locals {
   resource_name               = "${random_pet.this.id}-${random_id.this.dec}"
   app_identity_name           = "${local.resource_name}-identity"
   azuremonitor_workspace_name = "${local.resource_name}-prometheus"
+  app_insights_name           = "${local.resource_name}-appinsights"
   tags                        = "Azure Managed Prometheus Demo"
 }
 

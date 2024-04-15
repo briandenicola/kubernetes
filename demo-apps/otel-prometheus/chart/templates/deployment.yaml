@@ -31,6 +31,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: {{ .Values.SERVICE_PORT }}
+        env:
+        - name: APP_INSIGHTS_CONNECTION_STRING
+          value: {{ .Values.APP_INSIGHTS.CONNECTION_STRING }}
         resources:
           limits:
             memory: "512Mi"
