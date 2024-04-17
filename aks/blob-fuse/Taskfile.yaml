@@ -1,6 +1,10 @@
 version: '3'
 
 tasks:
+  default: 
+    cmds: 
+    - task --list
+
   up:
     desc: Builds end to end an AKS environment
     cmds:
