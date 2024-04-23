@@ -43,7 +43,8 @@ tasks:
     - kubectl apply -f ./manifests/container-azm-ms-agentconfig.yaml
     - kubectl apply -f ./manifests/ama-metrics-settings-configmap.yaml
     - kubectl -n kube-system rollout restart deploy ama-metrics
-
+    - kubectl -n kube-system rollout restart deployment ama-metrics-ksm
+    - kubectl -n kube-system rollout restart daemonset ama-metrics-node
   deploy-app:
     desc: Deploy Demo Application
     cmds:
