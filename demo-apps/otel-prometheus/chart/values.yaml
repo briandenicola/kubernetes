@@ -1,4 +1,4 @@
-NAMESPACE                               : "otel-demo"
+NAMESPACE                               : "prometheus-demo"
 GIT_COMMIT_VERSION                      : "26a16616"
 SERVICE_PORT                            : 5000
 
