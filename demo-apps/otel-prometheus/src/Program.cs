@@ -1,5 +1,5 @@
 var builder = WebApplication.CreateBuilder(args);
-
+https://github.com/open-telemetry/opentelemetry-dotnet/issues/5502
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.ListenAnyIP(9090);
@@ -17,10 +17,18 @@ builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService(serviceName: builder.Environment.ApplicationName))
     .WithMetrics(metrics => metrics
         .AddAspNetCoreInstrumentation()
-        .AddRuntimeInstrumentation()
         .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation()
+        .AddMeter("Microsoft.AspNetCore.Hosting")
+        .AddMeter("Microsoft.AspNetCore.Routing")
+        .AddMeter("Microsoft.AspNetCore.Diagnostics")
+        .AddMeter("Microsoft.AspNetCore.Server.Kestrel")
+        .AddMeter("Microsoft.AspNetCore.Http.Connections")
+        .AddMeter("Microsoft.Extensions.Diagnostics.HealthChecks")
+        .SetMaxMetricStreams(500)
+        .SetMaxMetricPointsPerMetricStream(200)
         .AddConsoleExporter()
-        .AddPrometheusExporter()
+        .AddPrometheusExporter(o => o.DisableTotalNameSuffixForCounters = true) //https://github.com/open-telemetry/opentelemetry-dotnet/issues/5502
     );
 
 var app = builder.Build();
