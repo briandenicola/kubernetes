@@ -1,7 +1,8 @@
 version: '3'
 
 vars:
-  SKU: "Standard_D4ads_v5"
+        #SKU: "Standard_D4ads_v5"
+  SKU: "Standard_B4ls_v2"
   DEFAULT_COUNT: 1
   DEFAULT_TAG: "Basic AKS Cluster"
 
