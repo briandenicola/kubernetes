@@ -13,5 +13,5 @@ module "aks_cluster" {
   kubernetes_version    = local.kubernetes_version
   tags                  = local.tags
   enable_mesh           = false
-  version               = "Standard_B4ls_v2"
+  vm_sku                = "Standard_B4ls_v2"
 }
