@@ -51,7 +51,13 @@ tasks:
   deploy:
     desc: Deploys simple pod via Helm
     cmds:
-    - helm upgrade -i blobfuse --set APP_NAME={{.APP_NAME}} --set ARM_WORKLOAD_APP_ID={{.ARM_WORKLOAD_APP_ID}} --set ARM_TENANT_ID={{.ARM_TENANT_ID}} --set RESOURCE_GROUP={{.RESOURCE_GROUP}} --set STORAGE_ACCOUNT_NAME={{.STORAGE_ACCOUNT_NAME}} --set STORAGE_CONTAINER_NAME={{.STORAGE_CONTAINER_NAME}}  ./chart
+    - helm upgrade -i blobfuse --set APP_NAME={{.APP_NAME}} 
+      --set ARM_WORKLOAD_APP_ID={{.ARM_WORKLOAD_APP_ID}} 
+      --set ARM_TENANT_ID={{.ARM_TENANT_ID}} 
+      --set RESOURCE_GROUP={{.RESOURCE_GROUP}} 
+      --set STORAGE_ACCOUNT_NAME={{.STORAGE_ACCOUNT_NAME}} 
+      --set STORAGE_CONTAINER_NAME={{.STORAGE_CONTAINER_NAME}}  
+      ./chart
     vars:
       APP_NAME: 
         sh: terraform -chdir=./infrastructure output -raw APP_NAME

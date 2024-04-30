@@ -3,21 +3,20 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.85.0"
+      version = "~> 3"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "1.10.0"
+      version = "~> 1"
     }
   }
 }
 
 provider "azurerm" {
+  storage_use_azuread = true
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
     }
   }
 }
-
-

@@ -18,7 +18,6 @@ spec:
     driver: blob.csi.azure.com
     volumeHandle:  {{ .Values.STORAGE_ACCOUNT_NAME }}
     volumeAttributes:
-      #Requires  v1.23.3
       resourcegroup: {{ .Values.RESOURCE_GROUP }}
       storageAccount:  {{ .Values.STORAGE_ACCOUNT_NAME }}
       containerName: {{ .Values.STORAGE_CONTAINER_NAME }}

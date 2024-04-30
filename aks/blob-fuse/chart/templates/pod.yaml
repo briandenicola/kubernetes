@@ -11,10 +11,70 @@ spec:
   - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
     name: blobfuse-test
     volumeMounts:
-      - name: blob01
-        mountPath: "/mnt/blob"
-        readOnly: false
+    - name: persistent-storage
+      mountPath: "/mnt/blob"
+      readOnly: false
   volumes:
-  - name: blob01
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: pvc-blob
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: blobfuse02
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: blobfuse-test
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: "/mnt/blob"
+      readOnly: false
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: pvc-blob
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: blobfuse03
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: blobfuse-test
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: "/mnt/blob"
+      readOnly: false
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: pvc-blob
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: blobfuse04
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: blobfuse-test
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: "/mnt/blob"
+      readOnly: false
+  volumes:
+  - name: persistent-storage
     persistentVolumeClaim:
       claimName: pvc-blob

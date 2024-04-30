@@ -19,11 +19,12 @@ locals {
 module "cluster" {
   source               = "../../module"
   region               = var.region
+  zones                = ["1"]
   authorized_ip_ranges = local.authorized_ip_ranges
   resource_name        = local.resource_name
   public_key_openssh   = tls_private_key.rsa.public_key_openssh
   tags                 = local.tags
-  kubernetes_version   = "1.27.7"
+  kubernetes_version   = "1.28"
   sdlc_environment     = "dev"
 }
 

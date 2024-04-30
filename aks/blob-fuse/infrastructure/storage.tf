@@ -7,7 +7,7 @@ resource "azurerm_storage_account" "this" {
   account_kind              = "BlockBlobStorage"
   enable_https_traffic_only = true
   min_tls_version           = "TLS1_2"
-  #shared_access_key_enabled = false
+  shared_access_key_enabled = false
 }
 
 resource "azurerm_storage_container" "this" {
