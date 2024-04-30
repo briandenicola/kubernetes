@@ -11,12 +11,20 @@ resource "azurerm_storage_account" "this" {
 }
 
 resource "azurerm_storage_container" "this" {
+  depends_on = [ 
+    azurerm_role_assignment.storage_blob_contributor_current_user 
+  ]
+  
   name                  = local.storage_container_name
   storage_account_name  = azurerm_storage_account.this.name
   container_access_type = "private"
 }
 
 resource "azurerm_storage_blob" "this" {
+  depends_on = [ 
+    azurerm_role_assignment.storage_blob_contributor_current_user 
+  ]
+
   name                   = "sample.txt"
   storage_account_name   = azurerm_storage_account.this.name
   storage_container_name = azurerm_storage_container.this.name

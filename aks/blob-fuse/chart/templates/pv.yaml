@@ -16,15 +16,13 @@ spec:
     - --file-cache-timeout-in-seconds=120
   csi:
     driver: blob.csi.azure.com
-    volumeHandle:  {{ .Values.STORAGE_ACCOUNT_NAME }}
+    volumeHandle:  {{ print .Values.STORAGE_ACCOUNT_NAME "_" .Values.STORAGE_CONTAINER_NAME }}
     volumeAttributes:
-      resourcegroup: {{ .Values.RESOURCE_GROUP }}
+      resourceGroup: {{ .Values.RESOURCE_GROUP }}
       storageAccount:  {{ .Values.STORAGE_ACCOUNT_NAME }}
       containerName: {{ .Values.STORAGE_CONTAINER_NAME }}
       protocol: fuse
       clientID: {{ .Values.ARM_WORKLOAD_APP_ID }}
-      # tenantID: $IDENTITY_TENANT  #optional, only specified when workload identity and AKS cluster are in different tenant
-      # subscriptionid: $SUBSCRIPTION #optional, only specified when workload identity and AKS cluster are in different subscription
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

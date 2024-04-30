@@ -5,9 +5,16 @@ resource "azurerm_role_assignment" "storage_contributor" {
   skip_service_principal_aad_check = true
 }
 
-resource "azurerm_role_assignment" "storage_blob_reader" {
+resource "azurerm_role_assignment" "storage_blob_contributor" {
   scope                            = azurerm_storage_account.this.id
   role_definition_name             = "Storage Blob Data Contributor"
   principal_id                     = azurerm_user_assigned_identity.app_identity.principal_id
+  skip_service_principal_aad_check = true
+}
+
+resource "azurerm_role_assignment" "storage_blob_contributor_current_user" {
+  scope                            = azurerm_storage_account.this.id
+  role_definition_name             = "Storage Blob Data Contributor"
+  principal_id                     = data.azurerm_client_config.current.object_id
   skip_service_principal_aad_check = true
 }
