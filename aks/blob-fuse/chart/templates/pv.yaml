@@ -22,7 +22,8 @@ spec:
       storageAccount:  {{ .Values.STORAGE_ACCOUNT_NAME }}
       containerName: {{ .Values.STORAGE_CONTAINER_NAME }}
       protocol: fuse
-      clientID: {{ .Values.ARM_WORKLOAD_APP_ID }}
+      AzureStorageAuthType: msi
+      AzureStorageIdentityClientID: {{ .Values.ARM_WORKLOAD_APP_ID }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

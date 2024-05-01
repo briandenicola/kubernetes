@@ -29,7 +29,12 @@ tasks:
     - terraform -chdir=./infrastructure apply -auto-approve -var "region={{.REGION}}"
     vars:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
-
+  
+  csi:
+    desc: Deploy Open Source CSI Driver 
+    cmds:
+    - helm repo add blob-csi-driver https://raw.githubusercontent.com/kubernetes-sigs/blob-csi-driver/master/charts
+    - helm install blob-csi-driver blob-csi-driver/blob-csi-driver --set node.enableBlobfuseProxy=true --namespace kube-system --version v1.24.1
   plan:
     desc: Reviews Terraform plan
     cmds:
@@ -71,7 +76,6 @@ tasks:
         sh: terraform -chdir=./infrastructure output -raw STORAGE_ACCOUNT_NAME
       STORAGE_CONTAINER_NAME:
         sh: terraform -chdir=./infrastructure output -raw STORAGE_CONTAINER_NAME
-
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform

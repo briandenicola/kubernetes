@@ -9,7 +9,7 @@ resource "random_pet" "this" {
 
 locals {
   resource_name          = "${random_pet.this.id}-${random_id.this.dec}"
-  authorized_ip_ranges   = [ "${chomp(data.http.myip.response_body)}/32" ]
+  authorized_ip_ranges   = ["${chomp(data.http.myip.response_body)}/32"]
   workload_identity      = "${local.resource_name}-app-identity"
   storage_name           = "${replace(local.resource_name, "-", "")}sa"
   storage_container_name = "test"
@@ -26,6 +26,8 @@ module "cluster" {
   tags                 = local.tags
   kubernetes_version   = "1.28"
   sdlc_environment     = "dev"
+  enable_csi_drivers   = false
+  enable_mesh          = false
 }
 
 resource "azurerm_resource_group" "this" {
