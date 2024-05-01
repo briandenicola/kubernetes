@@ -1,0 +1,79 @@
+version: '3'
+
+tasks:
+  default: 
+    cmds: 
+    - task --list
+
+  up:
+    desc: Builds end to end an AKS environment
+    cmds:
+    - task: init
+    - task: apply
+    - task: creds
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  init: 
+    desc: Initializes Terraform
+    cmds:
+    - terraform -chdir=./infrastructure workspace new {{.REGION}} || true
+    - terraform -chdir=./infrastructure workspace select {{.REGION}}
+    - terraform -chdir=./infrastructure init
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  apply: 
+    desc: Applies Terraform configuration
+    cmds:
+    - terraform -chdir=./infrastructure apply -auto-approve -var "region={{.REGION}}"
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+  
+  plan:
+    desc: Reviews Terraform plan
+    cmds:
+    - terraform -chdir=./infrastructure plan -var "region={{.REGION}}"
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+    
+  creds:
+    desc: Grab AKS credentials 
+    cmds:
+    - az aks get-credentials --name {{.AKS}} --resource-group {{.RG}}
+    - sed -i s/devicecode/azurecli/g ~/.kube/config
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
+
+  deploy:
+    desc: Deploys simple pod via Helm
+    cmds:
+    - helm upgrade -i blobfuse --set APP_NAME={{.APP_NAME}} 
+      --set ARM_WORKLOAD_APP_ID={{.ARM_WORKLOAD_APP_ID}} 
+      --set ARM_TENANT_ID={{.ARM_TENANT_ID}} 
+      --set RESOURCE_GROUP={{.RESOURCE_GROUP}} 
+      --set STORAGE_ACCOUNT_NAME={{.STORAGE_ACCOUNT_NAME}} 
+      --set STORAGE_CONTAINER_NAME={{.STORAGE_CONTAINER_NAME}}  
+      ./chart
+    vars:
+      APP_NAME: 
+        sh: terraform -chdir=./infrastructure output -raw APP_NAME
+      ARM_WORKLOAD_APP_ID: 
+        sh: terraform -chdir=./infrastructure output -raw ARM_WORKLOAD_APP_ID
+      ARM_TENANT_ID:
+        sh: terraform -chdir=./infrastructure output -raw ARM_TENANT_ID
+      RESOURCE_GROUP:
+        sh: terraform -chdir=./infrastructure output -raw RESOURCE_GROUP
+      STORAGE_ACCOUNT_NAME:
+        sh: terraform -chdir=./infrastructure output -raw STORAGE_ACCOUNT_NAME
+      STORAGE_CONTAINER_NAME:
+        sh: terraform -chdir=./infrastructure output -raw STORAGE_CONTAINER_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="Azure Files with Workload Identity" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait -n  || true
+    - cd ./infrastructure; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true

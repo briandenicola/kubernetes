@@ -1,0 +1,40 @@
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: azurefiles01
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: azurefiles-test
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: "/mnt/files"
+      readOnly: false
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: pvc-files
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: azurefiles02
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: {{ print .Values.APP_NAME "-app-identity" }}
+  containers:
+  - image: mcr.microsoft.com/oss/nginx/nginx:1.17.3-alpine
+    name: azurefiles-test
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: "/mnt/files"
+      readOnly: false
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: pvc-files
