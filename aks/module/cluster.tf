@@ -112,6 +112,16 @@ resource "azurerm_kubernetes_cluster" "this" {
     }
   }
 
+  dynamic "storage_profile" {
+    for_each = var.enable_csi_drivers == true ? [true] : []
+
+    content {
+      blob_driver_enabled = true
+      disk_driver_enabled = true
+      file_driver_enabled = true
+    }
+  }
+
   maintenance_window_auto_upgrade {
     frequency   = "Weekly"
     interval    = 1
@@ -154,11 +164,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     secret_rotation_interval = "2m"
   }
 
-  storage_profile {
-    blob_driver_enabled = true
-    disk_driver_enabled = true
-    file_driver_enabled = true
-  }
+
 
 }
 

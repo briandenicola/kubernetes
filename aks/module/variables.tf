@@ -53,6 +53,11 @@ variable "enable_mesh" {
   default     = true
 }
 
+variable "enable_csi_drivers" {
+  description = "Enable CSI drivers"
+  default     = true
+}
+
 variable "node_labels" {
   description = "The labels to apply to the nodes"
   type        = map(string)
