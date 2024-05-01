@@ -1,6 +1,6 @@
-#Details 
+# Details 
 
-__This does not work as of 5/1/24.  Workload Identies support requires that the storage account key is enabled on the storage account. If you do not wish to use the storage account key, you can only leveage a Managed Identity bound to AKS.  Workload Identities is not supported in this scenario__
+>> This does not work as of 5/1/24.  Workload Identies support requires that the storage account key is enabled on the storage account. If you do not wish to use the storage account key, you can only leveage a Managed Identity bound to AKS.  Workload Identities is not supported in this scenario
 
 # Notes
 * https://github.com/kubernetes-sigs/blob-csi-driver/issues/1351
