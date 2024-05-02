@@ -11,4 +11,5 @@ module "cluster" {
   vm_os                = "Ubuntu"
   node_count           = var.node_count
   enable_mesh          = false
+  zones                = ["2"]
 }
