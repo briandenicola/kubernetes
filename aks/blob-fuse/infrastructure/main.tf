@@ -26,7 +26,7 @@ module "cluster" {
   tags                 = local.tags
   kubernetes_version   = "1.29"
   sdlc_environment     = "dev"
-  enable_csi_drivers   = false
+  enable_csi_drivers   = true
   enable_mesh          = false
 }
 
