@@ -10,10 +10,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain  
-  storageClassName: azureblob-fuse-premium
-  mountOptions:
-    - -o allow_other
-    - --file-cache-timeout-in-seconds=120
+  storageClassName: azureblob-fuse-premium-custom
   csi:
     driver: blob.csi.azure.com
     volumeHandle:  {{ print .Values.STORAGE_ACCOUNT_NAME "_" .Values.STORAGE_CONTAINER_NAME }}
@@ -22,8 +19,9 @@ spec:
       storageAccount:  {{ .Values.STORAGE_ACCOUNT_NAME }}
       containerName: {{ .Values.STORAGE_CONTAINER_NAME }}
       protocol: fuse
-      AzureStorageAuthType: msi
-      AzureStorageIdentityClientID: {{ .Values.ARM_WORKLOAD_APP_ID }}
+    nodeStageSecretRef:
+      name: {{ print .Values.STORAGE_ACCOUNT_NAME "-creds" | quote }}
+      namespace: kube-system
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -31,9 +29,9 @@ metadata:
   name: pvc-blob
 spec:
   accessModes:
-    - ReadWriteMany
+  - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
   volumeName: pv-blob
-  storageClassName: azureblob-fuse-premium
+  storageClassName: azureblob-fuse-premium-custom

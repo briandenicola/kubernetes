@@ -9,3 +9,8 @@ resource "tls_private_key" "rsa" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
+
+data "azurerm_kubernetes_cluster" "this" {
+  name                = module.cluster.AKS_CLUSTER_NAME
+  resource_group_name = module.cluster.AKS_RESOURCE_GROUP  
+}

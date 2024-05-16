@@ -1,7 +1,7 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: azureblob-fuse-premium
+  name: azureblob-fuse-premium-custom
   resourceVersion: "30962"
 parameters:
   skuName: Premium_LRS
@@ -11,12 +11,16 @@ volumeBindingMode: Immediate
 allowVolumeExpansion: true
 mountOptions:
     - -o allow_other
-    - --file-cache-timeout-in-seconds=120
     - --use-attr-cache=true
     - --cancel-list-on-mount-seconds=10
-    - -o attr_timeout=120
-    - -o entry_timeout=120
-    - -o negative_timeout=120
+    - -o entry_timeout=0
+    - -o negative_timeout=0
+    - -o attribute-expiration-sec=0
+    - -o entry-expiration-sec=0
+    - -o negative-entry-expiration-sec=0
+    - -o direct-io=true
     - --log-level=LOG_WARNING
     - --cache-size-mb=1000
-
+    - --sync-to-flush=true
+    - --block-cache-disk-timeout=0
+    - --file-cache-timeout=0
