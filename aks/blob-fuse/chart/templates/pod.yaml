@@ -20,7 +20,7 @@ spec:
         name: blobfuse-test
         volumeMounts:
         - name: persistent-storage
-          mountPath: "/mnt/blob"
+          mountPath: "/opt/blob"
           readOnly: false
       volumes:
       - name: persistent-storage
