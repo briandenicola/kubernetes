@@ -18,10 +18,15 @@ spec:
       resourceGroup: {{ .Values.RESOURCE_GROUP }}
       storageAccount:  {{ .Values.STORAGE_ACCOUNT_NAME }}
       containerName: {{ .Values.STORAGE_CONTAINER_NAME }}
+      AzureStorageAuthType: MSI
+      AzureStorageIdentityObjectID: {{ .Values.KUBE_IDENTITY_OBJECT_ID }}
+      subscriptionID: {{ .Values.SUBSCRIPTION_ID }}
       protocol: fuse
-    nodeStageSecretRef:
-      name: {{ print .Values.STORAGE_ACCOUNT_NAME "-creds" | quote }}
-      namespace: kube-system
+      storeAccountKey: "true"
+      secretNamespace: "kube-system"      
+    #nodeStageSecretRef:
+    #  name: {{ print .Values.STORAGE_ACCOUNT_NAME "-creds" | quote }}
+    #  namespace: kube-system
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
