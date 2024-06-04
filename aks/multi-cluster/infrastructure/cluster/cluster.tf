@@ -2,9 +2,9 @@ data "azurerm_kubernetes_service_versions" "current" {
   location = azurerm_resource_group.this.location
 }
 
-locals {
-  zones              = var.region == "northcentralus" ? null : ["1", "2", "3"]
-}
+# locals {
+#   zones              = var.region == "northcentralus" ? null : ["1,","2","3"]
+# }
 
 resource "azurerm_kubernetes_cluster" "this" {
   depends_on = [ 
@@ -74,11 +74,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     name                = "system"
     node_count          = 1
     vm_size             = var.vm_sku
-    zones               = local.zones
+    #zones               = local.zones
     os_disk_size_gb     = 127
     vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = "Mariner"
-    os_disk_type        = "Ephemeral"
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
