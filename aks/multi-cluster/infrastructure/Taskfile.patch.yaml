@@ -31,17 +31,6 @@ tasks:
     - terraform -chdir=./infrastructure/patch-demo plan -var "region={{.REGION}}" -var-file="environments.tfvars"
     vars:
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
-    
-  save-creds:
-    desc: Grab AKS credentials 
-    cmds:
-    - az fleet get-credentials --name {{.FLEET}} --resource-group {{.RG}} --file fleet
-    - sed -i s/devicecode/azurecli/g fleet 
-    vars:
-      RG: 
-        sh: terraform -chdir=./infrastructure/patch-demo output -raw FLEET_RESOURCE_GROUP
-      FLEET: 
-        sh: terraform -chdir=./infrastructure/patch-demo output -raw FLEET_NAME
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
