@@ -1,0 +1,61 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+    - task --list 
+
+  up:
+    desc: Creates a complete Azure Container App Environment  
+    cmds:
+    - task: init
+    - task: apply
+    - task: deploy
+
+  init:
+    desc: Initializes Terraform 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+  
+  apply:
+    desc: Applies Terraform 
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    vars: 
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+
+  deploy:
+    desc: Deploys httpbin
+    cmds:
+    - az containerapp create -n {{.APP_NAME}} -g {{.RG}} --environment {{.CAE}} --yaml "./apps/httpbin.yaml"
+    vars: 
+      APP_NAME: httpbin
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP      
+      CAE:        
+        sh: terraform output -raw APP_ENVIRONMENT
+
+  validate:
+    desc: Deploys httpbin
+    cmds:
+    - curl -vvv {{.APP_URL}}/{{.URI}}
+    vars: 
+      APP_NAME: httpbin
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP
+      APP_URL:   
+        sh: az containerapp show -n {{.APP_NAME}} -g {{.RG}} --query properties.configuration.ingress.fqdn -o tsv
+      URI: '{{default "/" .CLI_ARGS}}'
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes --nowait || true
+    vars:
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP
