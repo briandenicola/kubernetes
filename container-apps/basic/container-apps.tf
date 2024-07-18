@@ -30,10 +30,10 @@ resource "azurerm_container_app" "httpbin" {
   ingress {
     external_enabled           = true
     target_port                = 8080
-    allow_insecure_connections = true
-
+    allow_insecure_connections = true    
     traffic_weight {
       percentage = 100
+      latest_revision          = true 
     }
   }
 }

@@ -38,7 +38,7 @@ locals {
   location             = var.region
   resource_name        = "${random_pet.this.id}-${random_id.this.dec}"
   aca_name             = "${local.resource_name}-environment"
-  container_image      = "bjd145/httpbin:1087"
+  container_image      = "bjd145/httpbin:1088"
   acr_name             = "${replace(local.resource_name, "-", "")}acr"
   vnet_cidr            = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
