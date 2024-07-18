@@ -55,7 +55,7 @@ tasks:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes --nowait || true
+    - az group delete -n {{.RG}} --yes --no-wait || true
     vars:
       RG: 
         sh: terraform output -raw RESOURCE_GROUP
