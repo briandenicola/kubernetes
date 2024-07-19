@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- base.yaml
+- secretsprovider.yaml
+- serviceaccount.yaml
+- istio-ingress-gateway.yaml
+patches:
+  - path: volumeMount-ingress-gw-customization.yaml

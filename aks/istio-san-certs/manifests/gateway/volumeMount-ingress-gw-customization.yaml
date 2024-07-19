@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-ingress
+  namespace: istio-ingress
+spec:
+  template:
+    spec:
+      serviceAccountName: istio-ingress-sa-identity
+      volumes:
+      - name: tls-mount
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "istio-tls"        
+      containers:
+      - name: istio-proxy
+        volumeMounts:
+        - name: tls-mount
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+    

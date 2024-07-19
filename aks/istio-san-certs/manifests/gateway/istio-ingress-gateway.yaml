@@ -1,0 +1,38 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: default-bjdazure-tech-gw
+  namespace: istio-ingress
+spec:
+  selector:
+    istio: ingress 
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      privateKey: /mnt/secrets-store/san-certificate.key
+      serverCertificate: /mnt/secrets-store/san-certificate.crt
+    hosts:
+    - apps01.bjdazure.tech
+    - apps02.bjdazure.tech
+    - apps03.bjdazure.tech
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name:  default-bjdazure-tech-vs
+  namespace: istio-ingress
+spec:
+  hosts:
+  -  istio-default.bjdazure.tech
+  gateways:
+  -  istio-ingress/default-bjdazure-tech-gw
+  http:
+  - route:
+    - destination:
+        host: default-backend-svc
+        port:
+          number: 80

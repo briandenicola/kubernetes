@@ -1,0 +1,95 @@
+version: '3'
+
+dotenv: ['.env']
+
+vars:
+  TAGS: "Azure Service Mesh Demo"
+  NODE_COUNT: 3
+  SKU: "Standard_D4ads_v5"
+
+tasks:
+  up:
+    desc: Builds end to end an AKS environment
+    cmds:
+    - task: init
+    - task: apply
+    - task: creds
+    - task: istio
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+  
+  init: 
+    desc: Initializes Terraform
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'      
+  
+  apply: 
+    desc: Applies Terraform configuration
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" 
+        -var "certificate_base64_encoded={{.CERT}}" 
+        -var "certificate_password={{.CERT_PFX_PASS}}"
+        -var "vm_size={{.SKU}}" 
+        -var "tags={{.TAGS}}" 
+        -var "node_count={{.NODE_COUNT}}"
+    vars:
+      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      CERT:
+        sh: cat {{.CERT_PATH}} | base64
+
+  creds:
+    desc: Gets AKS credential file
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - sed -i s/devicecode/azurecli/g ~/.kube/config
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  istio:
+    desc: Installs Core Istio commponents
+    cmds:
+    - kubectl create namespace istio-system || true
+    - helm install istio-base istio/base -n istio-system --set defaultRevision=default
+    - helm install istiod istio/istiod -n istio-system --wait
+
+  template:
+    desc: Generates templates for Istio Gateway
+    dir: ./manifests/gateway
+    cmds:
+    - export INGRESS_CLIENT_ID={{.INGRESS_CLIENT_ID}} ;
+      envsubst < ./serviceaccount.tmpl > ./serviceaccount.yaml
+    - export KEYVAULT_NAME={{.KEYVAULT_NAME}} ;
+      export INGRESS_CLIENT_ID={{.INGRESS_CLIENT_ID}} ;
+      envsubst < ./secretsprovider.tmpl > ./secretsprovider.yaml
+    - helm template istio-ingress istio/gateway --namespace istio-ingress --post-renderer ./kustomize.sh  
+    vars:
+      KEYVAULT_NAME:
+        sh: terraform -chdir=../../ output -raw KEYVAULT_NAME
+      INGRESS_CLIENT_ID:
+        sh: terraform -chdir=../../ output -raw INGRESS_CLIENT_ID    
+    
+  gateway:
+    desc: Update configurations with proper values Key
+    dir: ./manifests/gateway
+    cmds:
+    - kubectl create namespace istio-ingress || true
+    - kubectl apply -k .
+    
+  deploy:
+    desc: Deploys applications
+    cmds:
+    - kubectl apply -f manifests/app1.yaml
+    - kubectl apply -f manifests/app2.yaml
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="{{.TAGS}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
