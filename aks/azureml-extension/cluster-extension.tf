@@ -24,9 +24,9 @@ resource "azurerm_kubernetes_cluster_extension" "azureml" {
     "domain"                                                = "${local.location}.cloudapp.azure.com"
     "jobSchedulerLocation"                                  = local.location
     "location"                                              = local.location
-    "nginxIngress.enabled"                                  = "True"
+    "nginxIngress.enabled"                                  = "true"
     "prometheus.prometheusSpec.externalLabels.cluster_name" = data.azurerm_kubernetes_cluster.this.id
-    "relayserver.enabled"                                   = "False"
-    "servicebus.enabled"                                    = "False"
+    "relayserver.enabled"                                   = "false"
+    "servicebus.enabled"                                    = "false"
   }
 }
