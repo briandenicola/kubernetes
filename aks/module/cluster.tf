@@ -7,7 +7,7 @@ locals {
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
-  depends_on = [ 
+  depends_on = [
     azurerm_user_assigned_identity.aks_identity,
     azurerm_user_assigned_identity.aks_kubelet_identity,
     azurerm_log_analytics_workspace.this,
@@ -40,8 +40,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_channel_upgrade    = "patch"
-  node_os_channel_upgrade      = "SecurityPatch"
+  automatic_channel_upgrade = "patch"
+  node_os_channel_upgrade   = "SecurityPatch"
 
   api_server_access_profile {
     vnet_integration_enabled = true
@@ -74,19 +74,20 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                = "system"
-    node_count          = var.node_count
-    vm_size             = var.vm_sku
-    zones               = local.zones
-    os_disk_size_gb     = 127
-    vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = var.vm_os
-    type                = "VirtualMachineScaleSets"
-    enable_auto_scaling = true
-    min_count           = 1
-    max_count           = var.node_count
-    max_pods            = 250 
-    node_labels         = tomap(var.node_labels)
+    name                         = "system"
+    node_count                   = var.node_count
+    vm_size                      = var.vm_sku
+    zones                        = local.zones
+    os_disk_size_gb              = 127
+    vnet_subnet_id               = azurerm_subnet.nodes.id
+    os_sku                       = var.vm_os
+    type                         = "VirtualMachineScaleSets"
+    enable_auto_scaling          = true
+    min_count                    = 1
+    max_count                    = var.node_count
+    max_pods                     = 250
+    node_labels                  = tomap(var.node_labels)
+    only_critical_addons_enabled = var.only_critical_addons_enabled
 
     upgrade_settings {
       max_surge = "25%"
@@ -100,7 +101,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-
+    
   }
 
   dynamic "service_mesh_profile" {
@@ -160,11 +161,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   key_vault_secrets_provider {
-    secret_rotation_enabled = true
+    secret_rotation_enabled  = true
     secret_rotation_interval = "2m"
   }
-
-
-
 }
 

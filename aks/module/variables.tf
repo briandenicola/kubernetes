@@ -74,3 +74,8 @@ variable "zones" {
   type        = list(string)
   default     = ["1", "2", "3"]
 }
+
+variable "only_critical_addons_enabled" {
+  description = "Enable only critical addons for default system pool"
+  default = false
+}
