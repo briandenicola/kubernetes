@@ -15,4 +15,5 @@ locals {
   prometheus_name      = "${local.resource_name}-prometheus"
   app_path             = "./aks/istio/cluster-config"
   flux_repository      = "https://github.com/briandenicola/kubernetes"
+  os_sku               = "AzureLinux"
 }

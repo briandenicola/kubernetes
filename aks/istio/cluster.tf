@@ -8,7 +8,7 @@ module "cluster" {
   kubernetes_version           = "1.29"
   sdlc_environment             = "dev"
   vm_sku                       = var.vm_size
-  vm_os                        = "AzureLinux"
+  vm_os                        = local.os_sku
   node_count                   = var.node_count
   enable_mesh                  = true
   only_critical_addons_enabled = true
