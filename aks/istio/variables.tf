@@ -10,7 +10,7 @@ variable "vm_size" {
 
 variable "node_count" {
   description = "The default number of nodes to scale the cluster to"
-  default     = 1
+  default     = 2
 }
 
 variable "nodepool_name" {
