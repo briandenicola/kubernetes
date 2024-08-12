@@ -51,8 +51,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "tbd"
-    Components  = "aks;"
+    Application = var.tags
+    Components  = "AKS; Virtual Network; Cilium;"
     DeployedOn  = timestamp()
   }
 }

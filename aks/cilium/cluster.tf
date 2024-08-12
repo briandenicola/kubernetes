@@ -32,9 +32,9 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   azure_active_directory_role_based_access_control {
-    managed                = true
-    azure_rbac_enabled     = true
-    tenant_id              = data.azurerm_client_config.current.tenant_id
+    managed            = true
+    azure_rbac_enabled = true
+    tenant_id          = data.azurerm_client_config.current.tenant_id
   }
 
   identity {
@@ -79,26 +79,31 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-    ebpf_data_plane     = "cilium"
-    //network_policy      = "cilium"
+    network_data_plane  = "cilium"
+    network_policy      = "cilium"
   }
-  
+
+  service_mesh_profile {
+    mode                             = "Istio"
+    internal_ingress_gateway_enabled = true
+  }
+
   maintenance_window_auto_upgrade {
-    frequency = "Weekly"
-    interval  = 1
-    duration  = 4
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
     day_of_week = "Friday"
-    utc_offset = "-06:00"
-    start_time = "20:00"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
   }
 
   maintenance_window_node_os {
-    frequency = "Weekly"
-    interval  = 1
-    duration  = 4
+    frequency   = "Weekly"
+    interval    = 1
+    duration    = 4
     day_of_week = "Saturday"
-    utc_offset = "-06:00"
-    start_time = "20:00"
+    utc_offset  = "-06:00"
+    start_time  = "20:00"
   }
 
   auto_scaler_profile {
