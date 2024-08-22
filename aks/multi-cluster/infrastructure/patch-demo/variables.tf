@@ -16,3 +16,7 @@ variable automatic_channel_upgrade {
 variable node_os_channel_upgrade {
   description = "The value for the node OS channel upgrade"
 }
+
+variable "tags" {
+  description = "The tags to apply to the resources"
+}

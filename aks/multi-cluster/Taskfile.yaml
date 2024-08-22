@@ -2,7 +2,7 @@ version: '3'
 
 includes:
   patch:
-    taskfile: ./infrastructure/Taskfile.patch.yaml
+    taskfile: ./infrastructure/Taskfile.patches.yaml
     internal: false
 
   multiregion:
