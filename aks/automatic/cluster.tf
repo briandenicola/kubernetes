@@ -67,6 +67,14 @@ resource "azapi_resource" "aks" {
         }
       }
 
+      networkProfile = {
+        advancedNetworking = {
+          observability = {
+            enabled = true
+          }
+        }
+      }
+      
       azureMonitorProfile = {
         metrics = {
           enabled = true

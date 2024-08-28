@@ -8,13 +8,13 @@ resource "azapi_update_resource" "cluster_updates" {
 
   body = jsonencode({
     properties = {
-        networkProfile = {
-            advancedNetworking = {
-                observability = {
-                    enabled = true
-                }
-            }
+      networkProfile = {
+        advancedNetworking = {
+          observability = {
+            enabled = true
+          }
         }
+      }
     }
   })
 }

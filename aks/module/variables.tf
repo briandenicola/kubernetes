@@ -79,3 +79,8 @@ variable "only_critical_addons_enabled" {
   description = "Enable only critical addons for default system pool"
   default = false
 }
+
+variable "msi_auth_for_monitoring_enabled" {
+  description = "Enable MSI auth for monitoring"
+  default     = false
+}

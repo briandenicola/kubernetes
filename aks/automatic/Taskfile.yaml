@@ -12,10 +12,16 @@ tasks:
   up:
     desc: Creates a complete Azure environment 
     cmds:
+    - task: init
+    - task: apply
+    vars: 
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+
+  init:
+    cmds: 
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - task: apply
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
