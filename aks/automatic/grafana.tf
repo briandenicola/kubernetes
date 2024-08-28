@@ -11,6 +11,7 @@ resource "azurerm_dashboard_grafana" "this" {
   api_key_enabled                   = true
   deterministic_outbound_ip_enabled = true
   public_network_access_enabled     = true
+  grafana_major_version             = 10
 
   identity {
     type = "SystemAssigned"
