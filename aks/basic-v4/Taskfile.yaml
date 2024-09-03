@@ -1,0 +1,57 @@
+version: '3'
+
+vars:
+  SKU: "Standard_B4ls_v2"
+  DEFAULT_COUNT: 1
+  DEFAULT_TAG: "Basic AKS Cluster"
+
+tasks:
+  default:
+    desc: Calls `task --list` 
+    cmds:
+    - task --list
+
+  up:
+    desc: Creates a complete Azure environment 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    - task: apply
+      vars:
+        REGION: '{{.REGION}}'
+        TAGS: '{{.TAG_FOR_RUN}}'
+        NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
+    - task: creds
+    vars: 
+      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
+      TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
+      NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
+      
+  apply:
+    desc: Applies the Terraform templates
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.NODE_COUNT}}" -var "tags={{.TAGS}}" -compact-warnings
+    vars: 
+      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
+      NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
+      TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
+
+  creds:
+    desc: Gets AKS credential file
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="{{.TAG_FOR_DELETE}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true
+    vars:
+      TAG_FOR_DELETE: '{{default .DEFAULT_TAG .TAGS }}'
