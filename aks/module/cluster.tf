@@ -3,7 +3,7 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 locals {
-  zones = var.region == "northcentralus" ? null : var.zones
+  zones = var.region == "canadaeast" || var.region == "northcentralus" ? null : var.zones
 }
 
 resource "azurerm_kubernetes_cluster" "this" {

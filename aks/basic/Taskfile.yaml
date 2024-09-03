@@ -1,7 +1,6 @@
 version: '3'
 
 vars:
-        #SKU: "Standard_D4ads_v5"
   SKU: "Standard_B4ls_v2"
   DEFAULT_COUNT: 1
   DEFAULT_TAG: "Basic AKS Cluster"
@@ -25,7 +24,7 @@ tasks:
         NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
     - task: creds
     vars: 
-      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
+      REGION: '{{default "westus3" (split " " .CLI_ARGS)._0}}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
       NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
       
@@ -34,7 +33,7 @@ tasks:
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.NODE_COUNT}}" -var "tags={{.TAGS}}" -compact-warnings
     vars: 
-      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
+      REGION: '{{default "westus3" (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
