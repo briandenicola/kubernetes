@@ -1,0 +1,48 @@
+{
+	"name": "C# (.NET)",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": { 
+			"VARIANT": "dev-8.0-jammy",
+			"NODE_VERSION": "lts/*"
+		}
+	},
+	"runArgs": ["--init", "--privileged"],
+
+	"customizations": {
+		"vscode": {	
+			"extensions": [
+				"ms-dotnettools.csharp",
+				"ms-azuretools.vscode-docker",
+				"ms-azuretools.vscode-dapr",
+				"ms-azuretools.vscode-azureterraform",
+				"ms-vscode.powershell",
+				"ms-vscode.azure-account",
+				"ms-kubernetes-tools.aks-devx-tools",
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"github.vscode-pull-request-github",				
+				"github.copilot",
+				"mindaro.mindaro" 
+			]
+		}
+	},
+
+	"forwardPorts": [5000, 5001],
+
+	"remoteUser": "vscode",
+	"features": {
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/common-utils:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers/features/docker-from-docker:1": {},
+		"ghcr.io/devcontainers/features/sshd:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/powershell:1": {}
+	},
+
+	"waitFor": "postCreateCommand",
+
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"postStartCommand": "bash .devcontainer/post-start.sh"
+}
