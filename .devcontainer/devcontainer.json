@@ -27,8 +27,6 @@
 		}
 	},
 
-	"forwardPorts": [5000, 5001],
-
 	"remoteUser": "vscode",
 	"features": {
 		"ghcr.io/devcontainers/features/azure-cli:1": {},
