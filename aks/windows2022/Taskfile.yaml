@@ -4,7 +4,7 @@ vars:
   SKU: "Standard_B4ms"
   COUNT: 1
   TAG: "AKS with Windows Containers Demo"
-  DEFAULT_REGION: canadaeast
+  DEFAULT_REGION: canadacentral
 
 tasks:
   up:
