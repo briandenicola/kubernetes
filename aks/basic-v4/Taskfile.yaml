@@ -31,7 +31,7 @@ tasks:
   apply:
     desc: Applies the Terraform templates
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.NODE_COUNT}}" -var "tags={{.TAGS}}" -compact-warnings
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.NODE_COUNT}}" -var "tags={{.TAG_FOR_RUN}}" -compact-warnings
     vars: 
       REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
