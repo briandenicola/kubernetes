@@ -2,7 +2,6 @@ locals {
   zonal = var.region == "canadaeast" || var.region == "northcentralus" ? false : true
 }
 
-
 resource "azapi_resource" "azurerm_container_app_environment" {
   depends_on = [
     azapi_update_resource.nodes_delegation

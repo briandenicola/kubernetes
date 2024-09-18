@@ -1,3 +1,7 @@
+locals {
+  zonal = var.region == "canadaeast" || var.region == "northcentralus" ? false : true
+}
+
 resource "azapi_resource" "azurerm_container_app_environment" {
   depends_on = [
     azapi_update_resource.nodes_delegation
@@ -17,7 +21,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
       daprAIConnectionString      = azurerm_application_insights.this.connection_string
 
       infrastructureResourceGroup = "${local.resource_name}_aca_nodes_rg"
-      zoneRedundant               = true
+      zoneRedundant               = local.zonal
       vnetConfiguration = {
         infrastructureSubnetId    = azurerm_subnet.nodes.id
         internal                  = true

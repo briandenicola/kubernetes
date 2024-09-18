@@ -53,6 +53,9 @@
 #   }
 # }
 
+locals {
+  zonal = var.region == "canadaeast" || var.region == "northcentralus" ? false : true
+}
 
 resource "azapi_resource" "azurerm_container_app_environment" {
   depends_on = [
@@ -75,7 +78,8 @@ resource "azapi_resource" "azurerm_container_app_environment" {
       }
 
       infrastructureResourceGroup = "${local.resource_name}_aca_nodes_rg"
-      zoneRedundant               = true
+      zoneRedundant               = local.zonal
+      
       vnetConfiguration = {
         infrastructureSubnetId = azurerm_subnet.nodes.id
         internal               = true
