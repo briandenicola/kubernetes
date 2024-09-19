@@ -19,13 +19,13 @@ locals {
   k8s_version          = "1.30"
 }
 
-resource "azurerm_resource_group" "this" {
-  name     = "${local.resource_name}_rg"
-  location = local.location
+# resource "azurerm_resource_group" "this" {
+#   name     = "${local.resource_name}_rg"
+#   location = local.location
 
-  tags = {
-    Application = local.tags
-    Components  = "AKS; Managed Prometheus; Azure Monitor; Azure Grafana; Windows Containers"
-    DeployedOn  = timestamp()
-  }
-}
+#   tags = {
+#     Application = local.tags
+#     Components  = "AKS; Managed Prometheus; Azure Monitor; Azure Grafana; Windows Containers"
+#     DeployedOn  = timestamp()
+#   }
+# }
