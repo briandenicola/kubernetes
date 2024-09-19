@@ -17,6 +17,13 @@ spec:
         image: mcr.microsoft.com/windows/nanoserver:ltsc2022
         ports:
         - containerPort: 80
+        resources:
+          requests:
+            memory: "1024Mi"
+            cpu: "500m"
+          limits:
+            memory: "2048Mi"
+            cpu: "1024m"           
       nodeSelector:
         kubernetes.io/os: windows
         kubernetes.io/role: agent

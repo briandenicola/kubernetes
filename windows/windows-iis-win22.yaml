@@ -10,7 +10,14 @@ spec:
   - image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2022
     name: iis
     ports:
-    -  containerPort: 80
+    - containerPort: 80
+    resources:
+      requests:
+        memory: "1024Mi"
+        cpu: "500m"
+      limits:
+        memory: "2048Mi"
+        cpu: "1024m"    
   nodeSelector:
    kubernetes.io/os: windows
   tolerations:
