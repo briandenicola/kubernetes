@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: iis3
-  namespace: default
+  name: iis-windows2022
   labels: 
-   name: iis3
-   os: windows
+   web_server: iis
+   os: windows2022
 spec:
   containers:
-  - image: microsoft/iis:latest
-    name: iis3
+  - image: mcr.microsoft.com/windows/servercore/iis:windowsservercore-ltsc2022
+    name: iis
     ports:
     -  containerPort: 80
   nodeSelector:
