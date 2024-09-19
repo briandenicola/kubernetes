@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: iis-ssl-demo
-        image: bjd145.azurecr.io/windows/iisdemo:win2019-ltsc
+        image: bjd145.azurecr.io/windows/iisdemo:win2022-ltsc
         imagePullPolicy: Always
         ports:
         - containerPort: 443

@@ -1,0 +1,44 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: apsnetapp
+#   labels: 
+#    web_server: iis
+#    os: windows2022
+# spec:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apsnetapp
+  labels: 
+   web_server: iis
+   os: windows2022  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apsnetapp
+  template:
+    metadata:
+      labels:
+        app: apsnetapp
+    spec:
+      containers:
+      - image: mcr.microsoft.com/dotnet/samples:aspnetapp-chiseled
+        name: apsnetapp
+        ports:
+        -  containerPort: 80
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1024m"        
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+      - key: role
+        operator: Equal
+        value: applications
+        effect: NoSchedule

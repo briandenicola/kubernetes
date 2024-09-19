@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nanoserver-iis
+  name: nanoserver
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nanoserver-iis
+      app: nanoserver
   template:
     metadata:
       labels:
-        app: nanoserver-iis
+        app: nanoserver
     spec:
       containers:
-      - name: nanoserver-iis
-        image: microsoft/iis:nanoserver
+      - name: nanoserver
+        image: mcr.microsoft.com/windows/nanoserver:ltsc2022
         ports:
         - containerPort: 80
       nodeSelector:
