@@ -84,3 +84,7 @@ variable "msi_auth_for_monitoring_enabled" {
   description = "Enable MSI auth for monitoring"
   default     = false
 }
+
+variable "azurerm_log_analytics_workspace_id" {
+  description = "The resource id for the log analytics workspace"
+}

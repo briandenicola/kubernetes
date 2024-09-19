@@ -10,7 +10,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   depends_on = [
     azurerm_user_assigned_identity.aks_identity,
     azurerm_user_assigned_identity.aks_kubelet_identity,
-    azurerm_log_analytics_workspace.this,
     azurerm_subnet.api,
     azurerm_subnet.nodes,
     azurerm_role_assignment.aks_role_assignemnt_network,
@@ -44,8 +43,6 @@ resource "azurerm_kubernetes_cluster" "this" {
   node_os_upgrade_channel      = "SecurityPatch"    
   
   api_server_access_profile {
-    #vnet_integration_enabled = true
-    #subnet_id                = azurerm_subnet.api.id
     authorized_ip_ranges     = var.authorized_ip_ranges
   }
 
@@ -150,7 +147,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   oms_agent {
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+    log_analytics_workspace_id = var.azurerm_log_analytics_workspace_id
     msi_auth_for_monitoring_enabled = var.msi_auth_for_monitoring_enabled
   }
 
@@ -158,7 +155,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   microsoft_defender {
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+    log_analytics_workspace_id = var.azurerm_log_analytics_workspace_id
   }
 
   key_vault_secrets_provider {

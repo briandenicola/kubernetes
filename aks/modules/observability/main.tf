@@ -6,6 +6,20 @@ locals {
   monitor_rg_name      = "${var.resource_name}-monitor-rg"
   grafana_name         = "${var.resource_name}-grafana"
   prometheus_name      = "${var.resource_name}-prometheus"
+  streams = [
+    "Microsoft-ContainerLog",
+    "Microsoft-ContainerLogV2",
+    "Microsoft-KubeEvents",
+    "Microsoft-KubePodInventory",
+    "Microsoft-KubeNodeInventory",
+    "Microsoft-KubePVInventory",
+    "Microsoft-KubeServices",
+    "Microsoft-KubeMonAgentEvents",
+    "Microsoft-InsightsMetrics",
+    "Microsoft-ContainerInventory",
+    "Microsoft-ContainerNodeInventory",
+    "Microsoft-Perf"
+  ]  
 }
 
 resource "azurerm_resource_group" "this" {
