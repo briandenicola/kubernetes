@@ -15,6 +15,8 @@ locals {
   prometheus_name      = "${local.resource_name}-prometheus"
   tags                 = var.tags
   authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
+  environment_type     = "dev"
+  k8s_version          = "1.30"
 }
 
 resource "azurerm_resource_group" "this" {

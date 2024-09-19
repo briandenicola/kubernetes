@@ -1,6 +1,6 @@
 
 resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_node_recording_rule_group" {
-  name                = "${local.resource_name}-NodeRecordingRuleGroup"
+  name                = "${var.resource_name}-NodeRecordingRuleGroup"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"
@@ -65,7 +65,7 @@ resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_node_recordin
 }
 
 resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_node_recording_rule_group_windows" {
-  name                = "${local.resource_name}-NodeRecordingRuleGroup-Windows"
+  name                = "${var.resource_name}-NodeRecordingRuleGroup-Windows"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"

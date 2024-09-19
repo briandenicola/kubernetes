@@ -1,5 +1,5 @@
 resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_kubernetes_rule_groups" {
-  name                = "${local.resource_name}-KubernetesRecordingRuleGroup"
+  name                = "${var.resource_name}-KubernetesRecordingRuleGroup"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"
@@ -116,7 +116,7 @@ resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_kubernetes_ru
 }
 
 resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_kubernetes_rule_groups_windows" {
-  name                = "${local.resource_name}-KubernetesRecordingRuleGroup-Windows"
+  name                = "${var.resource_name}-KubernetesRecordingRuleGroup-Windows"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"
