@@ -13,7 +13,7 @@ output "AZURE_MONITOR_WORKSPACE_ID" {
   sensitive = false
 }
 
-output "DATA_COLLECTION_ENDPOINT_ID" {
-  value     = azurerm_monitor_data_collection_endpoint.this.id
+output "DATA_COLLECTION_RULES_ID" {
+  value     = azurerm_monitor_data_collection_rule.azuremonitor.id
   sensitive = false
 }
