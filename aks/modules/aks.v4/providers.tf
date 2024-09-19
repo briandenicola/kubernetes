@@ -7,5 +7,5 @@ terraform {
   }
 }
 
-provider "azapi" {
-}
+# provider "azapi" {
+# }

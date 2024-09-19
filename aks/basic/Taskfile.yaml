@@ -24,7 +24,7 @@ tasks:
         NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
     - task: creds
     vars: 
-      REGION: '{{default "westus3" (split " " .CLI_ARGS)._0}}'
+      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
       NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
       
@@ -33,7 +33,7 @@ tasks:
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.NODE_COUNT}}" -var "tags={{.TAG_FOR_RUN}}" -compact-warnings
     vars: 
-      REGION: '{{default "westus3" (split " " .CLI_ARGS)._0}}'
+      REGION: '{{default "southcentralus" (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 

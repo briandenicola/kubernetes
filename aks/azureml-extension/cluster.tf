@@ -1,5 +1,5 @@
 module "cluster" {
-  source               = "../module"
+  source               = "../modules/aks.v3"
   region               = var.region
   resource_name        = local.resource_name
   public_key_openssh   = tls_private_key.rsa.public_key_openssh

@@ -1,5 +1,5 @@
 module "cluster" {
-  source               = "../module"
+  source               = "../modules/aks.v4"
   region               = var.region
   zones                = var.zones
   authorized_ip_ranges = local.authorized_ip_ranges
