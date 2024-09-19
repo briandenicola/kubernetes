@@ -32,7 +32,7 @@ spec:
             memory: "1024Mi"
             cpu: "1024m"
       nodeSelector:
-        beta.kubernetes.io/os: windows
+        kubernetes.io/os: windows
 ---
 apiVersion: v1
 kind: Service

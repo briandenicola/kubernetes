@@ -14,3 +14,8 @@ spec:
     -  containerPort: 80
   nodeSelector:
    kubernetes.io/os: windows
+  tolerations:
+  - key: role
+    operator: Equal
+    value: applications
+    effect: NoSchedule
