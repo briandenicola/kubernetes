@@ -13,7 +13,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "app_node_pool" {
   kubernetes_cluster_id = data.azurerm_kubernetes_cluster.this.id
   vnet_subnet_id        = data.azurerm_kubernetes_cluster.this.agent_pool_profile.0.vnet_subnet_id
   vm_size               = var.vm_size
-  enable_auto_scaling   = true
+  auto_scaling_enabled  = true
   mode                  = "User"
   os_sku                = local.os_sku
   os_disk_size_gb       = 127

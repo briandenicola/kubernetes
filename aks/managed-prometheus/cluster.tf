@@ -4,7 +4,7 @@ locals {
 }
 
 module "aks_cluster" {
-  source                = "../module"
+  source               = "../modules/aks.v3"
   region                = azurerm_resource_group.this.location
   authorized_ip_ranges  = local.authorized_ip_ranges
   resource_name         = local.resource_name

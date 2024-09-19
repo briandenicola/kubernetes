@@ -1,6 +1,6 @@
 variable "region" {
   description = "Azure region to deploy to"
-  default     = "westus3"
+  default     = "southcentralus"
 }
 
 variable "vm_size" {
