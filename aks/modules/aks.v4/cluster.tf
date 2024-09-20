@@ -27,23 +27,24 @@ resource "azurerm_kubernetes_cluster" "this" {
   resource_group_name          = azurerm_resource_group.this.name
   location                     = azurerm_resource_group.this.location
   node_resource_group          = local.aks_node_rg_name
+  kubernetes_version           = var.kubernetes_version
   dns_prefix                   = local.aks_name
   sku_tier                     = "Standard"
   oidc_issuer_enabled          = true
   workload_identity_enabled    = true
   azure_policy_enabled         = true
-  local_account_disabled       = false
+  local_account_disabled       = true
   open_service_mesh_enabled    = false
   run_command_enabled          = false
-  kubernetes_version           = var.kubernetes_version
+  cost_analysis_enabled        = true
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_upgrade_channel    = "patch"
-  node_os_upgrade_channel      = "SecurityPatch"    
-  
+  automatic_upgrade_channel = "patch"
+  node_os_upgrade_channel   = "SecurityPatch"
+
   api_server_access_profile {
-    authorized_ip_ranges     = var.authorized_ip_ranges
+    authorized_ip_ranges = var.authorized_ip_ranges
   }
 
   azure_active_directory_role_based_access_control {
@@ -97,7 +98,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-    
+
   }
 
   dynamic "service_mesh_profile" {
@@ -147,7 +148,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   oms_agent {
-    log_analytics_workspace_id = var.azurerm_log_analytics_workspace_id
+    log_analytics_workspace_id      = var.azurerm_log_analytics_workspace_id
     msi_auth_for_monitoring_enabled = var.msi_auth_for_monitoring_enabled
   }
 
