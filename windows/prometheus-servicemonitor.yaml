@@ -1,0 +1,39 @@
+#helm install prometheus prometheus-community/kube-prometheus-stack
+#helm install kube-state-metrics prometheus-community/kube-state-metrics
+#helm install win-exporter prometheus-community/prometheus-windows-exporter
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: kube-state-metrics
+  labels:
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/instance: prometheus
+    release: prometheus
+spec:
+  staticConfigs:
+    - labels:
+        job: kube-state-metrics
+      targets:
+        - prometheus-kube-state-metrics.default.svc.cluster.local:8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor 
+metadata:
+  labels:
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/name: prometheus-windows-exporter
+    release: prometheus
+  name: prometheus-windows-exporter
+spec:
+  attachMetadata:
+    node: false
+  endpoints:
+  - port: metrics
+    scheme: http
+  jobLabel: jobLabel
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: win-exporter
+      app.kubernetes.io/name: prometheus-windows-exporter
