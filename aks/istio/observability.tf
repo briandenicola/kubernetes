@@ -9,15 +9,15 @@ module "azure_monitor" {
 resource "azurerm_monitor_data_collection_rule_association" "this" {
   depends_on = [ 
     module.azure_monitor,
-    module.aks_cluster
+    module.cluster
   ]
   name                    = "${local.resource_name}-ama-datacollection-rules-association"
-  target_resource_id      = module.aks_cluster.AKS_CLUSTER_ID
+  target_resource_id      = module.cluster.AKS_CLUSTER_ID
   data_collection_rule_id = module.azure_monitor.DATA_COLLECTION_RULES_ID
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "container_insights" {
   name                        = "${local.resource_name}-ama-container-insights-rules-association"
-  target_resource_id          = module.aks_cluster.AKS_CLUSTER_ID
+  target_resource_id          = module.cluster.AKS_CLUSTER_ID
   data_collection_rule_id     = module.azure_monitor.DATA_COLLECTION_RULE_CONTAINER_INSIGHTS_ID
 }
