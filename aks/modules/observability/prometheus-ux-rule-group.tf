@@ -1,9 +1,10 @@
 resource "azurerm_monitor_alert_prometheus_rule_group" "ux_recording_rule_group" {
+  count               = var.enable_managed_offerings ? 1 : 0  
   name                = "${var.resource_name}-UXRecordingRuleGroup"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"
-  scopes              = [azurerm_monitor_workspace.this.id]
+  scopes              = [azurerm_monitor_workspace.this[0].id]
   rule_group_enabled  = true
 
   rule {
@@ -99,11 +100,12 @@ resource "azurerm_monitor_alert_prometheus_rule_group" "ux_recording_rule_group"
 }
 
 resource "azurerm_monitor_alert_prometheus_rule_group" "ux_recording_rule_group_windows" {
+  count               = var.enable_managed_offerings ? 1 : 0
   name                = "${var.resource_name}-UXRecordingRuleGroup-Windows"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
   interval            = "PT1M"
-  scopes              = [azurerm_monitor_workspace.this.id]
+  scopes              = [azurerm_monitor_workspace.this[0].id]
   rule_group_enabled  = true
 
   rule {

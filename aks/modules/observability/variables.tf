@@ -14,3 +14,8 @@ variable "sdlc_environment" {
 variable "tags" {
   description = "Tags to apply for this resource"
 }
+
+variable "enable_managed_offerings" {
+  description = "Deploy Managed Prometheus and Managed Grafana"
+  default     = true
+}

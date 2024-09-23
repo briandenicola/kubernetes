@@ -3,7 +3,7 @@ resource "azurerm_monitor_data_collection_rule" "container_insights" {
     azurerm_monitor_workspace.this,
     azurerm_monitor_data_collection_endpoint.this
   ]
-
+  count               = var.enable_managed_offerings ? 1 : 0
   name                = "${var.resource_name}-container-insights-rules"
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
@@ -41,16 +41,16 @@ resource "azurerm_monitor_data_collection_rule" "azuremonitor" {
     azurerm_monitor_workspace.this,
     azurerm_monitor_data_collection_endpoint.this
   ]
-
-  name                          = "${var.resource_name}-ama-datacollection-rules"
-  resource_group_name           = azurerm_resource_group.this.name
-  location                      = azurerm_resource_group.this.location
-  kind                          = "Linux"
-  data_collection_endpoint_id   = azurerm_monitor_data_collection_endpoint.this.id
+  count               = var.enable_managed_offerings ? 1 : 0
+  name                        = "${var.resource_name}-ama-datacollection-rules"
+  resource_group_name         = azurerm_resource_group.this.name
+  location                    = azurerm_resource_group.this.location
+  kind                        = "Linux"
+  data_collection_endpoint_id = azurerm_monitor_data_collection_endpoint.this[0].id
 
   destinations {
     monitor_account {
-      monitor_account_id = azurerm_monitor_workspace.this.id
+      monitor_account_id = azurerm_monitor_workspace.this[0].id
       name               = "MonitoringAccount"
     }
   }

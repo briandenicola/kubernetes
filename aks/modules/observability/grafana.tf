@@ -2,7 +2,7 @@ resource "azurerm_dashboard_grafana" "this" {
   depends_on = [
     azurerm_monitor_workspace.this
   ]
-
+  count                             = var.enable_managed_offerings ? 1 : 0
   name                              = local.grafana_name
   resource_group_name               = azurerm_resource_group.this.name
   location                          = azurerm_resource_group.this.location
@@ -18,6 +18,6 @@ resource "azurerm_dashboard_grafana" "this" {
   }
 
   azure_monitor_workspace_integrations {
-    resource_id = azurerm_monitor_workspace.this.id
+    resource_id = azurerm_monitor_workspace.this[0].id
   }
 }

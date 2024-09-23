@@ -24,3 +24,8 @@ variable "zones" {
   type        = list(string)
   default     = [ "1", "2", "3" ]
 }
+
+variable "enable_managed_offerings" {
+  description = "Deploy with Managed Prometheus and Managed Grafana"
+  default     = true
+}

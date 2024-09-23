@@ -5,6 +5,7 @@ vars:
   COUNT: 1
   TAG: "AKS with Windows Containers Demo"
   DEFAULT_REGION: canadacentral
+  DEPLOY_PROMETHEUS: false
 
 tasks:
   up:
@@ -19,7 +20,12 @@ tasks:
       
   apply:
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -var "tags={{.TAG}}" -compact-warnings
+    - terraform apply -auto-approve -var "region={{.REGION}}" 
+        -var "vm_size={{.SKU}}" 
+        -var "node_count={{.COUNT}}" 
+        -var "tags={{.TAG}}" 
+        -var "enable_managed_offerings={{.DEPLOY_PROMETHEUS}}"
+        -compact-warnings
     - task: creds
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
