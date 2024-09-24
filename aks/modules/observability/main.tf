@@ -3,7 +3,7 @@ data "azurerm_subscription" "current" {}
 
 locals {
   location             = var.region
-  monitor_rg_name      = "${var.resource_name}-monitor-rg"
+  monitor_rg_name      = "${var.resource_name}-monitor_rg"
   grafana_name         = "${var.resource_name}-grafana"
   prometheus_name      = "${var.resource_name}-prometheus"
   streams = [
