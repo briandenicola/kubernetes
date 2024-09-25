@@ -3,10 +3,10 @@ locals {
 }
 
 resource "azurerm_container_app_environment" "this" {
-  name                       = local.aca_name
-  location                   = azurerm_resource_group.this.location
-  resource_group_name        = azurerm_resource_group.this.name
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+  name                           = local.aca_name
+  location                       = azurerm_resource_group.this.location
+  resource_group_name            = azurerm_resource_group.this.name
+  log_analytics_workspace_id     = azurerm_log_analytics_workspace.this.id
   internal_load_balancer_enabled = false
   zone_redundancy_enabled        = local.zonal
 }
@@ -36,10 +36,10 @@ resource "azurerm_container_app" "httpbin" {
   ingress {
     external_enabled           = true
     target_port                = 8080
-    allow_insecure_connections = true    
+    allow_insecure_connections = true
     traffic_weight {
-      percentage = 100
-      latest_revision          = true 
+      percentage      = 100
+      latest_revision = true
     }
   }
 }
