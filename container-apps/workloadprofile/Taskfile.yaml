@@ -23,20 +23,11 @@ tasks:
     vars: 
       REGION: '{{default "southcentralus" .CLI_ARGS}}'
 
-  validate:
-    desc: Validates proper deployment 
-    cmds:
-    - curl -vvv {{.APP_URL}}/{{.URI}}
-    vars:
-      APP_URL: 
-        sh: terraform  output -raw APP_URL
-      URI: '{{default "/" .CLI_ARGS}}'
-
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
     - az group delete -n {{.RG}} --yes --no-wait || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
     vars:
       RG: 
         sh: terraform  output -raw RESOURCE_GROUP

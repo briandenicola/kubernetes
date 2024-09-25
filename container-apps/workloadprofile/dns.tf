@@ -1,5 +1,5 @@
 resource "azurerm_private_dns_zone" "containerapps" {
-  name                = data.azurerm_container_app_environment.this.default_domain
+  name                = azurerm_container_app_environment.this.default_domain
   resource_group_name = azurerm_resource_group.this.name
 }
 
@@ -9,7 +9,7 @@ resource "azurerm_private_dns_a_record" "containerapps" {
   resource_group_name = azurerm_resource_group.this.name
   ttl                 = 300
   records             = [ 
-    data.azurerm_container_app_environment.this.static_ip_address
+    azurerm_container_app_environment.this.static_ip_address
   ]
 }
 
