@@ -23,11 +23,9 @@ locals {
   location                = var.region
   resource_name           = "${random_pet.this.id}-${random_id.this.dec}"
   aca_name                = "${local.resource_name}-env"
-  cognitive_services_name = "${local.resource_name}-ai"
   workload_profile_name   = "default"
-  workload_profile_size   = "D32"
+  workload_profile_size   = "D4"
   utils_image             = "bjd145/utils:3.15"
-  container_image         = "mcr.microsoft.com/azure-cognitive-services/form-recognizer/document-3.0"
   vnet_cidr               = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 1)
   compute_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
@@ -40,8 +38,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "Forms Recognizer - Invoice"
-    Components  = "Container Apps; Cognitive Services;"
+    Application = "TBD"
+    Components  = "Container Apps; "
     DeployedOn  = timestamp()
   }
 }
