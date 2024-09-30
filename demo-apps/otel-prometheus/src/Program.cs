@@ -1,5 +1,6 @@
 var builder = WebApplication.CreateBuilder(args);
-https://github.com/open-telemetry/opentelemetry-dotnet/issues/5502
+
+//https://github.com/open-telemetry/opentelemetry-dotnet/issues/5502
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
     serverOptions.ListenAnyIP(9090);
