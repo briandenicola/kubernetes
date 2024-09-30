@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name:  windows-demo-apps
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: apsnetapp
+  namespace: windows-demo-apps
   labels: 
    web_server: iis
    os: windows2022  
