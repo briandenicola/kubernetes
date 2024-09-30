@@ -7,7 +7,7 @@ vars:
 
 tasks:
   up:
-    desc: Creates a complete Azure AKS environment 
+    desc: Creates a {{.TAGS}} environment 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}

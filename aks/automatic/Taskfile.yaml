@@ -10,7 +10,7 @@ tasks:
     - task --list
     
   up:
-    desc: Creates a complete Azure environment 
+    desc: Creates a complete {{.TITLE}} environment 
     cmds:
     - task: init
     - task: apply

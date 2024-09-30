@@ -9,7 +9,7 @@ vars:
 
 tasks:
   up:
-    desc: Builds end to end an AKS environment
+    desc: Builds a {{.TAGS} environment
     cmds:
     - task: init
     - task: apply

@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  TAGS: "Azure ML Extension with AKS Cluster Demo"
+  TAGS: "AKS Cluster with Kata nodes Demo"
   NODE_COUNT: 2
   SKU: "Standard_D4ads_v5"
 
@@ -12,7 +12,7 @@ tasks:
     - task --list
     
   up:
-    desc: Creates a complete Azure ML environment 
+    desc: Creates a {{.TAGS}} environment
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}

@@ -12,7 +12,7 @@ tasks:
     - task --list
 
   up:
-    desc: Creates a complete Azure environment 
+    desc: Creates a {{.TAGS}} 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}

@@ -1,7 +1,7 @@
 version: '3'
 
 vars:
-  CHAOS_TAG: "Chaos Studio"
+  CHAOS_TAG: "Chaos Studio Demo"
   CHAOS_NODE_COUNT: 3
 includes:
   infra:
@@ -11,7 +11,7 @@ includes:
 
 tasks:
   up: 
-    desc: Creates a complete Azure Chaos Experiment
+    desc: Creates a {{.CHAOS_TAG}} and Experiments
     cmds:
     - task: 'infra:up' 
       vars:
