@@ -1,7 +1,12 @@
 #helm install prometheus prometheus-community/kube-prometheus-stack
 #helm install kube-state-metrics prometheus-community/kube-state-metrics
 #helm install win-exporter prometheus-community/prometheus-windows-exporter
----
+# ---
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: windows-demo-apps
+# ---
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
@@ -20,12 +25,12 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor 
 metadata:
+  name: prometheus-windows-exporter
   labels:
     app.kubernetes.io/component: metrics
     app.kubernetes.io/instance: prometheus
     app.kubernetes.io/name: prometheus-windows-exporter
     release: prometheus
-  name: prometheus-windows-exporter
 spec:
   attachMetadata:
     node: false
@@ -41,19 +46,88 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: apsnetapp-monitor
-  namespace: windows-demo-apps
+  name: prometheus-demo-monitor
+  labels:
+    release: prometheus  
 spec:
   attachMetadata:
     node: false
   endpoints:
-  - targetPort: 8080
+  - port: metrics
     scheme: http
     interval: 15s  
+    path: /metrics
   selector:
     matchLabels:
-      app: apsnetapp
-  jobLabel: jobLabel      
+      app: prometheus-demo
+  jobLabel: demo      
   namespaceSelector:
-    matchNames:
-    - windows-demo-app
+    any: true
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: promtheus-demo
+  namespace: windows-demo-apps
+  labels:
+    app: prometheus-demo    
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-demo
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: prometheus-demo
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: prometheus-demo
+        image: bjdcsa.azurecr.io/otel-demo:win-0ced255b
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        - containerPort: 9090
+        env:
+        - name: APP_INSIGHTS_CONNECTION_STRING
+          value: ""
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "2"
+          requests:
+            memory: "64Mi"
+            cpu: "0.25"
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+      - key: role
+        operator: Equal
+        value: applications
+        effect: NoSchedule            
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-demo-svc
+  namespace: windows-demo-apps
+  labels:
+    app: prometheus-demo  
+  annotations:
+   service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: prometheus-demo
+  ports:
+  - port: 80
+    targetPort: 5000
+    name: web
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  type: LoadBalancer
