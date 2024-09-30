@@ -37,3 +37,23 @@ spec:
     matchLabels:
       app.kubernetes.io/instance: win-exporter
       app.kubernetes.io/name: prometheus-windows-exporter
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: apsnetapp-monitor
+  namespace: windows-demo-apps
+spec:
+  attachMetadata:
+    node: false
+  endpoints:
+  - targetPort: 8080
+    scheme: http
+    interval: 15s  
+  selector:
+    matchLabels:
+      app: apsnetapp
+  jobLabel: jobLabel      
+  namespaceSelector:
+    matchNames:
+    - windows-demo-app
