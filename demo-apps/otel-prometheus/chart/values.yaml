@@ -12,3 +12,6 @@ WORKLOAD_ID:
 
 APP_INSIGHTS:
   CONNECTION_STRING                     : ""
+
+DEPLOY_ON:
+  WINDOWS                               : false

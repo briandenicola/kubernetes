@@ -41,7 +41,16 @@ spec:
             cpu: "2"
           requests:
             memory: "64Mi"
-            cpu: "0.25"
+            cpu: "0.25"          
+{{- if .Values.DEPLOY_ON.WINDOWS -}}         
+      nodeSelector:
+        kubernetes.io/os: windows
+      tolerations:
+      - key: role
+        operator: Equal
+        value: applications
+        effect: NoSchedule 
+{{- end }}  
 ---
 apiVersion: v1
 kind: Service
@@ -56,4 +65,8 @@ spec:
   ports:
   - port: 80
     targetPort: {{ .Values.SERVICE_PORT }}
+    name: web
+  - port: 9090
+    targetPort: 9090
+    name: metrics
   type: LoadBalancer
