@@ -1,12 +1,12 @@
 #helm install prometheus prometheus-community/kube-prometheus-stack
 #helm install kube-state-metrics prometheus-community/kube-state-metrics
 #helm install win-exporter prometheus-community/prometheus-windows-exporter
-# ---
-# apiVersion: v1
-# kind: Namespace
-# metadata:
-#   name: windows-demo-apps
-# ---
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: windows-demo-apps
+---
 apiVersion: monitoring.coreos.com/v1alpha1
 kind: ScrapeConfig
 metadata:
