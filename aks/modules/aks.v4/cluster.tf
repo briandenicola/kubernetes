@@ -4,14 +4,16 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 locals {
   zones = var.region == "northcentralus" || var.region == "canadaeast" ? null : var.zones
+  authorized_ip_ranges = "${concat(var.authorized_ip_ranges, ["${azurerm_public_ip.this.ip_address}/32", "${azurerm_public_ip_prefix.this.ip_prefix}"])}"
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
   depends_on = [
     azurerm_user_assigned_identity.aks_identity,
     azurerm_user_assigned_identity.aks_kubelet_identity,
-    azurerm_subnet.api,
+    #azurerm_subnet.api,
     azurerm_subnet.nodes,
+    azurerm_subnet_nat_gateway_association.nodes,
     azurerm_role_assignment.aks_role_assignemnt_network,
     azurerm_role_assignment.aks_role_assignemnt_msi
   ]
@@ -40,11 +42,11 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_upgrade_channel = "patch"
-  node_os_upgrade_channel   = "SecurityPatch"
+  automatic_upgrade_channel    = "patch"
+  node_os_upgrade_channel      = "SecurityPatch"
 
   api_server_access_profile {
-    authorized_ip_ranges = var.authorized_ip_ranges
+    authorized_ip_ranges = local.authorized_ip_ranges
   }
 
   azure_active_directory_role_based_access_control {
@@ -98,7 +100,9 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-
+    network_data_plane  = "cilium"
+    network_policy      = "cilium"
+    outbound_type       = "userAssignedNATGateway"
   }
 
   dynamic "service_mesh_profile" {
@@ -107,7 +111,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     content {
       mode                             = "Istio"
       internal_ingress_gateway_enabled = true
-      revisions                        = ["asm-1-21"]
+      revisions                        = local.istio_version
     }
   }
 
@@ -164,4 +168,3 @@ resource "azurerm_kubernetes_cluster" "this" {
     secret_rotation_interval = "2m"
   }
 }
-

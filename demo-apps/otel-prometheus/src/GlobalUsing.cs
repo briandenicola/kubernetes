@@ -11,10 +11,5 @@ global using OpenTelemetry.Trace;
 global using OpenTelemetry.Logs;
 global using OpenTelemetry.Resources;
 
-
-
-
 global using OpenTelemetry.Exporter;
 global using OpenTelemetry.Exporter.Prometheus;
-
-
