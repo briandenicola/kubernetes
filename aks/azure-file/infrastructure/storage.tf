@@ -5,7 +5,7 @@ resource "azurerm_storage_account" "this" {
   account_tier              = "Premium"
   account_replication_type  = "LRS"
   account_kind              = "FileStorage"
-  shared_access_key_enabled = false
+  shared_access_key_enabled = true
 }
 
 resource "azurerm_storage_share" "this" {
