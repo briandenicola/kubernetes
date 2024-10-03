@@ -17,7 +17,7 @@ locals {
 }
 
 module "cluster" {
-  source               = "../../module"
+  source               = "../../modules/aks.v3"
   region               = var.region
   zones                = ["1"]
   authorized_ip_ranges = local.authorized_ip_ranges
