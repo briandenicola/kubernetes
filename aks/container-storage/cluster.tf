@@ -10,5 +10,8 @@ module "cluster" {
   vm_sku               = var.vm_size
   vm_os                = "Ubuntu"
   node_count           = var.node_count
-  node_labels          = { "acstor.azure.com/io-engine" = "acstor" }
+  node_labels          = { 
+    "acstor.azure.com/io-engine" = "acstor" 
+    "acstor.azure.com/accept-ephemeral-storage" = true
+  }
 }
