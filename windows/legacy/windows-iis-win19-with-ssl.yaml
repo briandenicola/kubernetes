@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: iis-ssl-demo
+spec:
+  selector:
+    matchLabels:
+      app: iis-ssl-demo
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: iis-ssl-demo
+    spec:
+      containers:
+      - name: iis-ssl-demo
+        image: bjd145.azurecr.io/windows/iisdemo:win2022-ltsc
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 443
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1024m"
+      nodeSelector:
+        kubernetes.io/os: windows
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iis-ssl-demo
+spec:
+  selector:
+    app: iis-ssl-demo
+  ports:
+  - port: 443
+  type: LoadBalancer
