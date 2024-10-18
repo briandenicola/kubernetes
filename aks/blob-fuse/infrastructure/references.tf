@@ -11,6 +11,6 @@ resource "tls_private_key" "rsa" {
 }
 
 data "azurerm_kubernetes_cluster" "this" {
-  name                = module.cluster.AKS_CLUSTER_NAME
-  resource_group_name = module.cluster.AKS_RESOURCE_GROUP  
+  name                = module.aks_cluster.AKS_CLUSTER_NAME
+  resource_group_name = module.aks_cluster.AKS_RESOURCE_GROUP  
 }

@@ -6,13 +6,13 @@ resource "azurerm_user_assigned_identity" "app_identity" {
 
 resource "azurerm_federated_identity_credential" "aks_pod_identity" {
   depends_on = [ 
-    module.cluster
+    module.aks_cluster
   ]
 
   name                = local.workload_identity
   resource_group_name = azurerm_resource_group.this.name
   audience            = ["api://AzureADTokenExchange"]
-  issuer              = module.cluster.AKS_OIDC_ISSUER_URL
+  issuer              = module.aks_cluster.AKS_OIDC_ISSUER_URL
   parent_id           = azurerm_user_assigned_identity.app_identity.id
   subject             = "system:serviceaccount:${var.namespace}:${local.workload_identity}"
 }
