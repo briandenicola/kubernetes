@@ -12,7 +12,7 @@ module "aks_cluster" {
   tags                               = local.tags
   kubernetes_version                 = local.k8s_version
   sdlc_environment                   = local.environment_type
-  enable_csi_drivers                 = true
+  enable_csi_drivers                 = false #true for managed.  false for open source csi drivers
   enable_mesh                        = false
   azurerm_log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
 }
