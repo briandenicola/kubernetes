@@ -20,14 +20,14 @@ resource "azurerm_storage_container" "this" {
   container_access_type = "private"
 }
 
-resource "azurerm_storage_blob" "this" {
-  depends_on = [
-    azurerm_role_assignment.storage_blob_contributor_current_user
-  ]
+# resource "azurerm_storage_blob" "this" {
+#   depends_on = [
+#     azurerm_role_assignment.storage_blob_contributor_current_user
+#   ]
 
-  name                   = "sample.txt"
-  storage_account_name   = azurerm_storage_account.this.name
-  storage_container_name = azurerm_storage_container.this.name
-  type                   = "Block"
-  source_content         = "This is a sample text file just for testing."
-}
+#   name                   = "sample.txt"
+#   storage_account_name   = azurerm_storage_account.this.name
+#   storage_container_name = azurerm_storage_container.this.name
+#   type                   = "Block"
+#   source_content         = "This is a sample text file just for testing."
+# }
