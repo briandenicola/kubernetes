@@ -9,6 +9,7 @@ module "cluster" {
   public_key_openssh                 = tls_private_key.rsa.public_key_openssh
   tags                               = var.tags
   kubernetes_version                 = local.k8s_version
+  istio_version                      = local.istio_version
   sdlc_environment                   = local.environment_type
   vm_sku                             = var.vm_size
   vm_os                              = local.os_sku

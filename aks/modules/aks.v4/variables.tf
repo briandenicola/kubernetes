@@ -34,6 +34,11 @@ variable "kubernetes_version" {
   description = "The version of Kubernetes to deploy"
 }
 
+variable "istio_version" {
+  description = "The version of the managed Azure Service Mesh to deploy"
+  default = "asm-1-22"
+}
+
 variable "automatic_channel_upgrade" {
   default     = "patch"
   description = "The value for the automatic channel upgrade"
