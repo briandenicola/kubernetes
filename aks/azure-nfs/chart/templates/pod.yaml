@@ -13,11 +13,11 @@ spec:
     volumeMounts:
     - name: persistent-storage
       mountPath: "/mnt/files"
-      readOnly: false
+      readOnly: false    
   volumes:
   - name: persistent-storage
     persistentVolumeClaim:
-      claimName: pvc-files
+      claimName: persistent-storage
 ---
 kind: Pod
 apiVersion: v1
@@ -37,4 +37,4 @@ spec:
   volumes:
   - name: persistent-storage
     persistentVolumeClaim:
-      claimName: pvc-files
+      claimName: persistent-storage

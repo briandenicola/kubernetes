@@ -6,10 +6,7 @@ provisioner: file.csi.azure.com
 allowVolumeExpansion: true
 parameters:
   protocol: nfs
-  skuName: Premium_LRS
 mountOptions:
   - nconnect=4
   - noresvport
   - actimeo=30
-  - rsize=262144
-  - wsize=262144
