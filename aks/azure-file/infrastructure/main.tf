@@ -13,7 +13,7 @@ locals {
   workload_identity      = "${local.resource_name}-app-identity"
   storage_name           = "${replace(local.resource_name, "-", "")}sa"
   storage_container_name = "test"
-  tags                   = "Azure Files with Workload Identity"
+  tags                   = var.tags
 }
 
 module "cluster" {
@@ -24,7 +24,7 @@ module "cluster" {
   resource_name        = local.resource_name
   public_key_openssh   = tls_private_key.rsa.public_key_openssh
   tags                 = local.tags
-  kubernetes_version   = "1.29"
+  kubernetes_version   = "1.30"
   sdlc_environment     = "dev"
   enable_csi_drivers   = false
   enable_mesh          = false

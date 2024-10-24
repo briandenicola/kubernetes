@@ -1,18 +1,22 @@
 version: '3'
 
+env:
+  TITLE: Azure Files with AKS Workload Identity
+  DEFAULT_REGION: canadaeast
+
 tasks:
   default: 
     cmds: 
     - task --list
 
   up:
-    desc: Builds end to end an AKS environment
+    desc: Builds {{.TITLE}} demo environment
     cmds:
     - task: init
     - task: apply
     - task: creds
     vars:
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   init: 
     desc: Initializes Terraform
@@ -21,21 +25,21 @@ tasks:
     - terraform -chdir=./infrastructure workspace select {{.REGION}}
     - terraform -chdir=./infrastructure init
     vars:
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   apply: 
     desc: Applies Terraform configuration
     cmds:
-    - terraform -chdir=./infrastructure apply -auto-approve -var "region={{.REGION}}"
+    - terraform -chdir=./infrastructure apply -auto-approve -var "region={{.REGION}}" -var "tags={{.TITLE}}"
     vars:
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
   
   plan:
     desc: Reviews Terraform plan
     cmds:
     - terraform -chdir=./infrastructure plan -var "region={{.REGION}}"
     vars:
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
     
   creds:
     desc: Grab AKS credentials 
@@ -51,7 +55,7 @@ tasks:
   deploy:
     desc: Deploys simple pod via Helm
     cmds:
-    - helm upgrade -i blobfuse --set APP_NAME={{.APP_NAME}} 
+    - helm upgrade -i azurefile --set APP_NAME={{.APP_NAME}} 
       --set ARM_WORKLOAD_APP_ID={{.ARM_WORKLOAD_APP_ID}} 
       --set ARM_TENANT_ID={{.ARM_TENANT_ID}} 
       --set RESOURCE_GROUP={{.RESOURCE_GROUP}} 
@@ -75,5 +79,5 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="Azure Files with Workload Identity" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait -n  || true
+    - az group list --tag Application={{.TITLE}} --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait -n  || true
     - cd ./infrastructure; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true
