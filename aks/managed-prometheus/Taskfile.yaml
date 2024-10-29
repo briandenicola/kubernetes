@@ -1,28 +1,38 @@
 version: '3'
 
+vars:
+  TAGS: "Azure Managed Prometheus Demo"
+  DEFAULT_REGION: canadaeast
+  NODE_COUNT: 3
+  SKU: "Standard_D4ads_v5"
+
 tasks:
   default:
     cmds:
     - task --list
     
   up:
-    desc: Creates a complete Azure environment 
+    desc: Creates a {{.TAGS}} environment
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
     - task: apply
+    - task: creds
+    - task: deploy-configs
+    - task: deploy-app    
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+     REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   apply:
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
-    - task: creds
-    - task: deploy-configs
-    - task: deploy-app
+    - terraform apply -auto-approve -compact-warnings
+        -var "region={{.REGION}}" 
+        -var "vm_size={{.SKU}}" 
+        -var "tags={{.TAGS}}" 
+        -var "node_count={{.NODE_COUNT}}" 
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   creds:
     desc: Gets AKS credential file
@@ -45,6 +55,7 @@ tasks:
     - kubectl -n kube-system rollout restart deploy ama-metrics
     - kubectl -n kube-system rollout restart deployment ama-metrics-ksm
     - kubectl -n kube-system rollout restart daemonset ama-metrics-node
+  
   deploy-app:
     desc: Deploy Demo Application
     cmds:

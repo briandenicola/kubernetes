@@ -4,18 +4,34 @@ vars:
   TAGS: "Azure Service Mesh Demo"
   NODE_COUNT: 3
   SKU: "Standard_D4ads_v5"
+  DEFAULT_REGION: canadaeast
 
 tasks:
+  default:
+    cmds:
+    - task --list 
+
   up:
-    desc: Creates a {{.TAGS}}
+    desc: Creates a {{.TAGS}} environment
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
     - terraform init
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "tags={{.TAGS}}" -var "node_count={{.NODE_COUNT}}" -compact-warnings
+    - task: apply
     - task: creds
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+
+  apply:
+    desc: Applies the Terraform configuration 
+    cmds:
+    - terraform apply -auto-approve -compact-warnings
+        -var "region={{.REGION}}" 
+        -var "vm_size={{.SKU}}" 
+        -var "tags={{.TAGS}}" 
+        -var "node_count={{.NODE_COUNT}}"
+    vars: 
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   creds:
     desc: Gets AKS credential file
