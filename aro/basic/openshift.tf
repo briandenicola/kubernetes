@@ -31,11 +31,11 @@ resource "azurerm_redhat_openshift_cluster" "this" {
   }
 
   api_server_profile {
-    visibility = "Public"
+    visibility = "Private"
   }
 
   ingress_profile {
-    visibility = "Public"
+    visibility = "Private"
   }
 
   worker_profile {
