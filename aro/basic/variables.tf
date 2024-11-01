@@ -13,5 +13,5 @@ variable "tags" {
 
 variable "domain" {
   description = "Domain name"
-  type        = string 
+  type        = string
 }

@@ -49,7 +49,6 @@ tasks:
       ARO_NAME: 
         sh: terraform output -raw ARO_NAME  
 
-
   down:
     desc: Destorys Azure infrastructure and cleans up terraform state files
     cmds:
