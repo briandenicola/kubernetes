@@ -1,4 +1,7 @@
 resource "azurerm_bastion_host" "this" {
+  depends_on = [ 
+    azurerm_virtual_network.this 
+  ]
   name                = local.bastion_name
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
