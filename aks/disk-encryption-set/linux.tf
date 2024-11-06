@@ -1,7 +1,7 @@
 resource "azurerm_network_interface" "this" {
   name                = "${local.vm_name}-nic"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.vm.location
+  resource_group_name = azurerm_resource_group.vm.name
 
   ip_configuration {
     name                          = "internal"
@@ -12,8 +12,8 @@ resource "azurerm_network_interface" "this" {
 
 resource "azurerm_linux_virtual_machine" "this" {
   name                  = local.vm_name
-  resource_group_name   = azurerm_resource_group.this.name
-  location              = azurerm_resource_group.this.location
+  resource_group_name   = azurerm_resource_group.vm.name
+  location              = azurerm_resource_group.vm.location
   size                  = local.jump_vm_sku
   admin_username        = "manager"
   zone                  = local.jump_vm_zone

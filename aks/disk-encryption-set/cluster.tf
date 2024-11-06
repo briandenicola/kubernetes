@@ -1,7 +1,3 @@
-locals {
-  
-}
-
 resource "azurerm_kubernetes_cluster" "this" {
   depends_on = [
     azurerm_user_assigned_identity.aks_identity,

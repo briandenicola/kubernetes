@@ -13,9 +13,10 @@ locals {
   bastion_name                 = "${local.resource_name}-bastion"
   aks_node_rg_name             = "${local.aks_name}_nodes_rg"
   vnet_cidr                    = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
-  pe_subnet_cidir              = cidrsubnet(local.vnet_cidr, 8, 1)
-  api_subnet_cidir             = cidrsubnet(local.vnet_cidr, 8, 2)
-  nodes_subnet_cidir           = cidrsubnet(local.vnet_cidr, 8, 3)
+  bastion_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 1)
+  pe_subnet_cidir              = cidrsubnet(local.vnet_cidr, 8, 2)
+  api_subnet_cidir             = cidrsubnet(local.vnet_cidr, 8, 3)
+  nodes_subnet_cidir           = cidrsubnet(local.vnet_cidr, 8, 4)
   compute_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 10)
   kubernetes_version           = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
   sdlc_environment             = "Dev"
