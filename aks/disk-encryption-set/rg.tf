@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "this" {
 }
 
 resource "azurerm_resource_group" "network" {
-  name     = "${local.resource_name}_aks_rg"
+  name     = "${local.resource_name}_network_rg"
   location = local.location
 
   tags = {

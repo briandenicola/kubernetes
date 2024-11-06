@@ -100,6 +100,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
+    outbound_type       = "userAssignedNATGateway"
   }
 
   maintenance_window_auto_upgrade {

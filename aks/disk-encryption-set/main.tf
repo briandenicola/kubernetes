@@ -11,6 +11,7 @@ locals {
   app_insights_name            = "${local.resource_name}-appinsights"
   log_analytics_workspace_name = "${local.resource_name}-logs"
   bastion_name                 = "${local.resource_name}-bastion"
+  nat_name                     = "${local.resource_name}-nat"
   aks_node_rg_name             = "${local.aks_name}_nodes_rg"
   vnet_cidr                    = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   bastion_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 1)

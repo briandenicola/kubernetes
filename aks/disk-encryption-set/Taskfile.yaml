@@ -4,7 +4,7 @@ vars:
   SKU: "Standard_B4ls_v2"
   DEFAULT_COUNT: 2
   DEFAULT_TAG: "Private AKS Cluster with Disk Encryption"
-  DEFAULT_REGION: "northcentralus"
+  DEFAULT_REGION: "canadacentral"
   
 tasks:
   default:
