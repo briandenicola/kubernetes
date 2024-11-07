@@ -21,8 +21,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   name                         = local.aks_name
-  resource_group_name          = azurerm_resource_group.this.name
-  location                     = azurerm_resource_group.this.location
+  resource_group_name          = azurerm_resource_group.this["aks"].name
+  location                     = azurerm_resource_group.this["aks"].location
   node_resource_group          = local.aks_node_rg_name
   private_cluster_enabled      = true
   private_dns_zone_id          = azurerm_private_dns_zone.aks_private_zone.id
@@ -47,25 +47,25 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   key_management_service {
-    key_vault_key_id         = azurerm_key_vault_key.etcd_encryption_key.id 
+    key_vault_key_id         = azurerm_key_vault_key.etcd_encryption_key.id
     key_vault_network_access = "Private"
   }
 
   azure_active_directory_role_based_access_control {
-    managed                  = true
-    azure_rbac_enabled       = true
-    tenant_id                = data.azurerm_client_config.current.tenant_id
+    managed            = true
+    azure_rbac_enabled = true
+    tenant_id          = data.azurerm_client_config.current.tenant_id
   }
 
   identity {
-    type                     = "UserAssigned"
-    identity_ids             = [azurerm_user_assigned_identity.aks_identity.id]
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
   }
 
   linux_profile {
-    admin_username           = "manager"
+    admin_username = "manager"
     ssh_key {
-      key_data               = tls_private_key.rsa.public_key_openssh
+      key_data = tls_private_key.rsa.public_key_openssh
     }
   }
 

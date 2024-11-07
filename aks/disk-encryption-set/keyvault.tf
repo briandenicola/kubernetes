@@ -1,13 +1,13 @@
 resource "azurerm_key_vault" "this" {
-  name                        = local.key_vault_name
-  resource_group_name         = azurerm_resource_group.this.name
-  location                    = azurerm_resource_group.this.location
-  sku_name                    = "standard"
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  enabled_for_disk_encryption = true
-  purge_protection_enabled    = true
-  public_network_access_enabled = true 
+  name                          = local.key_vault_name
+  resource_group_name           = azurerm_resource_group.this["aks"].name
+  location                      = azurerm_resource_group.this["aks"].location
+  sku_name                      = "standard"
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days    = 7
+  enabled_for_disk_encryption   = true
+  purge_protection_enabled      = true
+  public_network_access_enabled = true
 
   network_acls {
     bypass         = "AzureServices"
@@ -43,8 +43,8 @@ resource "azurerm_private_endpoint" "key_vault" {
   ]
 
   name                = "${local.key_vault_name}-endpoint"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this["aks"].name
+  location            = azurerm_resource_group.this["aks"].location
   subnet_id           = azurerm_subnet.pe.id
 
   private_service_connection {

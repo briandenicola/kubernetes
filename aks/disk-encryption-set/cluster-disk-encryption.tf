@@ -19,8 +19,8 @@ resource "azurerm_key_vault_key" "disk_encryption_key" {
 
 resource "azurerm_disk_encryption_set" "disk_encryption_set" {
   name                = "${local.aks_name}-enc-set"
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this["aks"].name
+  location            = azurerm_resource_group.this["aks"].location
   key_vault_key_id    = azurerm_key_vault_key.disk_encryption_key.id
 
   identity {
