@@ -25,3 +25,38 @@ resource "azurerm_role_assignment" "keyvault_role_assignemnt_cluster_identity" {
   principal_id                      = azurerm_user_assigned_identity.aks_identity.principal_id
   skip_service_principal_aad_check  = true
 }
+
+resource "azurerm_role_assignment" "jumpbox_managed_identity_aks_admin" {
+  scope                             = azurerm_kubernetes_cluster.this.id
+  role_definition_name              = "Azure Kubernetes Service RBAC Cluster Admin"
+  principal_id                      = azurerm_linux_virtual_machine.this.identity.0.principal_id
+  skip_service_principal_aad_check  = true
+}
+
+resource "azurerm_role_assignment" "jumpbox_managed_identity_contributor_rgs_vm" {
+  scope                             = azurerm_resource_group.vm.id
+  role_definition_name              = "Contributor"
+  principal_id                      = azurerm_linux_virtual_machine.this.identity.0.principal_id
+  skip_service_principal_aad_check  = true
+}
+
+resource "azurerm_role_assignment" "jumpbox_managed_identity_contributor_rgs_this" {
+  scope                             = azurerm_resource_group.this.id
+  role_definition_name              = "Contributor"
+  principal_id                      = azurerm_linux_virtual_machine.this.identity.0.principal_id
+  skip_service_principal_aad_check  = true
+}
+
+resource "azurerm_role_assignment" "jumpbox_managed_identity_contributor_rgs_network" {
+  scope                             = azurerm_resource_group.network.id
+  role_definition_name              = "Contributor"
+  principal_id                      = azurerm_linux_virtual_machine.this.identity.0.principal_id
+  skip_service_principal_aad_check  = true
+}
+
+resource "azurerm_role_assignment" "jumpbox_managed_identity_contributor_rgs_monitor" {
+  scope                             = azurerm_resource_group.monitor.id
+  role_definition_name              = "Contributor"
+  principal_id                      = azurerm_linux_virtual_machine.this.identity.0.principal_id
+  skip_service_principal_aad_check  = true
+}
