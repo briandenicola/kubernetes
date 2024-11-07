@@ -10,6 +10,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     azurerm_role_assignment.keyvault_role_assignemnt_cluster_identity,
     azurerm_private_endpoint.key_vault,
     azurerm_key_vault_access_policy.disk_encryption_set_access_policy,
+    azurerm_key_vault_access_policy.etcd_encryption_access_policy
   ]
 
   lifecycle {
