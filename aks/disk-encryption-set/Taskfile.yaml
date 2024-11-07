@@ -42,6 +42,19 @@ tasks:
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
+  refresh:
+    desc: Refresh the Terraform values
+    cmds:
+    - terraform refresh -compact-warnings
+        -var "region={{.REGION}}" 
+        -var "vm_size={{.SKU}}"
+        -var "node_count={{.NODE_COUNT}}" 
+        -var "tags={{.TAG_FOR_RUN}}" 
+    vars: 
+      REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
+      NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
+      TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
+
   creds:
     desc: Gets AKS credential file
     cmds:
@@ -52,6 +65,18 @@ tasks:
         sh: terraform output -raw AKS_RESOURCE_GROUP
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
+
+  tunnel:
+    desc: Creates a tunnel to the Jumphost through Azure Bastion
+    cmds:
+    - az network bastion tunnel --name {{.BASTION_NAME}} --resource-group {{.BASTION_RG}} --target-resource-id {{.JUMPBOX_ID}} --resource-port 22 --port 2222
+    vars:
+      BASTION_RG: 
+        sh: terraform output -raw BASTION_RG
+      BASTION_NAME: 
+        sh: terraform output -raw BASTION_NAME
+      JUMPBOX_ID:
+        sh: terraform output -raw JUMPBOX_ID
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
