@@ -24,7 +24,7 @@ resource "azurerm_key_vault_access_policy" "etcd_encryption_access_policy" {
   object_id = azurerm_user_assigned_identity.aks_identity.principal_id
 
   key_permissions = [
-    "decrypt",
-    "encrypt",
+    "Decrypt",
+    "Encrypt",
   ]
 }
