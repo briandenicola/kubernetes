@@ -21,3 +21,8 @@ resource "random_integer" "pod_cidr" {
   min = 100
   max = 127
 }
+
+resource "random_integer" "vm_zone" {
+  min = 1
+  max = 3
+}

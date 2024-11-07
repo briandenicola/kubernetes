@@ -2,8 +2,9 @@
 locals {
   location                     = var.region
   tags                         = var.tags
+  non_az_regions               = ["northcentralus", "canadaeast", "westcentralus", "westus"]
   resource_name                = "${random_pet.this.id}-${random_id.this.dec}"
-  aks_name                     = "${local.resource_name}-aks-cluster"
+  aks_name                     = "${local.resource_name}-aks"
   virtual_network_name         = "${local.resource_name}-vnet"
   vm_name                      = "${local.resource_name}-vm"
   key_vault_name               = "${local.resource_name}-keyvault"
@@ -22,8 +23,8 @@ locals {
   kubernetes_version           = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
   sdlc_environment             = "Dev"
   jump_vm_sku                  = "Standard_B1ms"
-  aks_zones                    = var.region == "canadaeast" || var.region == "northcentralus" ? null : var.zones
-  jump_vm_zone                 = var.region == "canadaeast" || var.region == "northcentralus" ? null : local.aks_zones[0]
+  aks_zones                    = contains(local.non_az_regions, local.location) ? null : var.zones
+  jump_vm_zone                 = contains(local.non_az_regions, local.location) ? null : random_integer.vm_zone.result
 }
 
 
