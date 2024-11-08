@@ -3,7 +3,7 @@ version: '3'
 vars:
   SKU: "Standard_B4ls_v2"
   DEFAULT_COUNT: 2
-  DEFAULT_TAG: "Private AKS Cluster with Disk Encryption"
+  DEFAULT_TAG: "Private AKS Cluster with NSG Lock Down Rules"
   DEFAULT_REGION: "canadacentral"
   SSH_PORT: 2222
   

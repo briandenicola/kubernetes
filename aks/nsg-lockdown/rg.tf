@@ -6,7 +6,7 @@ locals {
     }
     network = {
       name       = "${local.resource_name}_network_rg"
-      components = "Virtual Network; NSG; Azure Bastion; Azure Nat Gateway; Private DNS Zone; Private Endpoints"
+      components = "Virtual Network; NSG; Azure Bastion; Azure Firewall; Private DNS Zone; Private Endpoints"
     }
     monitor = {
       name       = "${local.resource_name}_monitor_rg"
