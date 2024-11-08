@@ -7,6 +7,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     azurerm_subnet.nodes,
     azurerm_role_assignment.aks_role_assignemnt_network,
     azurerm_role_assignment.aks_role_assignemnt_msi,
+    azurerm_subnet_route_table_association.nodes,
+    azurerm_firewall.this,
   ]
 
   lifecycle {
@@ -91,7 +93,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   service_mesh_profile {
     mode                             = "Istio"
     internal_ingress_gateway_enabled = true
-    revisions                        = [ local.istio_version ]
+    revisions                        = [local.istio_version]
   }
 
   network_profile {
@@ -101,7 +103,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-    outbound_type       = "userAssignedNATGateway"
+    outbound_type       = "userDefinedRouting"
   }
 
   maintenance_window_auto_upgrade {
