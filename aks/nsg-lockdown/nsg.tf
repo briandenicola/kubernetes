@@ -130,16 +130,55 @@ resource "azurerm_network_security_group" "lock_down" {
   }
 
   security_rule {
-    name                       = "DenyAnyOutbound"
-    priority                   = 4096
+    name                       = "Allow-Traffic-to-K8SPods"
+    priority                   = 400
     direction                  = "Outbound"
-    access                     = "Deny"
+    access                     = "Allow"
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "*"
-    destination_address_prefix = "*"
+    destination_address_prefix = local.pod_cidr
   }
+
+  security_rule {
+    name                       = "Allow-Traffic-to-K8SServices"
+    priority                   = 401
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = local.services_cidr
+  }
+
+  security_rule {
+    name                       = "Allow-Traffic-to-Nodes"
+    priority                   = 500
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = local.nodes_subnet_cidir
+  }
+
+  #
+  # Disables all outbound traffic to the Internet
+  #
+  # security_rule {
+  #   name                       = "DenyAnyOutbound"
+  #   priority                   = 4096
+  #   direction                  = "Outbound"
+  #   access                     = "Deny"
+  #   protocol                   = "*"
+  #   source_port_range          = "*"
+  #   destination_port_range     = "*"
+  #   source_address_prefix      = "*"
+  #   destination_address_prefix = "*"
+  # }
 
 }
 
