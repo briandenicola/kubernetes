@@ -82,7 +82,8 @@ tasks:
   ssh:
     desc: SSHs to the Jumphost through Azure Bastion
     cmds:
-    - ssh -o "StrictHostKeyChecking=no" manager@localhost -p {{.SSH_PORT}}
+     - cmd: ssh -o UserKnownHostsFile=/dev/null -o GlobalKnownHostsFile=/dev/null -o "StrictHostKeyChecking=no" manager@localhost -p {{.SSH_PORT}}
+       silent: true
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
