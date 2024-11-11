@@ -58,6 +58,18 @@ resource "azurerm_network_security_group" "lock_down" {
   }
 
   security_rule {
+    name                       = "Allow-Node-to-Services-CIDRS"
+    priority                   = 401
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = local.nodes_subnet_cidir
+    destination_address_prefix = local.services_cidr
+  }
+
+  security_rule {
     name                       = "Allow-Pod-to-Pod-CIDRS"
     priority                   = 500
     direction                  = "Inbound"
@@ -67,6 +79,18 @@ resource "azurerm_network_security_group" "lock_down" {
     destination_port_range     = "*"
     source_address_prefix      = local.pod_cidr
     destination_address_prefix = local.pod_cidr
+  }
+
+  security_rule {
+    name                       = "Allow-Pod-to-Services-CIDRS"
+    priority                   = 501
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = local.pod_cidr
+    destination_address_prefix = local.services_cidr
   }
 
   security_rule {
