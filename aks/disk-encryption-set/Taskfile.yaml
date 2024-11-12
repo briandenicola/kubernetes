@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   SKU: "Standard_B4ls_v2"
-  DEFAULT_COUNT: 2
+  DEFAULT_NODE_COUNT: 2
   DEFAULT_TAG: "Private AKS Cluster with Disk Encryption"
   DEFAULT_REGION: "canadacentral"
   
@@ -22,12 +22,12 @@ tasks:
       vars:
         REGION: '{{.REGION}}'
         TAGS: '{{.TAG_FOR_RUN}}'
-        NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
+        NODE_COUNT: '{{default .DEFAULT_NODE_COUNT .COUNT }}'
     - task: creds
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
-      NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
+      NODE_COUNT: '{{default .DEFAULT_NODE_COUNT .COUNT }}'
       
   apply:
     desc: Applies the Terraform templates
@@ -39,7 +39,7 @@ tasks:
         -var "tags={{.TAG_FOR_RUN}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
-      NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
+      NODE_COUNT: '{{default .DEFAULT_NODE_COUNT (split " " .CLI_ARGS)._1 }}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
   refresh:
@@ -52,7 +52,7 @@ tasks:
         -var "tags={{.TAG_FOR_RUN}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
-      NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
+      NODE_COUNT: '{{default .DEFAULT_NODE_COUNT (split " " .CLI_ARGS)._1 }}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
   creds:

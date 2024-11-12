@@ -22,7 +22,7 @@ resource "random_integer" "pod_cidr" {
   max = 127
 }
 
-resource "random_integer" "vm_zone" {
+resource "random_integer" "zone" {
   min = 1
   max = 3
 }

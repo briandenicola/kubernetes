@@ -23,8 +23,8 @@ locals {
   kubernetes_version           = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
   sdlc_environment             = "Dev"
   jump_vm_sku                  = "Standard_B1ms"
-  aks_zones                    = contains(local.non_az_regions, local.location) ? null : var.zones
-  jump_vm_zone                 = contains(local.non_az_regions, local.location) ? null : random_integer.vm_zone.result
+  zone                         = contains(local.non_az_regions, local.location) ? null : [ random_integer.zone.result ]
+  jump_vm_zone                 = contains(local.non_az_regions, local.location) ? null : random_integer.zone.result
 }
 
 

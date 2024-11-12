@@ -21,9 +21,3 @@ variable "node_count" {
   description = "The node count for the default node pool"
   default     = 1
 }
-
-variable "zones" {
-  description = "The zones to deploy the cluster to"
-  type        = list(string)
-  default     = ["1", "2", "3"]
-}

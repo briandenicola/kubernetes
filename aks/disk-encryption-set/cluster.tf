@@ -79,7 +79,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     name                = "system"
     node_count          = var.node_count
     vm_size             = var.vm_size
-    zones               = local.aks_zones
+    zones               = local.zone
     os_disk_size_gb     = 127
     vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = var.vm_os

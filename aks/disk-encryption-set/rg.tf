@@ -2,7 +2,7 @@ locals {
   resource_groups = {
     aks = {
       name       = "${local.resource_name}_aks_rg"
-      components = "Azure Kubernetes Service; Key Vault; Managed Identities"
+      components = "Azure Kubernetes Service; Key Vault; Managed Identities; Zone - ${local.zone == null ? "none" : tostring(random_integer.zone.result)}"
     }
     network = {
       name       = "${local.resource_name}_network_rg"

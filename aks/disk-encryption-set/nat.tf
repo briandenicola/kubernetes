@@ -4,6 +4,7 @@ resource "azurerm_public_ip" "this" {
   resource_group_name = azurerm_resource_group.this["network"].name
   allocation_method   = "Static"
   sku                 = "Standard"
+  zones               = local.zone
 }
 
 resource "azurerm_public_ip_prefix" "this" {
@@ -11,6 +12,7 @@ resource "azurerm_public_ip_prefix" "this" {
   location            = azurerm_resource_group.this["network"].location
   resource_group_name = azurerm_resource_group.this["network"].name
   prefix_length       = 30
+  zones               = local.zone
 }
 
 resource "azurerm_nat_gateway" "this" {
@@ -19,6 +21,7 @@ resource "azurerm_nat_gateway" "this" {
   resource_group_name     = azurerm_resource_group.this["network"].name
   sku_name                = "Standard"
   idle_timeout_in_minutes = 10
+  zones               = local.zone
 }
 
 resource "azurerm_nat_gateway_public_ip_association" "this" {
