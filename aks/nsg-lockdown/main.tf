@@ -1,9 +1,9 @@
 locals {
-  location         = var.region
-  tags             = var.tags
-  non_az_regions   = ["northcentralus", "canadaeast", "westcentralus", "westus"]
-  resource_name    = "${random_pet.this.id}-${random_id.this.dec}"
-  sdlc_environment = "Dev"
+  location                     = var.region
+  tags                         = var.tags
+  non_az_regions               = ["northcentralus", "canadaeast", "westcentralus", "westus"]
+  resource_name                = "${random_pet.this.id}-${random_id.this.dec}"
+  sdlc_environment             = "Dev"
 
   aks_name                     = "${local.resource_name}-aks"
   virtual_network_name         = "${local.resource_name}-vnet"
