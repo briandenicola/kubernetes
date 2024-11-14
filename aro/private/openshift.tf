@@ -22,20 +22,23 @@ resource "azurerm_redhat_openshift_cluster" "this" {
     domain                      = var.domain
     version                     = local.aro_version
     fips_enabled                = false
+    pull_secret                 = random_password.password.result
     managed_resource_group_name = local.aro_managed_resource_group
   }
 
   network_profile {
-    pod_cidr     = "100.${random_integer.pod_cidr.id}.0.0/16"
-    service_cidr = "100.${random_integer.services_cidr.id}.0.0/16"
+    pod_cidr                                     = "100.${random_integer.pod_cidr.id}.0.0/16"
+    service_cidr                                 = "100.${random_integer.services_cidr.id}.0.0/16"
+    outbound_type                                = "loadBalancer" #UserDefinedRouting
+    preconfigured_network_security_group_enabled = false
   }
 
   api_server_profile {
-    visibility = local.visibility
+    visibility = "Private"
   }
 
   ingress_profile {
-    visibility = local.visibility
+    visibility = "Private"
   }
 
   worker_profile {

@@ -12,7 +12,6 @@ locals {
   worker_vm_size             = "Standard_D4s_v3"
   worker_os_disk_size_gb     = 128
   vm_node_count              = 3
-  visibility                 = "Public"
 }
 
 resource "azurerm_resource_group" "this" {
@@ -21,7 +20,7 @@ resource "azurerm_resource_group" "this" {
 
   tags = {
     Application = var.tags
-    Components  = "Public Azure Red Hat OpenShift"
+    Components  = "Azure Red Hat OpenShift"
     DeployedOn  = timestamp()
   }
 }
