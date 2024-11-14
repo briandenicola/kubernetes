@@ -39,6 +39,19 @@ tasks:
       ARO_RP_SPN:
         sh: az ad sp list --display-name "Azure Red Hat OpenShift RP" --query [0].id -o tsv
 
+  refresh:
+    desc: Applies Terraform configuration
+    cmds:
+    - terraform refresh
+      -var "tags={{.TITLE}}" 
+      -var "region={{.REGION}}" 
+      -var "domain={{.DEFAULT_DOMAIN}}"
+      -var "aro_rp_aad_sp_object_id={{.ARO_RP_SPN}}" 
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
+      ARO_RP_SPN:
+        sh: az ad sp list --display-name "Azure Red Hat OpenShift RP" --query [0].id -o tsv
+
   creds:
     desc: Get ARO Credentials
     cmds:

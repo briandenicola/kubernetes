@@ -10,4 +10,15 @@ output "ARO_NAME" {
 
 output "ARO_CONSOLE_URL" {
   value = azurerm_redhat_openshift_cluster.this.console_url
+  sensitive = false
+}
+
+output "ARO_API_SERVER_IP" {
+  value = azurerm_redhat_openshift_cluster.this.api_server_profile[0].ip_address 
+  sensitive = false
+}
+
+output "ARO_INGRESS_IP" {
+  value = azurerm_redhat_openshift_cluster.this.ingress_profile[0].ip_address 
+  sensitive = false
 }
