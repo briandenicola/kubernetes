@@ -1,7 +1,7 @@
 version: '3'
 
 env:
-  TITLE: Azure Redhat OpenShift demo
+  TITLE: Private Azure Redhat OpenShift demo
   DEFAULT_REGION: canadaeast
   DEFAULT_DOMAIN: bjdazure.tech
 
@@ -29,7 +29,7 @@ tasks:
   apply:
     desc: Applies Terraform configuration
     cmds:
-    - terraform apply -auto-approve -compact-warnings
+    - unset ARM_CLIENT_ID; unset ARM_CLIENT_SECRET; terraform apply -auto-approve -compact-warnings
       -var "tags={{.TITLE}}" 
       -var "region={{.REGION}}" 
       -var "domain={{.DEFAULT_DOMAIN}}"
