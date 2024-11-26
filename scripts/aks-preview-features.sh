@@ -48,6 +48,8 @@ features=(
     "AutomaticSKUPreview"
     "AdvancedNetworkingPreview"
     "AzureLinuxV3Preview"
+    "NetworkIsolatedClusterPreview"
+    "AzureMonitorAppMonitoringPreview"
 )
 
 for feature in ${features[*]}
