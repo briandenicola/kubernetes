@@ -1,5 +1,8 @@
 module "aks" {
-  depends_on = [azurerm_container_registry_cache_rule.mcr_cache_rule]
+  depends_on = [
+    azurerm_container_registry_cache_rule.mcr_cache_rule,
+    azurerm_private_endpoint.acr_account
+  ]
   source     = "./aks"
   zones      = var.zones
   aks_cluster = {
