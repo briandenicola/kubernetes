@@ -10,8 +10,6 @@ resource "azurerm_subnet" "api" {
   resource_group_name                           = azurerm_resource_group.this["network"].name
   virtual_network_name                          = azurerm_virtual_network.this.name
   address_prefixes                              = [local.api_subnet_cidir]
-  default_outbound_access_enabled               = false
-  private_link_service_network_policies_enabled = false
 
   delegation {
     name = "aks-delegation"
@@ -40,7 +38,7 @@ resource "azurerm_subnet" "private-endpoints" {
   virtual_network_name                          = azurerm_virtual_network.this.name
   address_prefixes                              = [local.pe_subnet_cidir]
   default_outbound_access_enabled               = false
-  private_link_service_network_policies_enabled = false
+  private_link_service_network_policies_enabled = true
 }
 
 resource "azurerm_subnet" "compute" {
