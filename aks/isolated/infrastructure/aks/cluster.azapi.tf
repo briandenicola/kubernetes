@@ -63,7 +63,6 @@ resource "azapi_resource" "aks" {
       bootstrapProfile = {
         artifactSource = "Cache"
         containerRegistryId = var.aks_cluster.container_registry.id
-
       }
 
       agentPoolProfiles = [{
