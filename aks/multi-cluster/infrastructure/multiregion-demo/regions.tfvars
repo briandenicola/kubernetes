@@ -1,1 +1,2 @@
-regions = ["southcentralus","westus3"]
+regions    = ["canadacentral", "westus3"]
+hub_region = "canadacentral"

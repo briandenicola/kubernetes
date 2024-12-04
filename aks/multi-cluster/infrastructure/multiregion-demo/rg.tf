@@ -1,6 +1,6 @@
 resource "azurerm_resource_group" "this" {
   name     = "${local.resource_name}_rg"
-  location = var.region
+  location = var.hub_region
 
   tags = {
     Application = var.tags

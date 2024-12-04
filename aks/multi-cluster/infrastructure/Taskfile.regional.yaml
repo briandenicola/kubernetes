@@ -1,13 +1,18 @@
 version: '3'
 
+env:
+  TAG: AKS environment with Fleet for Multi-Region Management
+  DEFAULT_REGION: canadacentral
+
 tasks:
   up:
-    desc: Builds end to end an AKS environment with Fleet for Multi-Region Management Demo
+    desc: Builds a {{.TAG}}  Demo
     cmds:
     - task: init
     - task: apply
+    - task: creds
     vars:
-      HUB_REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      HUB_REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   init: 
     desc: Initializes Terraform
@@ -16,23 +21,23 @@ tasks:
     - terraform -chdir=./infrastructure/multiregion-demo workspace select {{.HUB_REGION}}
     - terraform -chdir=./infrastructure/multiregion-demo init
     vars:
-      HUB_REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      HUB_REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   apply: 
     desc: Applies Terraform configuration
     cmds: 
-    - terraform -chdir=./infrastructure/multiregion-demo apply -auto-approve -var="hub_region={{.HUB_REGION}}" -var-file="regions.tfvars"
+    - terraform -chdir=./infrastructure/multiregion-demo apply -auto-approve -var "tags={{.TAG}}" -var-file="regions.tfvars"
     vars:
-      HUB_REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      HUB_REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   plan:
     desc: Reviews Terraform plan
     cmds:
-    - terraform -chdir=./infrastructure/multiregion-demo plan -var "hub_region={{.HUB_REGION}}"
+    - terraform -chdir=./infrastructure/multiregion-demo plan -var "tags={{.TAG}}" -var "hub_region={{.HUB_REGION}}" -var-file="regions.tfvars"
     vars:
-      HUB_REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      HUB_REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
     
-  save-creds:
+  creds:
     desc: Grab AKS credentials 
     cmds:
     - az fleet member list -f {{.FLEET}} -g {{.RG}} -o tsv --query '[].clusterResourceId' | awk -F/ '{ print "az aks get-credentials -g " $5 " -n " $9 " -f " $9 }' | xargs -n 1 -d '\n' bash -c "$@"
@@ -46,6 +51,5 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="AKS Fleet Demo Clusters" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait --verbose -n
-    - az group list --tag Application="AKS Fleet multiregion Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait --verbose -n
-    - cd ./infrastructure/multiregion-demo; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group list --tag Application="{{.TAG}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --no-wait --verbose -n || true
+    - cd ./infrastructure/multiregion-demo; rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true

@@ -5,5 +5,8 @@ variable regions {
 
 variable "hub_region" {
   description = "Azure region to deploy Fleet Manager to"
-  default     = "southcentralus"
+}
+
+variable "tags" {
+  description = "The tags to apply to the resources"
 }

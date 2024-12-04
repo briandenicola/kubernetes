@@ -6,7 +6,8 @@ module "cluster_resources" {
   resource_name             = "${local.resource_name}-${each.value}"
   public_key_openssh        = tls_private_key.rsa.public_key_openssh
   sdlc_environment          = each.value
-  kubernetes_version        = "1.29"
+  kubernetes_version        = local.kubernetes_version
   automatic_channel_upgrade = var.automatic_channel_upgrade
   node_os_channel_upgrade   = var.node_os_channel_upgrade
+  tags                      = var.tags
 }

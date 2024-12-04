@@ -1,6 +1,9 @@
 variable "region" {
   description = "Azure region to deploy to"
-  default     = "southcentralus"
+}
+
+variable "tags" {
+  description = "The tags to apply to the resources"
 }
 
 variable "authorized_ip_ranges" {

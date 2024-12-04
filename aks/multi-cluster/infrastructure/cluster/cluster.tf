@@ -3,7 +3,7 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
-  depends_on = [ 
+  depends_on = [
     azurerm_role_assignment.aks_role_assignemnt_dns
   ]
 
@@ -33,17 +33,11 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled               = true
   image_cleaner_interval_hours        = 48
 
-  automatic_channel_upgrade           = var.automatic_channel_upgrade
-  node_os_channel_upgrade             = var.node_os_channel_upgrade
-
-  api_server_access_profile {
-    vnet_integration_enabled = true
-    subnet_id                = azurerm_subnet.api.id
-    //authorized_ip_ranges     = [var.authorized_ip_ranges]
-  }
+  automatic_upgrade_channel = var.automatic_channel_upgrade
+  node_os_upgrade_channel   = var.node_os_channel_upgrade
 
   azure_active_directory_role_based_access_control {
-    managed            = true
+
     azure_rbac_enabled = true
     tenant_id          = data.azurerm_client_config.current.tenant_id
   }
@@ -67,17 +61,17 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                = "system"
-    node_count          = 1
-    vm_size             = var.vm_sku
-    os_disk_size_gb     = 127
-    vnet_subnet_id      = azurerm_subnet.nodes.id
-    os_sku              = "Mariner"
-    type                = "VirtualMachineScaleSets"
-    enable_auto_scaling = true
-    min_count           = 1
-    max_count           = 1
-    max_pods            = 90
+    name                 = "System"
+    node_count           = 1
+    vm_size              = var.vm_sku
+    os_disk_size_gb      = 127
+    vnet_subnet_id       = azurerm_subnet.nodes.id
+    os_sku               = "AzureLinux"
+    type                 = "VirtualMachineScaleSets"
+    auto_scaling_enabled = true
+    min_count            = 1
+    max_count            = 2
+    max_pods             = 127
     upgrade_settings {
       max_surge = "25%"
     }
@@ -95,6 +89,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   service_mesh_profile {
     mode                             = "Istio"
     internal_ingress_gateway_enabled = true
+    revisions                        = local.istio_version
   }
 
   auto_scaler_profile {

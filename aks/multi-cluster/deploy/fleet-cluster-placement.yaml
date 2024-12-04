@@ -19,7 +19,7 @@ spec:
 apiVersion: fleet.azure.com/v1alpha1
 kind: ClusterResourcePlacement
 metadata:
-  name: app-southcentral
+  name: app-canadacentral
 spec:
   resourceSelectors:
     - group: ""
@@ -32,4 +32,4 @@ spec:
         clusterSelectorTerms:
           - labelSelector:
               matchLabels:
-                fleet.azure.com/location: southcentralus
+                fleet.azure.com/location: canadacentral

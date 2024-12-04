@@ -6,7 +6,6 @@ variable sdlc_environments {
 
 variable "region" {
   description = "Azure region to deploy to"
-  default     = "southcentralus"
 }
 
 variable automatic_channel_upgrade {
