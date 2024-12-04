@@ -33,11 +33,10 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled               = true
   image_cleaner_interval_hours        = 48
 
-  automatic_upgrade_channel = var.automatic_channel_upgrade
-  node_os_upgrade_channel   = var.node_os_channel_upgrade
+  automatic_upgrade_channel           = var.automatic_channel_upgrade
+  node_os_upgrade_channel             = var.node_os_channel_upgrade
 
   azure_active_directory_role_based_access_control {
-
     azure_rbac_enabled = true
     tenant_id          = data.azurerm_client_config.current.tenant_id
   }
