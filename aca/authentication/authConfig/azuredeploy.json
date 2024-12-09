@@ -13,7 +13,7 @@
         "type": "string",
         "defaultValue": "microsoft-provider-authentication-secret"
       },
-      "allowedClientApplicationId": {
+      "vmIdentityId": {
         "type": "string"
       },
       "tenantID": {
@@ -49,7 +49,7 @@
                             "allowedPrincipals": {},
                             "allowedApplications": [
                                 "[parameters('clientId')]",
-                                "[parameters('allowedClientApplicationId')]"
+                                "[parameters('vmIdentityId')]"
                             ]
                         }
                     },

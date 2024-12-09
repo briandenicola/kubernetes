@@ -16,5 +16,5 @@ output "AAD_TENANT_ID" {
 }
 
 output "VM_CLIENT_ID" {
-    value = azurerm_linux_virtual_machine.this.identity[0].principal_id
+    value = azurerm_user_assigned_identity.this.client_id
 }

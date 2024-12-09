@@ -36,12 +36,14 @@ tasks:
   auth:
     desc: Applies AUthentication COnfiguration to Container Application
     cmds:
-    - az deployment group create --verbose -g {{.RG}} --template-file ./authConfig/azuredeploy.json --parameters @./authConfig/azuredeploy.parameters.json --parameters tenantID={{.AAD_TENANT_ID}} 
+    - az deployment group create --verbose -g {{.RG}} --template-file ./authConfig/azuredeploy.json --parameters @./authConfig/azuredeploy.parameters.json --parameters tenantID={{.AAD_TENANT_ID}} --parameters vmIdentityId={{.VM_CLIENT_ID}} 
     vars:
       RG:
         sh: terraform output -raw RESOURCE_GROUP
       AAD_TENANT_ID:
         sh: terraform output -raw AAD_TENANT_ID
+      VM_CLIENT_ID:
+        sh: terraform output -raw VM_CLIENT_ID
 
   deploy:
     desc: Deploys httpbin and client Container Apps

@@ -1,3 +1,9 @@
+resource "azurerm_user_assigned_identity" "this" {
+    name                = "${local.vm_name}-identity"
+    location            = azurerm_resource_group.this.location
+    resource_group_name = azurerm_resource_group.this.name
+}
+
 resource "azurerm_network_interface" "this" {
   name                = "${local.vm_name}-nic"
   location            = azurerm_resource_group.this.location
@@ -43,7 +49,10 @@ resource "azurerm_linux_virtual_machine" "this" {
   }
 
   identity {
-    type = "SystemAssigned"
+    type = "UserAssigned"      
+    identity_ids = [
+      azurerm_user_assigned_identity.this.id,
+    ]
   }
 
   source_image_reference {
