@@ -1,0 +1,68 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "containerAppName": {
+        "type": "string",
+        "defaultValue": "httpbin"
+      },
+      "clientId": {
+        "type": "string"
+      },
+      "clientSecretSettingName": {
+        "type": "string",
+        "defaultValue": "microsoft-provider-authentication-secret"
+      },
+      "allowedClientApplicationId": {
+        "type": "string"
+      },
+      "tenantID": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "openIdIssuer": "[concat('https://login.microsoftonline.com/', parameters('tenantID'), '/v2.0')]"
+    },
+    "resources": 
+    [{   
+        "type": "Microsoft.App/containerApps/authConfigs",
+        "apiVersion": "2024-03-01",
+        "name": "[concat(parameters('containerAppName'), '/current')]",
+        "properties": {
+            "platform": {
+                "enabled": true
+            },
+            "globalValidation": {
+                "unauthenticatedClientAction": "RedirectToLoginPage",
+                "redirectToProvider": "azureactivedirectory"
+            },
+            "identityProviders": {
+                "azureActiveDirectory": {
+                    "registration": {
+                        "openIdIssuer": "[variables('openIdIssuer')]",
+                        "clientId": "[parameters('clientId')]",
+                        "clientSecretSettingName": "[parameters('clientSecretSettingName')]"
+                    },
+                    "validation": {
+                        "allowedAudiences": [],
+                        "defaultAuthorizationPolicy": {
+                            "allowedPrincipals": {},
+                            "allowedApplications": [
+                                "[parameters('clientId')]",
+                                "[parameters('allowedClientApplicationId')]"
+                            ]
+                        }
+                    },
+                    "isAutoProvisioned": false
+                }
+            },
+            "login": {
+                "routes": {},
+                "preserveUrlFragmentsForLogins": false,
+                "cookieExpiration": {},
+                "nonce": {}
+            },
+            "encryptionSettings": {}
+        }
+    }]
+}

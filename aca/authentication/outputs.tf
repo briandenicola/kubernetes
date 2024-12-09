@@ -10,3 +10,11 @@ output "APP_ENVIRONMENT" {
 output "APP_ENVIRONMENT_ID" {
     value = data.azurerm_container_app_environment.this.id
 }
+
+output "AAD_TENANT_ID" {
+    value = data.azurerm_client_config.current.tenant_id
+}
+
+output "VM_CLIENT_ID" {
+    value = azurerm_linux_virtual_machine.this.identity[0].principal_id
+}
