@@ -3,7 +3,10 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clientId": {
-            "value": "963c6f8d-b848-4e44-82ea-2c6a454e863b"
+            "value": "REPLACE_ME with Container App Registration. Follow: https://learn.microsoft.com/en-us/azure/container-apps/authentication-entra"
+        },
+        "allowedClientApplicationId": {
+            "value": "REPLACE_ME with App/ClientID of the Virtual Machine Created by Terraform. Not the PrincipalID!"
         }
     }
 }
