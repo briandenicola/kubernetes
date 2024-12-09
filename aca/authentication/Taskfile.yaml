@@ -1,0 +1,63 @@
+version: '3'
+
+env:
+  TITLE: Azure Container App Environment Authentication 
+  DEFAULT_REGION: canadaeast
+
+tasks:
+  default:
+    cmds:
+    - task --list 
+
+  up:
+    desc: Creates a complete {{.TITLE}} demo
+    cmds:
+    - task: init
+    - task: apply
+    - task: deploy
+
+  init:
+    desc: Initializes Terraform 
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    vars: 
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+  
+  apply:
+    desc: Applies Terraform 
+    cmds:
+    - terraform apply -auto-approve -var "tags={{.TITLE}}" -var "region={{.REGION}}" -compact-warnings
+    vars: 
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+
+  deploy:
+    desc: Deploys httpbin and client Container Apps
+    cmds:
+    - az containerapp create -n {{.APP_NAME}} -g {{.RG}} --environment {{.CAE}} --yaml "./apps/httpbin.yaml"
+    vars: 
+      APP_NAME: httpbin
+      CLIENT_APP_NAME: client
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP      
+      CAE:        
+        sh: terraform output -raw APP_ENVIRONMENT
+
+  validate:
+    desc: Deploys httpbin
+    cmds:
+    - curl -vvv {{.APP_URL}}/{{.URI}}
+    vars: 
+      APP_NAME: httpbin
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP
+      APP_URL:   
+        sh: az containerapp show -n {{.APP_NAME}} -g {{.RG}} --query properties.configuration.ingress.fqdn -o tsv
+      URI: '{{default "/" .CLI_ARGS}}'
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="{{.TITLE}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true%

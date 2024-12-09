@@ -1,0 +1,25 @@
+identity:
+  type: SystemAssigned
+properties:
+  workloadProfileName: Consumption
+  configuration:
+    ingress:
+      external: true
+      allowInsecure: false
+      targetPort: 8080
+  template:
+    containers:
+    - image: bjd145/httpbin:1088
+      name: httpbin
+      resources: 
+        cpu: 1
+        memory: 2Gi                       
+    scale:
+      minReplicas: 1
+      maxReplicas: 5
+      rules:
+      - name: httpscalingrule
+        custom:
+          type: http
+          metadata:
+            concurrentRequests: 50
