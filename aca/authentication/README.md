@@ -4,7 +4,7 @@ This is a quick and dirty example of how to setup, configure and test Container 
 
 # Environment 
 ## Prerequisites
-* [Azure CLI] (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 * [Terraform](https://www.terraform.io/)
 * [Taskfile](https://taskfile.dev/)
 
