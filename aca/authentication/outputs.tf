@@ -4,11 +4,11 @@ output "RESOURCE_GROUP" {
 }
 
 output "APP_ENVIRONMENT" {
-    value = data.azurerm_container_app_environment.this.name
+    value = azurerm_container_app_environment.this.name
 }
 
 output "APP_ENVIRONMENT_ID" {
-    value = data.azurerm_container_app_environment.this.id
+    value = azurerm_container_app_environment.this.id
 }
 
 output "AAD_TENANT_ID" {
