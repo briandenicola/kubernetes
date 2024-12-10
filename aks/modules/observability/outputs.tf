@@ -27,3 +27,8 @@ output "LOG_ANALYTICS_WORKSPACE_ID" {
   value     = azurerm_log_analytics_workspace.this.id
   sensitive = false
 }
+
+output "APP_INSIGHTS_CONNECTION_STRING" {
+  value     = azurerm_application_insights.this.connection_string
+  sensitive = true
+}

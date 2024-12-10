@@ -3,6 +3,15 @@ variable "region" {
   default     = "southcentralus"
 }
 
+variable "grafana_region" {
+  description = "Azure region to deploy to"
+  default     = "southcentralus"
+  validation {
+    condition     = contains(["southcentralus", "westcentralus","eastus2", "uksouth","canadacentral"], var.grafana_region)
+    error_message = "Valid values for var: grafana_region are (Windows, Linux)."
+  } 
+}
+
 variable "resource_name" {
   description = "The root value to use for naming resources"
 }

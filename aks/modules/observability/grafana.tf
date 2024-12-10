@@ -5,7 +5,7 @@ resource "azurerm_dashboard_grafana" "this" {
   count                             = var.enable_managed_offerings ? 1 : 0
   name                              = local.grafana_name
   resource_group_name               = azurerm_resource_group.this.name
-  location                          = azurerm_resource_group.this.location
+  location                          = var.grafana_region
   sku                               = "Standard"
   api_key_enabled                   = true
   deterministic_outbound_ip_enabled = true
