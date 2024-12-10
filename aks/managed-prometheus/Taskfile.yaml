@@ -3,6 +3,7 @@ version: '3'
 vars:
   TAGS: "Azure Managed Prometheus Demo"
   DEFAULT_REGION: canadaeast
+  GRAFANA_REGION: canadacentral
   NODE_COUNT: 3
   SKU: "Standard_D4ads_v5"
 
@@ -22,7 +23,7 @@ tasks:
     - task: deploy-configs
     - task: deploy-app    
     vars: 
-     REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   apply:
     cmds:
@@ -30,6 +31,7 @@ tasks:
         -var "region={{.REGION}}" 
         -var "vm_size={{.SKU}}" 
         -var "tags={{.TAGS}}" 
+        -var "grafana_region={{.GRAFANA_REGION}}"
         -var "node_count={{.NODE_COUNT}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'

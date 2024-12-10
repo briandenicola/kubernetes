@@ -34,6 +34,6 @@ output "WORKLOAD_ID_TENANT_ID" {
 }
 
 output "APP_INSIGHTS_CONNECTION_STRING" {
-    value = data.azurerm_application_insights.this.connection_string
+    value = module.azure_monitor.APP_INSIGHTS_CONNECTION_STRING
     sensitive = true 
 }

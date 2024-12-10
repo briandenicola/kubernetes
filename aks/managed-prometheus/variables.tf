@@ -35,3 +35,13 @@ variable "nodepool_name" {
   type        = string
   default     = "system"
 }
+
+variable "enable_managed_offerings" {
+  description = "Enable Azure Monitor Managed offerings"
+  type        = bool
+  default     = true
+}
+
+variable "grafana_region" {
+  description = "The region to Grafana to"
+}
