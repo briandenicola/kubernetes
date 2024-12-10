@@ -3,9 +3,8 @@ version: '3'
 vars:
   SKU: "Standard_B4ls_v2"
   DEFAULT_COUNT: 1
-  DEFAULT_TAG: "Basic AKS Cluster"
+  DEFAULT_TAG: "VNet Injection Example"
   DEFAULT_REGION: "canadacentral"
-  DEPLOY_PROMETHEUS: false
   
 tasks:
   default:
@@ -38,7 +37,6 @@ tasks:
         -var "vm_size={{.SKU}}"
         -var "node_count={{.NODE_COUNT}}" 
         -var "tags={{.TAG_FOR_RUN}}" 
-        -var "enable_managed_offerings={{.DEPLOY_PROMETHEUS}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
