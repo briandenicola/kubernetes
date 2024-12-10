@@ -1,5 +1,14 @@
-# Quicksteps
-## Complete Environment
+# Overview 
+
+This is a quick and dirty example of how to setup, configure and test Container Apps Authentication.  This will leverage Entra ID as an identity provider.  This example will use a sample application called HTTPbin as the protected resource.  The HTTPBin is a simple HTTP request and response service.  HTTP requests will be made from a virtual machine simulating a client application.  The virtual machine will be assigned a managed identity that will be used to authenticate to the Container App. 
+
+# Environment 
+## Prerequisites
+* [Azure CLI] (https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+* [Terraform](https://www.terraform.io/)
+* [Taskfile](https://taskfile.dev/)
+
+## Setup and Configuration 
 * Create an Azure App Registration following: https://learn.microsoft.com/en-us/azure/container-apps/authentication-entra
     * Create an Client and Secret and save in a bash variable named AZURE_APP_REGISTRATION_CLIENT_SECRET
 * Create the environment
@@ -15,8 +24,8 @@
     ```bash
         task auth
     ```
-# Validate 
-* Connect to the Virtual Machine via Azure Bastion
+# Validation
+>_**Note**: Do all these connected to the Virtual Machine via Azure Bastion_
 ```bash
     # Install jq
     sudo apt update
@@ -27,7 +36,7 @@
     curl -vvv  https://${HTTP_BIN_APPPLICATION_URL}
 ```
 ```bash
-    # Get the token from the Managed Identity
+    # Get the token for the Managed Identity from the Metadata Service 
     token= `curl -s -H "Metadata: true" "http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&&client_id=${CLIENT_ID_OF_VM_MI}&resource=api://${APP_ID_OF_SPN_CREATED_IN_FIRST_STEP}" | jq -r .access_token`
     
     # Call the API with the token   
