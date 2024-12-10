@@ -16,7 +16,6 @@ tasks:
     - task: init
     - task: apply
     - task: deploy
-    - task: auth
 
   init:
     desc: Initializes Terraform 
