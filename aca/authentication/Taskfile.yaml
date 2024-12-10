@@ -3,6 +3,7 @@ version: '3'
 env:
   TITLE: Azure Container App Environment Authentication 
   DEFAULT_REGION: canadaeast
+  APP_NAME: httpbin
 
 tasks:
   default:
@@ -32,6 +33,16 @@ tasks:
     - terraform apply -auto-approve -var "tags={{.TITLE}}" -var "region={{.REGION}}" -compact-warnings
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+  
+  secret:
+    desc: Creates the App Registration Secret for Authentication
+    cmds:
+    - cmd: az containerapp secret set -n {{.APP_NAME}} -g {{.RG}} --secrets  microsoft-provider-authentication-secret={{.SECRET}} 
+      silent: true
+    vars:
+      RG:
+        sh: terraform output -raw RESOURCE_GROUP
+      SECRET: '{{default "REPLACE_ME" .CLI_ARGS}}'
 
   auth:
     desc: Applies AUthentication COnfiguration to Container Application
@@ -50,24 +61,10 @@ tasks:
     cmds:
     - az containerapp create -n {{.APP_NAME}} -g {{.RG}} --environment {{.CAE}} --yaml "./apps/httpbin.yaml"
     vars: 
-      APP_NAME: httpbin
-      CLIENT_APP_NAME: client
       RG: 
         sh: terraform output -raw RESOURCE_GROUP      
       CAE:        
         sh: terraform output -raw APP_ENVIRONMENT
-
-  validate:
-    desc: Deploys httpbin
-    cmds:
-    - curl -vvv {{.APP_URL}}/{{.URI}}
-    vars: 
-      APP_NAME: httpbin
-      RG: 
-        sh: terraform output -raw RESOURCE_GROUP
-      APP_URL:   
-        sh: az containerapp show -n {{.APP_NAME}} -g {{.RG}} --query properties.configuration.ingress.fqdn -o tsv
-      URI: '{{default "/" .CLI_ARGS}}'
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
