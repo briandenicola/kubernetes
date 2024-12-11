@@ -20,8 +20,8 @@ locals {
   vnet_name                      = "${local.regional_name}-vnet"
   la_name                        = "${var.app_name}-logs"
   ai_name                        = "${var.app_name}-ai"
-  bastion_name                   = "${var.app_name}-bastion"
-  vm_name                        = "${var.app_name}-${var.location}-vm"
+  bastion_name                   = "${local.regional_name}-bastion"
+  vm_name                        = "${local.regional_name}-vm"
   vnet_cidr                      = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir                = cidrsubnet(local.vnet_cidr, 8, 1)
   compute_subnet_cidir           = cidrsubnet(local.vnet_cidr, 8, 2)
