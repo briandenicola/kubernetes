@@ -4,47 +4,47 @@ az extension add --name aks-preview
 az extension update --name aks-preview
 
 #Features Have Gone GA and no longer require preview flag
-#az feature register --namespace Microsoft.ContainerService --name HTTPProxyConfigPreview 
-#az feature register --namespace Microsoft.ContainerService --name MultiAgentpoolPreview
-#az feature register --namespace Microsoft.ContainerService --name EnablePodIdentityPreview
-#az feature register --namespace Microsoft.ContainerService --name RunCommandPreview
-#az feature register --namespace Microsoft.ContainerService --name AKS-OpenServiceMesh
-#az feature register --namespace Microsoft.ContainerService --name AKS-AzureKeyVaultSecretsProvider
-#az feature register --namespace Microsoft.ContainerService --name EnableOIDCIssuerPreview
-#az feature register --namespace Microsoft.ContainerService --name FleetResourcePreview
-#az feature register --namespace Microsoft.ContainerService --name AzureServiceMeshPreview
-#az feature register --namespace Microsoft.ContainerService --name EnableWorkloadIdentityPreview
+#HTTPProxyConfigPreview 
+#MultiAgentpoolPreview
+#EnablePodIdentityPreview
+#RunCommandPreview
+#AKS-OpenServiceMesh
+#AKS-AzureKeyVaultSecretsProvider
+#EnableOIDCIssuerPreview
+#FleetResourcePreview
+#AzureServiceMeshPreview
+#EnableWorkloadIdentityPreview
+#DisableLocalAccountsPreview
+#AKS-AzureDefender
+#AzureOverlayPreview
+#AKS-PrometheusAddonPreview
+#EnableImageCleanerPreview
+#AKS-KedaPreview
+#NodeOsUpgradeChannelPreview
+#EnableBYOKOnEphemeralOSDiskPreview
+#AKS-ExtensionManager
+#AKS-Dapr
+#AKS-AzurePolicyExternalData
+#DisableSSHPreview
 
 features=(
-    "DisableLocalAccountsPreview"
-    "AKS-ExtensionManager"
-    "AKS-AzureDefender"
-    "AzureOverlayPreview"
-    "AKS-PrometheusAddonPreview"
-    "EnableImageCleanerPreview"
-    "AKS-KedaPreview"
     "EnableAPIServerVnetIntegrationPreview"
     "EnableAzureDiskCSIDriverV2"
-    "AKS-Dapr"
     "EnableMultipleStandardLoadBalancers"
     "AKSNodelessPreview"
-    "NodeOsUpgradeChannelPreview"
     "CiliumDataplanePreview"
     "TrustedAccessPreview"
     "KubeletDisk"
     "KataVMIsolationPreview"
     "KataCcIsolationPreview"
-    "EnableBYOKOnEphemeralOSDiskPreview"
     "NetworkObservabilityPreview"
     "EnableCloudControllerManager"
     "EnableImageIntegrityPreview"
-    "AKS-AzurePolicyExternalData"
     "KubeProxyConfigurationPreview"
     "NodeAutoProvisioningPreview"
     "NRGLockdownPreview"
     "IstioNativeSidecarModePreview"
     "SafeguardsPreview"
-    "DisableSSHPreview"
     "AutomaticSKUPreview"
     "AdvancedNetworkingPreview"
     "AzureLinuxV3Preview"
