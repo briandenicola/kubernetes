@@ -27,7 +27,7 @@ spec:
       serviceAccountName: {{ .Values.WORKLOAD_ID.NAME }}
       containers:
       - name: prometheus-demo
-        image: {{ print .Values.ACR.NAME "/otel-promtheus-demo:" .Values.GIT_COMMIT_VERSION }}
+        image: {{ print .Values.ACR.NAME "/otel-demo/8.0-ubuntu-jammy:" .Values.GIT_COMMIT_VERSION }}
         imagePullPolicy: Always
         ports:
         - containerPort: {{ .Values.SERVICE_PORT }}
