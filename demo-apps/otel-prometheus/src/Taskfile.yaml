@@ -1,0 +1,30 @@
+version: '3'
+
+env:
+  DEFAULT_ACR_NAME: bjdcsa
+  DEFAULT_ACR_RG: Core_ContainerRepo_RG
+  
+tasks:
+  default:
+    cmds:
+    - task --list 
+
+  build-linux:
+    desc: Builds Linux container using Azure Container Registry
+    cmds:
+    - az acr login -n {{.ACR_NAME}}
+    - az acr build --registry {{.ACR_NAME}} --file ./Dockerfile --platform linux -t {{.ACR_NAME}}.azurecr.io/otel-demo:{{.COMMIT_VERSION}} .
+    vars:
+      ACR_NAME: '{{default .DEFAULT_ACR_NAME .CLI_ARGS}}' 
+      COMMIT_VERSION:
+        sh: git rev-parse HEAD | head -c 8
+
+  build-windows:
+    desc: Builds Windows container using Azure Container Registry
+    cmds:
+    - az acr login -n {{.ACR_NAME}}
+    - az acr build --registry {{.ACR_NAME}} --file ./Dockerfile.Windows --platform windows -t {{.ACR_NAME}}.azurecr.io/todoapi:win-{{.COMMIT_VERSION}} .
+    vars:
+      ACR_NAME: '{{default .DEFAULT_ACR_NAME .CLI_ARGS}}' 
+      COMMIT_VERSION:
+        sh: git rev-parse HEAD | head -c 8
