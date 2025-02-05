@@ -60,7 +60,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   default_node_pool {
-    name                 = "System"
+    name                 = "system"
     node_count           = 1
     vm_size              = var.vm_sku
     os_disk_size_gb      = 127

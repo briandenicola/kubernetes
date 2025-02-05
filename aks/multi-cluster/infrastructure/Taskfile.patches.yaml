@@ -27,7 +27,7 @@ tasks:
     cmds:
       - terraform -chdir=./infrastructure/patch-demo apply -auto-approve -var "tags={{.TAG}}" -var "region={{.REGION}}" -var-file="environments.tfvars"
     vars:
-      REGION: '{{default .DEFAULT_REGION" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   plan:
     desc: Reviews Terraform plan
