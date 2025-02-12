@@ -1,7 +1,7 @@
 name: Otel Api Build
 on:
   schedule:
-    - cron: "05 7 * * wed"
+    - cron: "05 8 * * wed"
   workflow_dispatch:
   push:
     branches: 
