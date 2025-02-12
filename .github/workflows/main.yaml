@@ -59,4 +59,4 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
 
       - name: Build and push Windows image to ACR
-        run: az acr build --image ${{ env.WIN_CONTAINER_NAME }}:${{ github.sha }} --registry ${{ secrets.ACR_NAME }} -g ${{ secrets.ACR_RESOURCE_GROUP }} -f ${{ env.WIN_DOCKER_FILE }} ${{ env.SRC_DIRECTORY }}
+        run: az acr build --image ${{ env.WIN_CONTAINER_NAME }}:${{ github.sha }} --registry ${{ secrets.ACR_NAME }} -g ${{ secrets.ACR_RESOURCE_GROUP }} --platform windows -f ${{ env.WIN_DOCKER_FILE }} ${{ env.SRC_DIRECTORY }}
