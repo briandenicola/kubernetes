@@ -15,5 +15,5 @@ locals {
   location           = var.aks_cluster.location
   istio_version      = [var.aks_cluster.istio.version]
   kubernetes_version = var.aks_cluster.version
-  aks_zones          = contains(local.non_az_regions, local.location) ? null : var.zones
+  aks_zones          = ["3"] #contains(local.non_az_regions, local.location) ? null : var.zones
 }

@@ -4,7 +4,7 @@ vars:
   TAGS: "Azure Service Mesh Demo"
   NODE_COUNT: 3
   SKU: "Standard_D4ads_v5"
-  DEFAULT_REGION: canadaeast
+  DEFAULT_REGION: canadacentral
 
 tasks:
   default:

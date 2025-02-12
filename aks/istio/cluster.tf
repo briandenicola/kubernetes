@@ -15,6 +15,6 @@ module "cluster" {
   vm_os                              = local.os_sku
   node_count                         = var.node_count
   enable_mesh                        = true
-  only_critical_addons_enabled       = true
+  only_critical_addons_enabled       = false
   azurerm_log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
 }

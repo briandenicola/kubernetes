@@ -6,7 +6,6 @@ resource "azurerm_kubernetes_cluster_extension" "flux" {
   name              = "flux"
   cluster_id        = data.azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.flux"
-  release_namespace = "flux-system"
 }
 
 resource "azurerm_kubernetes_flux_configuration" "flux_config" {
