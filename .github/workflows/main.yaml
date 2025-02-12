@@ -22,8 +22,8 @@ jobs:
       LINUX_CONTAINER_NAME: otel-demo/8.0-ubuntu-jammy
       WIN_CONTAINER_NAME: otel-demo/8.0-win2022-nano
       SRC_DIRECTORY: ./demo-apps/otel-prometheus/src/
-      WIN_DOCKER_FILE: ${{ env.SRC_DIRECTORY }}/Dockerfile.Windows
-      LINUX_DOCKER_FILE: ${{ env.SRC_DIRECTORY }}/Dockerfile
+      WIN_DOCKER_FILE: ./demo-apps/otel-prometheus/src/Dockerfile.Windows
+      LINUX_DOCKER_FILE: ./demo-apps/otel-prometheus/src/Dockerfile
 
     steps:
       - name: Checkout to the branch
