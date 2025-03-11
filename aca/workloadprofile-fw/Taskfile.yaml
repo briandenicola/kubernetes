@@ -1,8 +1,16 @@
 version: '3'
 
+env:
+  TITLE: Azure Container App Environment with Workload Profile
+  DEFAULT_REGION: canadaeast
+
 tasks:
+  default:
+    cmds:
+    - task --list 
+    
   up:
-    desc: Creates a complete Azure Container App Environment with Workload Profile
+    desc: Creates an {{.TITLE}} environment
     cmds:
     - task: init
     - task: apply
@@ -14,14 +22,14 @@ tasks:
     - terraform workspace select {{.REGION}}
     - terraform init
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
   
   apply:
     desc: Applies Terraform 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   validate:
     desc: Validates proper deployment 
@@ -39,4 +47,4 @@ tasks:
     - az group delete -n {{.RG}} --yes --no-wait || true
     vars:
       RG: 
-        sh: terraform  output -raw RESOURCE_GROUP
+        sh: terraform output -raw RESOURCE_GROUP

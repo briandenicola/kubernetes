@@ -37,7 +37,7 @@ resource "random_integer" "pod_cidr" {
 locals {
   location             = var.region
   resource_name        = "${random_pet.this.id}-${random_id.this.dec}"
-  aca_name             = "${local.resource_name}-environment"
+  aca_name             = "${local.resource_name}-env"
   #container_image      = "bjd145/httpbin:1087"
   container_image      = "bjd145/httpbin:1088"
   acr_name             = "${replace(local.resource_name, "-", "")}acr"
@@ -45,7 +45,7 @@ locals {
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
   api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
   nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
-  compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
+  compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 4)
 }
 
 resource "azurerm_resource_group" "this" {

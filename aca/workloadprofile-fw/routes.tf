@@ -2,7 +2,7 @@ resource "azurerm_route_table" "this" {
   name                            = "${local.resource_name}-routetable"
   resource_group_name             = azurerm_resource_group.this.name
   location                        = azurerm_resource_group.this.location
-  disable_bgp_route_propagation   = true
+  bgp_route_propagation_enabled   = false
 
   route {
     name                          = "DefaultRoute"

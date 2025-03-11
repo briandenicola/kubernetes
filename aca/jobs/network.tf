@@ -29,7 +29,7 @@ resource "azapi_update_resource" "nodes_delegation" {
   type        = "Microsoft.Network/virtualNetworks/subnets@2023-04-01"
   resource_id = azurerm_subnet.nodes.id
 
-  body = jsonencode({
+  body = {
     properties= {
       delegations = [{
         name = "Microsoft.App.environment"
@@ -42,7 +42,7 @@ resource "azapi_update_resource" "nodes_delegation" {
         }      
       }]
     }
-  })
+  }
 }
 
 resource "azurerm_subnet" "pe" {

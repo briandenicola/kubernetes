@@ -1,8 +1,16 @@
 version: '3'
 
+env:
+  TITLE: Azure Container App Environment with a NAT Gateway
+  DEFAULT_REGION: canadaeast
+
 tasks:
+  default:
+    cmds:
+    - task --list 
+    
   up:
-    desc: Creates a complete Azure Container App Environment with a NAT Gateway
+    desc: Creates an {{.TITLE }} environment
     cmds:
     - task: init
     - task: apply
@@ -14,14 +22,14 @@ tasks:
     - terraform workspace select {{.REGION}}
     - terraform init
     vars: 
-      REGION: '{{default "eastus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
   
   apply:
     desc: Applies Terraform 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     vars: 
-      REGION: '{{default "eastus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   validate:
     desc: Validates proper deployment 
@@ -36,7 +44,7 @@ tasks:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
-    - az group delete -n {{.RG}} --yes || true
+    - az group delete -n {{.RG}} --yes --no-wait || true
     vars:
       RG: 
         sh: terraform  output -raw RESOURCE_GROUP

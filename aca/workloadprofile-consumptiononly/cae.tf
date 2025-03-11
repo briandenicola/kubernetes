@@ -12,7 +12,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_resource_group.this.id
 
-  body = jsonencode({
+  body = {
     properties = {
       appLogsConfiguration = {
         destination = "azure-monitor"
@@ -39,7 +39,7 @@ resource "azapi_resource" "azurerm_container_app_environment" {
           name                = local.workload_profile_name
         }]
     }
-  })
+  }
 }
 
 data "azurerm_container_app_environment" "this" {

@@ -1,16 +1,19 @@
 version: '3'
 
+env:
+  TITLE: Azure Container App Environment with a YAML Deployment
+  DEFAULT_REGION: canadaeast
+
 tasks:
   default:
     cmds:
     - task --list 
-
+    
   up:
-    desc: Creates a complete Azure Container App Environment  
+    desc: Creates an {{.TITLE}} only
     cmds:
     - task: init
     - task: apply
-    - task: deploy
 
   init:
     desc: Initializes Terraform 
@@ -19,14 +22,14 @@ tasks:
     - terraform workspace select {{.REGION}}
     - terraform init
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
   
   apply:
     desc: Applies Terraform 
     cmds:
     - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   deploy:
     desc: Deploys httpbin
