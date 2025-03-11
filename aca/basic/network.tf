@@ -12,24 +12,6 @@ resource "azurerm_subnet" "nodes" {
   address_prefixes     = [local.nodes_subnet_cidir]
 }
 
-resource "azurerm_subnet" "api" {
-  name                 = "api"
-  resource_group_name  = azurerm_resource_group.this.name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = [local.api_subnet_cidir]
-
-  delegation {
-    name = "aks-delegation"
-
-    service_delegation {
-      name = "Microsoft.ContainerService/managedClusters"
-      actions = [
-        "Microsoft.Network/virtualNetworks/subnets/join/action",
-      ]
-    }
-  }
-}
-
 resource "azurerm_subnet" "pe" {
   name                 = "private-endpoints"
   resource_group_name  = azurerm_resource_group.this.name
@@ -66,9 +48,3 @@ resource "azurerm_subnet_network_security_group_association" "compute" {
   subnet_id                 = azurerm_subnet.compute.id
   network_security_group_id = azurerm_network_security_group.this.id
 }
-
-resource "azurerm_subnet_network_security_group_association" "api" {
-  subnet_id                 = azurerm_subnet.api.id
-  network_security_group_id = azurerm_network_security_group.this.id
-}
-

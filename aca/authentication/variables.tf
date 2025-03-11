@@ -1,10 +1,12 @@
 variable "region" {
   description = "Azure region to deploy to"
-  default     = "southcentralus"
+  default     = "canadaeast"
 }
 
 variable "tags" {
-  description = "Tags to apply to Resource Group"
+  description = "The name of the node pool"
+  type        = string
+  default     = "Basic ACA Environment"
 }
 
 variable "zones" {

@@ -27,7 +27,7 @@ tasks:
   apply:
     desc: Applies Terraform 
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var-file="revisions.tfvars" -compact-warnings
+    - terraform apply -auto-approve -var "tags={{.TITLE}}" -var "region={{.REGION}}" -var-file="revisions.tfvars" -compact-warnings
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 

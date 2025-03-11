@@ -35,7 +35,7 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "Azure Container Apps Yaml Deployment Demo"
+    Application = var.tags
     Components  = "Azure Container Apps"
     DeployedOn  = timestamp()
   }

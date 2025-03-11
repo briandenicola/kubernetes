@@ -40,8 +40,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "httpbin"
-    Components  = "aca;"
+    Application = var.tags
+    Components  = "Azure Container Apps; Azure NAT Gateway"
     DeployedOn  = timestamp()
   }
 }

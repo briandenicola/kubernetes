@@ -38,8 +38,8 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "TBD"
-    Components  = "Container Apps; "
+    Application = var.tags
+    Components  = "Azure Container Apps"
     DeployedOn  = timestamp()
   }
 }

@@ -43,9 +43,8 @@ locals {
   acr_name             = "${replace(local.resource_name, "-", "")}acr"
   vnet_cidr            = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
-  api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
-  nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
-  compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 4)
+  nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 2)
+  compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 3)
 }
 
 resource "azurerm_resource_group" "this" {
@@ -53,7 +52,7 @@ resource "azurerm_resource_group" "this" {
   location = local.location
 
   tags = {
-    Application = "httpbin"
+    Application = var.tags
     Components  = "Azure Container Apps"
     DeployedOn  = timestamp()
   }

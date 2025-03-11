@@ -8,7 +8,7 @@ tasks:
   default:
     cmds:
     - task --list 
-    
+
   up:
     desc: Creates an {{.TITLE}} only
     cmds:
@@ -27,7 +27,7 @@ tasks:
   apply:
     desc: Applies Terraform 
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -compact-warnings
+    - terraform apply -auto-approve -var "tags={{.TITLE}}" -var "region={{.REGION}}" -compact-warnings
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
