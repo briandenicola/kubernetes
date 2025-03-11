@@ -25,12 +25,12 @@ locals {
   aca_name                = "${local.resource_name}-env"
   workload_profile_name   = "default"
   workload_profile_size   = "D4"
-  utils_image             = "bjd145/utils:3.15"
+  utils_image             = "bjd145/utils:3.20"
   vnet_cidr               = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 1)
   compute_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
   fw_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 3)
-  nodes_subnet_cidir      = cidrsubnet(local.vnet_cidr, 4, 2)
+  nodes_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 4)
 }
 
 resource "azurerm_resource_group" "this" {
