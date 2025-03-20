@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: alb-gateway
+  name: ws-demo-gateway
   namespace: ws-example
   annotations:
     alb.networking.azure.io/alb-id: "${ALB_RESOURCE_ID}"
@@ -25,7 +25,7 @@ metadata:
   namespace: ws-example
 spec:
   parentRefs:
-  - name: alb-gateway
+  - name: ws-demo-gateway
   hostnames:
   - "chat.${DEFAULT_DOMAIN}"
   rules:
