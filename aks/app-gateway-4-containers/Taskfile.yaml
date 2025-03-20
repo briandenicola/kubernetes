@@ -83,16 +83,22 @@ tasks:
   gateway:
     desc: Deploy the AppGw for Container AKS Components
     cmds:
-    - helm upgrade -i alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
-      --create-namespace
-      --namespace azure-alb-system
-      --version 1.4.14 
-      --set albController.namespace=azure-alb-system
-      --set albController.podIdentity.clientID={{.ALB_IDENTITY_CLIENT_ID}}
-    - export ALB_FRONTEND_NAME="{{.ALB_FRONTEND_NAME}}" ; 
-      export ALB_RESOURCE_ID="{{.ALB_RESOURCE_ID}}"     ;
-      export DEFAULT_DOMAIN="{{.DEFAULT_DOMAIN}}"       ;
-      envsubst < cluster-config/gateways/gateway.tmpl > cluster-config/gateways/gateway.yaml
+    - cmd: echo -e '➡️\033[1m\e[38;5;Installing ALB Controller with Helm Chart'
+      silent: True
+    - cmd: helm upgrade -i alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
+            --create-namespace
+            --namespace azure-alb-system
+            --version 1.4.14 
+            --set albController.namespace=azure-alb-system
+            --set albController.podIdentity.clientID={{.ALB_IDENTITY_CLIENT_ID}}
+      silent: True
+    - cmd: echo -e '➡️\033[1m\e[38;5;45mUpdating cluster-config/gateways/gateway.yaml'
+      silent: True
+    - cmd: export ALB_FRONTEND_NAME="{{.ALB_FRONTEND_NAME}}" ; 
+           export ALB_RESOURCE_ID="{{.ALB_RESOURCE_ID}}"     ;
+           export DEFAULT_DOMAIN="{{.DEFAULT_DOMAIN}}"       ;
+           envsubst < cluster-config/gateways/gateway.tmpl > cluster-config/gateways/gateway.yaml
+      silent: True
     - git add cluster-config/gateways/gateway.yaml
     - git commit -m "Updated Config values"
     - git push      
