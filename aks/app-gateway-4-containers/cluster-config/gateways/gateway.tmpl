@@ -4,7 +4,7 @@ metadata:
   name: alb-gateway
   namespace: ws-example
   annotations:
-    alb.networking.azure.io/alb-id: ${ALB_RESOURCE_ID}
+    alb.networking.azure.io/alb-id: "${ALB_RESOURCE_ID}"
 spec:
   gatewayClassName: azure-alb-external
   listeners:
