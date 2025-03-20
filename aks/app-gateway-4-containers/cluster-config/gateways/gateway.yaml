@@ -4,7 +4,7 @@ metadata:
   name: alb-gateway
   namespace: ws-example
   annotations:
-    alb.networking.azure.io/alb-id: /subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/coyote-15480-aks_rg/providers/Microsoft.ServiceNetworking/trafficControllers/coyote-15480-alb
+    alb.networking.azure.io/alb-id: "/subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/coyote-15480-aks_rg/providers/Microsoft.ServiceNetworking/trafficControllers/coyote-15480-alb"
 spec:
   gatewayClassName: azure-alb-external
   listeners:
