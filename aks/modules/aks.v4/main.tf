@@ -25,8 +25,9 @@ locals {
   pe_subnet_cidir      = cidrsubnet(local.vnet_cidr, 8, 1)
   api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
   nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
+  alb_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 4)
   compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
-  istio_version        = [ var.istio_version ]
+  istio_version        = [var.istio_version]
 }
 
 resource "azurerm_resource_group" "this" {

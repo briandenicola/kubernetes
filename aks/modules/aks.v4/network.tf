@@ -49,6 +49,23 @@ resource "azurerm_subnet" "compute" {
   default_outbound_access_enabled               = false
 }
 
+resource "azurerm_subnet" "alb" {
+  name                                          = "alb"
+  resource_group_name                           = azurerm_resource_group.this.name
+  virtual_network_name                          = azurerm_virtual_network.this.name
+  address_prefixes                              = [local.alb_subnet_cidir]
+  delegation {
+    name = "alb-delegation"
+
+    service_delegation {
+      name = "Microsoft.ServiceNetworking/trafficControllers"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
+}
+
 resource "azurerm_network_security_group" "this" {
   name                = "${var.resource_name}-default-nsg"
   location            = azurerm_resource_group.this.location
@@ -75,4 +92,7 @@ resource "azurerm_subnet_network_security_group_association" "compute" {
   network_security_group_id = azurerm_network_security_group.this.id
 }
 
-
+resource "azurerm_subnet_network_security_group_association" "alb" {
+  subnet_id                 = azurerm_subnet.alb.id
+  network_security_group_id = azurerm_network_security_group.this.id
+}

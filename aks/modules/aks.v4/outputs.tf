@@ -22,3 +22,13 @@ output "AKS_OIDC_ISSUER_URL" {
     value = azurerm_kubernetes_cluster.this.oidc_issuer_url
     sensitive = false 
 }
+
+output "ALB_SUBNET_ID" {
+    value = azurerm_subnet.alb.id
+    sensitive = false
+}
+
+output "VNET_ID" {
+    value = azurerm_virtual_network.this.id
+    sensitive = false
+}
