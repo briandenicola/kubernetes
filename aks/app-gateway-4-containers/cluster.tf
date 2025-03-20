@@ -1,7 +1,7 @@
 module "cluster" {
   source                             = "../modules/aks.cni"
   region                             = var.region
-  authorized_ip_ranges               = local.authorized_ip_ranges
+  authorized_ip_range                = local.authorized_ip_range
   resource_name                      = local.resource_name
   public_key_openssh                 = tls_private_key.rsa.public_key_openssh
   tags                               = var.tags

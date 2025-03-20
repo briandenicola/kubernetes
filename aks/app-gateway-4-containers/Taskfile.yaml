@@ -1,13 +1,13 @@
 version: '3'
 
 vars:
-  SKU: "Standard_B4ls_v2"
-  DEFAULT_COUNT: 3
-  DEFAULT_TAG: "AppGateway for Containers Demo"
+  TITLE: "AppGateway for Containers Demo"
   DEFAULT_REGION: "canadacentral"
   DEPLOY_PROMETHEUS: true
   DEFAULT_DOMAIN: "bjdazure.tech"
-  
+  SKU: "Standard_B4ls_v2"
+  DEFAULT_COUNT: 3
+
 tasks:
   default:
     desc: Calls `task --list` 
@@ -23,7 +23,7 @@ tasks:
     - az provider register --namespace Microsoft.ServiceNetworking
     - az extension add --name alb --allow-preview 
   up:
-    desc: Creates a {{.TAGS}} 
+    desc: Creates a {{.TITLE}} environment
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
@@ -31,13 +31,12 @@ tasks:
     - task: apply
       vars:
         REGION: '{{.REGION}}'
-        TAGS: '{{.TAG_FOR_RUN}}'
+        TAGS: '{{.TITLE}}'
         NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
     - task: creds
     - task: gateway
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
-      TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
       NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
       
   apply:
@@ -47,12 +46,11 @@ tasks:
         -var "region={{.REGION}}" 
         -var "vm_size={{.SKU}}"
         -var "node_count={{.NODE_COUNT}}" 
-        -var "tags={{.TAG_FOR_RUN}}" 
+        -var "tags={{.TITLE}}" 
         -var "enable_managed_offerings={{.DEPLOY_PROMETHEUS}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
-      TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
   refresh:
     desc: Applies the Terraform templates
@@ -61,12 +59,11 @@ tasks:
         -var "region={{.REGION}}" 
         -var "vm_size={{.SKU}}"
         -var "node_count={{.NODE_COUNT}}" 
-        -var "tags={{.TAG_FOR_RUN}}" 
+        -var "tags={{.TITLE}}" 
         -var "enable_managed_offerings={{.DEPLOY_PROMETHEUS}}" 
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
       NODE_COUNT: '{{default .DEFAULT_COUNT (split " " .CLI_ARGS)._1 }}'
-      TAG_FOR_RUN: '{{default .DEFAULT_TAG (split " " .CLI_ARGS)._2 }}'
 
   creds:
     desc: Gets AKS credential file
@@ -110,10 +107,22 @@ tasks:
       ALB_FRONTEND_NAME:
         sh: terraform output -raw ALB_FRONTEND_NAME
 
+  validate: 
+    desc: Test out the default WebSocket sample Application
+    cmds:
+    - cmd: echo -e '➡️\033[1m\e[38;5;45m Test for websocat existence'
+      silent: true
+    - cmd: websocat --version 2>>/dev/null
+      silent: true
+    - websocat -t - --ws-c-uri=ws://chat.{{.DEFAULT_DOMAIN}}/chat ws-c:tcp:{{.GATEWAY_IP}}:80      
+    vars:
+      GATEWAY_URL:
+        sh: kubectl -n ws-example get gateway alb-gateway  -o jsonpath='{.status.addresses[0].value}'
+      GATEWAY_IP: 
+        sh: dig +short {{.GATEWAY_URL}}
+
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="{{.TAG_FOR_DELETE}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - az group list --tag Application="{{.TITLE}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true
-    vars:
-      TAG_FOR_DELETE: '{{default .DEFAULT_TAG .TAGS }}'

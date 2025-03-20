@@ -27,7 +27,7 @@ spec:
   parentRefs:
   - name: alb-gateway
   hostnames:
-  - "${DEFAULT_DOMAIN}"
+  - "chat.${DEFAULT_DOMAIN}"
   rules:
     - backendRefs:
         - name: websocket-backend
