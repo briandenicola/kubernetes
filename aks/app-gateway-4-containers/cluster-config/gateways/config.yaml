@@ -34,4 +34,4 @@ spec:
     albController:
       namespace: azure-alb-system
       podIdentity:
-        clientID: 
+        clientID: fbf37067-41c6-4ac7-be5e-a2027a014425
