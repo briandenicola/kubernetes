@@ -6,6 +6,7 @@ vars:
   DEFAULT_TAG: "AppGateway for Containers Demo"
   DEFAULT_REGION: "canadacentral"
   DEPLOY_PROMETHEUS: true
+  DEFAULT_DOMAIN: "bjdazure.tech"
   
 tasks:
   default:
@@ -88,7 +89,9 @@ tasks:
       --version 1.4.14 
       --set albController.namespace=azure-alb-system
       --set albController.podIdentity.clientID={{.ALB_IDENTITY_CLIENT_ID}}
-    - export ALB_FRONTEND_NAME="{{.ALB_FRONTEND_NAME}}" ; export ALB_RESOURCE_ID="{{.ALB_RESOURCE_ID}}" ;
+    - export ALB_FRONTEND_NAME="{{.ALB_FRONTEND_NAME}}" ; 
+      export ALB_RESOURCE_ID="{{.ALB_RESOURCE_ID}}"     ;
+      export DEFAULT_DOMAIN="{{.DEFAULT_DOMAIN}}"       ;
       envsubst < cluster-config/gateways/gateway.tmpl > cluster-config/gateways/gateway.yaml
     - git add cluster-config/gateways/gateway.yaml
     - git commit -m "Updated Config values"

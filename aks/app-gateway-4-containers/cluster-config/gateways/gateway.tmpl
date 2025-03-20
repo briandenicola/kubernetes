@@ -27,7 +27,7 @@ spec:
   parentRefs:
   - name: alb-gateway
   hostnames:
-  - "bjdazure.tech"
+  - "${DEFAULT_DOMAIN}"
   rules:
     - backendRefs:
         - name: websocket-backend
