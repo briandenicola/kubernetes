@@ -23,7 +23,12 @@ output "ALB_RESOURCE_ID" {
     sensitive = false
 }
 
-output "ALB_FRONTEND_NAME" {
-    value = azurerm_application_load_balancer_frontend.this.name
+output "ALB_WEBSOCKET_FRONTEND_NAME" {
+    value = azurerm_application_load_balancer_frontend.websocket.name
+    sensitive = false
+}
+
+output "ALB_HTTPBIN_FRONTEND_NAME" {
+    value = azurerm_application_load_balancer_frontend.httpbin.name
     sensitive = false
 }

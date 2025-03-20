@@ -56,6 +56,36 @@ resource "azurerm_network_security_group" "this" {
   name                = "${var.resource_name}-default-nsg"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
+
+  security_rule {
+    name                       = "allow-http-my-ipaddress"
+    priority                   = 1000
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = local.home_ip_address
+    destination_address_prefix = "*"
+  }
+  
+  security_rule {
+    name                       = "allow-https-my-ipaddress"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = local.home_ip_address
+    destination_address_prefix = "*"
+  }  
+}
+
+resource "azurerm_network_security_group" "alb" {
+  name                = "${var.resource_name}-alb-nsg"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 resource "azurerm_subnet_network_security_group_association" "nodes" {
@@ -75,5 +105,5 @@ resource "azurerm_subnet_network_security_group_association" "compute" {
 
 resource "azurerm_subnet_network_security_group_association" "alb" {
   subnet_id                 = azurerm_subnet.alb.id
-  network_security_group_id = azurerm_network_security_group.this.id
+  network_security_group_id = azurerm_network_security_group.alb.id
 }

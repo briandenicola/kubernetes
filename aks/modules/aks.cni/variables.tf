@@ -3,8 +3,8 @@ variable "region" {
   default     = "southcentralus"
 }
 
-variable "authorized_ip_ranges" {
-  description = "Authorized IP ranges for accessing the cluster"
+variable "authorized_ip_range" {
+  description = "Authorized IP range for accessing the cluster"
   default     = null
 }
 

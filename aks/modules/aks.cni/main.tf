@@ -28,6 +28,7 @@ locals {
   alb_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 4)
   compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
   istio_version        = [var.istio_version]
+  home_ip_address      = var.authorized_ip_range
 }
 
 resource "azurerm_resource_group" "this" {

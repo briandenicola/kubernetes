@@ -4,7 +4,7 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 locals {
   zones = var.region == "northcentralus" || var.region == "canadaeast" ? null : var.zones
-  authorized_ip_ranges = "${concat(var.authorized_ip_ranges, ["${azurerm_public_ip.this.ip_address}/32", "${azurerm_public_ip_prefix.this.ip_prefix}"])}"
+  authorized_ip_ranges = ["${var.authorized_ip_range}/32"]
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
@@ -13,9 +13,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     azurerm_user_assigned_identity.aks_kubelet_identity,
     #azurerm_subnet.api,
     azurerm_subnet.nodes,
-    azurerm_subnet_nat_gateway_association.nodes,
-    azurerm_role_assignment.aks_role_assignemnt_network,
-    azurerm_role_assignment.aks_role_assignemnt_msi
+    azurerm_role_assignment.aks_role_assignment_network,
+    azurerm_role_assignment.aks_role_assignment_msi
   ]
 
   lifecycle {

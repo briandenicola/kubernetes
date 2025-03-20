@@ -16,7 +16,12 @@ resource "azurerm_application_load_balancer_subnet_association" "this" {
   subnet_id                    = module.cluster.ALB_SUBNET_ID
 }
  
-resource "azurerm_application_load_balancer_frontend" "this" {
-  name                         = "${local.alb_name}-frontend"
+resource "azurerm_application_load_balancer_frontend" "websocket" {
+  name                         = "${local.alb_name}-websocket-frontend"
+  application_load_balancer_id = azurerm_application_load_balancer.this.id
+}
+
+resource "azurerm_application_load_balancer_frontend" "httpbin" {
+  name                         = "${local.alb_name}-httpbin-frontend"
   application_load_balancer_id = azurerm_application_load_balancer.this.id
 }
