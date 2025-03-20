@@ -6,19 +6,21 @@ resource "azurerm_virtual_network" "this" {
 }
 
 resource "azurerm_subnet" "nodes" {
-  name                            = "nodes"
-  resource_group_name             = azurerm_resource_group.this.name
-  virtual_network_name            = azurerm_virtual_network.this.name
-  address_prefixes                = [local.nodes_subnet_cidir]
-  default_outbound_access_enabled = false
+  name                                          = "nodes"
+  resource_group_name                           = azurerm_resource_group.this.name
+  virtual_network_name                          = azurerm_virtual_network.this.name
+  address_prefixes                              = [local.nodes_subnet_cidir]
+  default_outbound_access_enabled               = true
+  private_link_service_network_policies_enabled = false
 }
 
 resource "azurerm_subnet" "pe" {
-  name                            = "private-endpoints"
-  resource_group_name             = azurerm_resource_group.this.name
-  virtual_network_name            = azurerm_virtual_network.this.name
-  address_prefixes                = [local.pe_subnet_cidir]
-  default_outbound_access_enabled = false
+  name                                          = "private-endpoints"
+  resource_group_name                           = azurerm_resource_group.this.name
+  virtual_network_name                          = azurerm_virtual_network.this.name
+  address_prefixes                              = [local.pe_subnet_cidir]
+  default_outbound_access_enabled               = true
+  private_link_service_network_policies_enabled = true
 }
 
 resource "azurerm_subnet" "compute" {
@@ -28,7 +30,7 @@ resource "azurerm_subnet" "compute" {
   address_prefixes                              = [local.compute_subnet_cidir]
   private_endpoint_network_policies             = "Enabled"
   private_link_service_network_policies_enabled = false
-  default_outbound_access_enabled               = false
+  default_outbound_access_enabled               = true
 }
 
 resource "azurerm_subnet" "alb" {
@@ -36,6 +38,8 @@ resource "azurerm_subnet" "alb" {
   resource_group_name                           = azurerm_resource_group.this.name
   virtual_network_name                          = azurerm_virtual_network.this.name
   address_prefixes                              = [local.alb_subnet_cidir]
+  private_link_service_network_policies_enabled = false
+  default_outbound_access_enabled               = true
   delegation {
     name = "alb-delegation"
 

@@ -98,7 +98,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     service_cidr        = "100.${random_integer.services_cidr.id}.0.0/16"
     network_plugin      = "azure"
     load_balancer_sku   = "standard"
-    outbound_type       = "userAssignedNATGateway"
+    outbound_type       = "loadBalancer"
   }
 
   dynamic "service_mesh_profile" {

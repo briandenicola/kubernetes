@@ -1,8 +1,8 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: gateway-01
-  namespace: test-infra
+  name: alb-gateway
+  namespace: ws-example
   annotations:
     alb.networking.azure.io/alb-id: ${ALB_RESOURCE_ID}
 spec:
