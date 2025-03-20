@@ -1,5 +1,5 @@
 module "cluster" {
-  source                             = "../modules/aks.v4"
+  source                             = "../modules/aks.cni"
   region                             = var.region
   authorized_ip_ranges               = local.authorized_ip_ranges
   resource_name                      = local.resource_name
@@ -15,6 +15,7 @@ module "cluster" {
 }
 
 data "azurerm_kubernetes_cluster" "this" {
+  depends_on          = [module.cluster]
   name                = module.cluster.AKS_CLUSTER_NAME
   resource_group_name = module.cluster.AKS_RESOURCE_GROUP
 }

@@ -13,7 +13,17 @@ output "AKS_CLUSTER_ID" {
     sensitive = false
 }
 
-output "APPGW_IDENITTY_CLIENT_ID" {
+output "ALB_IDENTITY_CLIENT_ID" {
     value = azurerm_user_assigned_identity.alb_identity.client_id
+    sensitive = false
+}
+
+output "ALB_RESOURCE_ID" {
+    value = azurerm_application_load_balancer.this.id
+    sensitive = false
+}
+
+output "ALB_FRONTEND_NAME" {
+    value = azurerm_application_load_balancer_frontend.this.name
     sensitive = false
 }

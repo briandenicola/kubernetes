@@ -82,14 +82,26 @@ tasks:
   gateway:
     desc: Deploy the AppGw for Container AKS Components
     cmds:
-    - helm install alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
-      --namespace azure-alb-system 
+    - helm upgrade -i alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
+      --create-namespace
+      --namespace azure-alb-system
       --version 1.4.14 
       --set albController.namespace=azure-alb-system
-     --set albController.podIdentity.clientID={{.APPGW_IDENITTY_CLIENT_ID}}
+      --set albController.podIdentity.clientID={{.ALB_IDENTITY_CLIENT_ID}}
+    - export ALB_IDENTITY_CLIENT_ID="{{.ALB_IDENTITY_CLIENT_ID}}" ;
+      envsubst < cluster-config/gateways/gateway.tmpl > cluster-config/gateways/gateway.yaml
+    - export ALB_RESOURCE_ID="{{.ALB_RESOURCE_ID}}" ;
+      envsubst < cluster-config/gateways/gateway.tmpl >> cluster-config/gateways/gateway.yaml      
+    - git add cluster-config/gateways/gateway.yaml
+    - git commit -m "Updated Config values"
+    - git push      
     vars:
-      APPGW_IDENITTY_CLIENT_ID: 
-        sh: terraform output -raw APPGW_IDENITTY_CLIENT_ID
+      ALB_IDENTITY_CLIENT_ID: 
+        sh: terraform output -raw ALB_IDENTITY_CLIENT_ID
+      ALB_RESOURCE_ID:
+        sh: terraform output -raw ALB_RESOURCE_ID
+      ALB_FRONTEND_NAME:
+        sh: terraform output -raw ALB_FRONTEND_NAME
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
