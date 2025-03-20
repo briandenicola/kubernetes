@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ./gateways
   - ./prometheus
-  - ./hubble
+  #- ./hubble
