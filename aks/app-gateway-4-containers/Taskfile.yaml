@@ -130,12 +130,13 @@ tasks:
   httpbin: 
     desc: Test out the Httpbin sample Application
     cmds:
-    - curl http://httpbin.{{.DEFAULT_DOMAIN}}/ tcp:{{.GATEWAY_IP}}:80      
+    - curl -vvk https://{{.APP_URI}} --resolve {{.APP_URI}}:443:{{.GATEWAY_IP}}
     vars:
       GATEWAY_URL:
         sh: kubectl get gateway httpbin-gateway  -o jsonpath='{.status.addresses[0].value}'
       GATEWAY_IP: 
         sh: dig +short {{.GATEWAY_URL}}
+      APP_URI: httpbin.{{.DEFAULT_DOMAIN}}
 
   down:
     desc: Destroys all Azure resources and cleans up Terraform
