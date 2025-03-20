@@ -80,7 +80,7 @@ tasks:
   apps:
     desc: Deploy the AppGw for Container AKS Components
     cmds:
-    - cmd: echo -e '➡️\033[1m\e[38;5;Installing ALB Controller with Helm Chart'
+    - cmd: echo -e '➡️\033[1m\e[38;5;45mInstalling ALB Controller with Helm Chart'
       silent: True
     - cmd: helm upgrade -i alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
             --create-namespace
