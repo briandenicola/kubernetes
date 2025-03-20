@@ -13,3 +13,8 @@ module "cluster" {
   enable_mesh                        = false
   azurerm_log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
 }
+
+data "azurerm_kubernetes_cluster" "this" {
+  name                = module.cluster.AKS_CLUSTER_NAME
+  resource_group_name = module.cluster.AKS_RESOURCE_GROUP
+}

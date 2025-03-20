@@ -6,7 +6,7 @@ resource "azurerm_role_assignment" "alb_identity_network_contributor" {
 }
 
 resource "azurerm_role_assignment" "alb_identity_appgw_config_manager" {
-  scope                            = module.cluster.AKS_RESOURCE_GROUP
+  scope                            = data.azurerm_resource_group.this.id
   role_definition_name             = "AppGw for Containers Configuration Manager"
   principal_id                     = azurerm_user_assigned_identity.alb_identity.principal_id
   skip_service_principal_aad_check = true

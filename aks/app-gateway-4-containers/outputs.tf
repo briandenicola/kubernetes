@@ -12,3 +12,8 @@ output "AKS_CLUSTER_ID" {
     value = module.cluster.AKS_CLUSTER_ID
     sensitive = false
 }
+
+output "APPGW_IDENITTY_CLIENT_ID" {
+    value = azurerm_user_assigned_identity.alb_identity.client_id
+    sensitive = false
+}
