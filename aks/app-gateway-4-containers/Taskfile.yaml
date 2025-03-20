@@ -70,7 +70,8 @@ tasks:
     desc: Gets AKS credential file
     cmds:
     - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
-    - sed -i s/devicecode/azurecli/g ~/.kube/config
+    - cmd: sed -i s/devicecode/azurecli/g ~/.kube/config
+      silent: true
     vars:
       RG: 
         sh: terraform output -raw AKS_RESOURCE_GROUP
