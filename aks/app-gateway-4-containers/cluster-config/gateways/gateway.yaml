@@ -50,5 +50,4 @@ spec:
     healthyThreshold: 1
     unhealthyThreshold: 1
     http:
-      path: /health 
-EOF
+      path: /health
