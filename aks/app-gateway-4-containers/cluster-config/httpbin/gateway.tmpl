@@ -2,6 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: httpbin-gateway
+  namespace: apps
   annotations:
     alb.networking.azure.io/alb-id: "${ALB_RESOURCE_ID}"
 spec:
@@ -21,12 +22,13 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: httpbin-route
+  namespace: apps
 spec:
   parentRefs:
-  - name: alb-gateway
+  - name: httpbin-gateway
   hostnames:
   - "httpbin.${DEFAULT_DOMAIN}"
   rules:
     - backendRefs:
         - name: httpbinsvc
-          port: 80
+          port: 8080

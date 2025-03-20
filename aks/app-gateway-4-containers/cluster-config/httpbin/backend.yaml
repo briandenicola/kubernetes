@@ -1,7 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: httpbin
+  namespace: apps
 spec:
   replicas: 2
   selector:
@@ -47,10 +53,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: httpbinsvc
+  namespace: apps
 spec:
   selector:
     app: httpbin
   ports:
-  - port: 80
+  - port: 8080
     targetPort: 8080
   type: ClusterIP
