@@ -16,7 +16,7 @@ spec:
         from: Same
   addresses:
   - type: alb.networking.azure.io/alb-frontend
-    value: kangaroo-56526-alb-frontend
+    value: kangaroo-56526-alb-websocket-frontend
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
