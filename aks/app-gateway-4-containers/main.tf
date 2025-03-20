@@ -18,4 +18,5 @@ locals {
   app_path             = "./aks/app-gateway-4-containers/cluster-config"
   flux_repository      = "https://github.com/briandenicola/kubernetes"
   namespace            = "azure-alb-system"
+  alb_identity_sa_name = "alb-controller-sa"
 }

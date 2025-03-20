@@ -14,5 +14,5 @@ resource "azurerm_federated_identity_credential" "alb_identity" {
   audience            = ["api://AzureADTokenExchange"]
   issuer              = module.cluster.AKS_OIDC_ISSUER_URL
   parent_id           = azurerm_user_assigned_identity.alb_identity.id
-  subject             = "system:serviceaccount:${local.namespace}:${local.alb_identity_name}"
+  subject             = "system:serviceaccount:${local.namespace}:${local.alb_identity_sa_name}"
 }
