@@ -33,6 +33,7 @@ tasks:
         TAGS: '{{.TAG_FOR_RUN}}'
         NODE_COUNT: '{{default .DEFAULT_COUNT .COUNT }}'
     - task: creds
+    - task: gateway
     vars: 
       REGION: '{{default .DEFAULT_REGION (split " " .CLI_ARGS)._0}}'
       TAG_FOR_RUN: '{{default .DEFAULT_TAG .TAGS }}'
@@ -78,14 +79,14 @@ tasks:
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
 
-  auth:
-    desc: Update Deployment with Client ID of the APPGW IDENITTY
+  gateway:
+    desc: Deploy the AppGw for Container AKS Components
     cmds:
-    - export APPGW_IDENITTY_CLIENT_ID="{{.APPGW_IDENITTY_CLIENT_ID}}" ;
-      envsubst < cluster-config/gateways/config.tmpl > cluster-config/gateways/config.yaml
-    - git add cluster-config/gateways/config.yaml
-    - git commit -m "Updated Config values"
-    - git push
+    - helm install alb-controller oci://mcr.microsoft.com/application-lb/charts/alb-controller 
+      --namespace azure-alb-system 
+      --version 1.4.14 
+      --set albController.namespace=azure-alb-system
+     --set albController.podIdentity.clientID={{.APPGW_IDENITTY_CLIENT_ID}}
     vars:
       APPGW_IDENITTY_CLIENT_ID: 
         sh: terraform output -raw APPGW_IDENITTY_CLIENT_ID
