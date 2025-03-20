@@ -4,25 +4,6 @@ metadata:
   name: alb-gateway
   namespace: ws-example
   annotations:
-    alb.networking.azure.io/alb-id: 
-spec:
-  gatewayClassName: azure-alb-external
-  listeners:
-  - name: http-listener
-    port: 80
-    protocol: HTTP
-    allowedRoutes:
-      namespaces:
-        from: Same
-  addresses:
-  - type: alb.networking.azure.io/alb-frontend
-    value: 
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: alb-gateway
-  namespace: ws-example
-  annotations:
     alb.networking.azure.io/alb-id: /subscriptions/ccfc5dda-43af-4b5e-8cc2-1dda18f2382e/resourceGroups/coyote-15480-aks_rg/providers/Microsoft.ServiceNetworking/trafficControllers/coyote-15480-alb
 spec:
   gatewayClassName: azure-alb-external
@@ -35,4 +16,4 @@ spec:
         from: Same
   addresses:
   - type: alb.networking.azure.io/alb-frontend
-    value: 
+    value: coyote-15480-alb-frontend
