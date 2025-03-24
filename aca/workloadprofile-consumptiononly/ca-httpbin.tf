@@ -1,8 +1,8 @@
 resource "azapi_resource" "azurerm_container_app_httpbin" {
   name      = local.app_name
   type      = "Microsoft.App/containerApps@2023-05-01"
-  parent_id = azurerm_resource_group.this.id
-  location  = azurerm_resource_group.this.location
+  parent_id = azurerm_resource_group.this["aca"].id
+  location  = azurerm_resource_group.this["aca"].location
 
   identity {
     type = "UserAssigned"

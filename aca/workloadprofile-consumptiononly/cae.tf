@@ -9,8 +9,8 @@ resource "azapi_resource" "azurerm_container_app_environment" {
 
   type      = "Microsoft.App/managedEnvironments@2023-05-01"
   name      = local.aca_name
-  location  = azurerm_resource_group.this.location
-  parent_id = azurerm_resource_group.this.id
+  location  = azurerm_resource_group.this["aca"].location
+  parent_id = azurerm_resource_group.this["aca"].id
 
   body = {
     properties = {
@@ -47,7 +47,7 @@ data "azurerm_container_app_environment" "this" {
     azapi_resource.azurerm_container_app_environment
   ]
   name                = local.aca_name
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = azurerm_resource_group.this["aca"].name
 }
 
 resource "azurerm_monitor_diagnostic_setting" "cae" {

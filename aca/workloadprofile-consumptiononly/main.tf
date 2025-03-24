@@ -5,43 +5,26 @@ data "http" "myip" {
   url = "http://checkip.amazonaws.com/"
 }
 
-resource "random_id" "this" {
-  byte_length = 2
-}
-
-resource "random_pet" "this" {
-  length    = 1
-  separator = ""
-}
-
-resource "random_integer" "vnet_cidr" {
-  min = 10
-  max = 250
-}
-
 locals {
   location              = var.region
   resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
+  non_az_regions        = ["northcentralus", "canadaeast", "westcentralus", "westus"]
   aca_name              = "${local.resource_name}-env"
   app_name              = "httpbin"
   workload_profile_name = "Consumption"
-  fw_name               = "${local.resource_name}-fw"
+  nat_name              = "${local.resource_name}-nat"
+  vm_name               = "${local.resource_name}-vm"
+  bastion_name          = "${local.resource_name}-bastion"
   apps_image            = "bjd145/httpbin:1087"
   utils_image           = "bjd145/utils:3.15"
+  sdlc_environment      = "Development"
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
-  pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)
-  compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 2)
-  fw_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 3)
+  bastion_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 1)
+  pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 2)
+  compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 3)
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 4)
+
+  jump_vm_sku  = "Standard_B1ms"
+  jump_vm_zone = contains(local.non_az_regions, local.location) ? null : random_integer.vm_zone.result
 }
 
-resource "azurerm_resource_group" "this" {
-  name     = "${local.resource_name}_rg"
-  location = local.location
-
-  tags = {
-    Application = var.tags
-    Components  = "Azure Container Apps"
-    DeployedOn  = timestamp()
-  }
-}

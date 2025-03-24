@@ -1,8 +1,9 @@
 output "RESOURCE_GROUP" {
-    value = azurerm_resource_group.this.name
+    value = azurerm_resource_group.this["aca"].name
     sensitive = false
 }
 
-# output "APP_URL" {
-#     value = azurerm_container_app.httpbin.ingress[0].fqdn
-# }
+output "VM_IP" {
+    value = azurerm_network_interface.this.private_ip_address
+    sensitive = false
+}
