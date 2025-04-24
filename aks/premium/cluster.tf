@@ -4,7 +4,7 @@ data "azurerm_kubernetes_service_versions" "current" {
 
 locals {
   #kubernetes_version = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
-  kubernetes_version = "1.27.7"
+  kubernetes_version = "1.32"
   allowed_ip_range   = ["${chomp(data.http.myip.response_body)}/32"]
 }
 
