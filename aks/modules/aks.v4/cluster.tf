@@ -148,7 +148,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   workload_autoscaler_profile {
-    keda_enabled = true
+    keda_enabled                    = true
+    vertical_pod_autoscaler_enabled = true
   }
 
   oms_agent {
