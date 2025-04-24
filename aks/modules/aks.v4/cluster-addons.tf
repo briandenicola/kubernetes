@@ -8,12 +8,12 @@ resource "azapi_update_resource" "cluster_updates" {
 
   body = jsonencode({
     properties = {
-      agentPoolProfiles = [{
-        name = "system"
-        upgradeSettings = {
-          undrainableNodeBehavior = "Cordon"
-        }
-      }]
+      #agentPoolProfiles = [{
+      #  name = "system"
+      #  upgradeSettings = {
+      #    undrainableNodeBehavior = "Cordon"
+      # }
+      #}]
       networkProfile = {
         advancedNetworking = {
           observability = {
