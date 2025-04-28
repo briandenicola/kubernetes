@@ -2,7 +2,7 @@ version: '3'
 
 vars:
   SKU: "Standard_B4ls_v2"
-  DEFAULT_COUNT: 1
+  DEFAULT_COUNT: 2 
   DEFAULT_TAG: "Basic AKS Cluster"
   DEFAULT_REGION: "canadacentral"
   DEPLOY_PROMETHEUS: false
