@@ -16,7 +16,7 @@ locals {
   tags                 = var.tags
   authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   environment_type     = "dev"
-  k8s_version          = "1.30"
+  k8s_version          = "1.31"
 }
 
 # resource "azurerm_resource_group" "this" {

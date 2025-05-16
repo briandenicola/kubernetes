@@ -13,8 +13,8 @@ locals {
   vm_name               = "${local.resource_name}-vm"
   acr_account_name      = "${replace(local.resource_name, "-", "")}acr"
 
-  kubernetes_version    = "1.30" #data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
-  istio_version         = "asm-1-23"
+  kubernetes_version    = "1.31" #data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
+  istio_version         = "asm-1-24"
 
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)

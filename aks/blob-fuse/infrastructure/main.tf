@@ -14,6 +14,6 @@ locals {
   storage_name           = "${replace(local.resource_name, "-", "")}sa"
   storage_container_name = "test"
   tags                   = "Blob Fuse with Workload Identity"
-  k8s_version            = "1.30"
+  k8s_version            = "1.31"
   environment_type       = "dev"
 }

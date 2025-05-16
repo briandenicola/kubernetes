@@ -27,7 +27,7 @@ locals {
   compute_subnet_cidir         = cidrsubnet(local.vnet_cidr, 8, 10)
 
   kubernetes_version           = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
-  istio_version                = "asm-1-23"
+  istio_version                = "asm-1-24"
   dns_service_ip               = "100.${random_integer.services_cidr.result}.0.10"
   services_cidr                = "100.${random_integer.services_cidr.result}.0.0/16"
   pod_cidr                     = "100.${random_integer.pod_cidr.result}.0.0/16"

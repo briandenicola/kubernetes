@@ -24,7 +24,7 @@ module "cluster" {
   resource_name        = local.resource_name
   public_key_openssh   = tls_private_key.rsa.public_key_openssh
   tags                 = local.tags
-  kubernetes_version   = "1.30"
+  kubernetes_version   = "1.31"
   sdlc_environment     = "dev"
   enable_csi_drivers   = false
   enable_mesh          = false

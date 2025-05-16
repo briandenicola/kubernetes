@@ -17,6 +17,6 @@ locals {
   flux_repository      = "https://github.com/briandenicola/kubernetes"
   os_sku               = "AzureLinux"
   environment_type     = "dev"
-  k8s_version          = "1.30"
-  istio_version        = "asm-1-23"
+  k8s_version          = "1.31"
+  istio_version        = "asm-1-24"
 }

@@ -24,7 +24,7 @@ locals {
   api_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 2)
   nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
   compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
-  istio_version        = ["asm-1-23"]
+  istio_version        = ["asm-1-24"]
 }
 
 resource "azurerm_resource_group" "this" {
