@@ -17,9 +17,13 @@ resource "azapi_update_resource" "cluster_updates" {
       }]
       networkProfile = {
         advancedNetworking = {
+          enabled = true,
           observability = {
             enabled = true
           }
+          security = {
+            enable = true
+          }          
         }
       }
     }
