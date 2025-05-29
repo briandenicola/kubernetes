@@ -1,4 +1,5 @@
 resource "azapi_update_resource" "cluster_updates" {
+  count = var.enable_addons ? 1 : 0
   depends_on = [
     azurerm_kubernetes_cluster.this
   ]
@@ -8,12 +9,12 @@ resource "azapi_update_resource" "cluster_updates" {
 
   body = jsonencode({
     properties = {
-      #agentPoolProfiles = [{
-      #  name = "system"
-      #  upgradeSettings = {
-      #    undrainableNodeBehavior = "Cordon"
-      # }
-      #}]
+      agentPoolProfiles = [{
+       name = "system"
+       upgradeSettings = {
+         undrainableNodeBehavior = "Cordon"
+      }
+      }]
       networkProfile = {
         advancedNetworking = {
           observability = {

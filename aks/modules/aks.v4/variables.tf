@@ -98,3 +98,7 @@ variable "cni_plugin_mode" {
   description = "The CNI plugin mode to use"
   default     = "overlay"
 }
+
+variable "enable_addons" {
+  default = false 
+}
