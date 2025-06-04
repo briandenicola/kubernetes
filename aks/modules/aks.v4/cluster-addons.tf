@@ -7,7 +7,7 @@ resource "azapi_update_resource" "cluster_updates" {
   type        = "Microsoft.ContainerService/managedClusters@2024-07-02-preview"
   resource_id = azurerm_kubernetes_cluster.this.id
 
-  body = jsonencode({
+  body = {
     properties = {
       agentPoolProfiles = [{
        name = "system"
@@ -27,5 +27,5 @@ resource "azapi_update_resource" "cluster_updates" {
         }
       }
     }
-  })
+  }
 }

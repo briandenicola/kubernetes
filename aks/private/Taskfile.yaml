@@ -1,0 +1,71 @@
+version: '3'
+
+env: 
+  TAG: "Network Isolated AKS Demo"
+  DEFAULT_REGION: southcentralus
+
+vars:
+  VARFILE: "azure.tfvars"
+
+tasks:
+  default:
+    cmds:
+    - task --list 
+    
+  up:
+    desc: Creates a complete {{.TAG}} environment
+    cmds:
+    - task: init
+    - task: apply
+    - task: creds
+
+  init:
+    desc: Initializes Terraform
+    cmds: 
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
+
+  apply:
+    desc: Applies the Terraform templates
+    cmds:
+    - terraform apply -auto-approve -var "region={{.REGION}}" -var "tags={{.TAG}}" -var-file="{{.VARFILE}}"
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
+    
+  creds:
+    desc: Grab AKS credentials 
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+
+  refresh:
+    desc: Refresh the Terraform values
+    cmds:
+    - terraform refresh -var "region={{.REGION}}" -var "tags={{.TAG}}" -var-file="{{.VARFILE}}"
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+
+  run:
+    desc: Run commands on AKS cluster 
+    cmds:
+    - az aks command invoke -g {{.RG}} -n {{.AKS}} --command {{.CMD}}
+    vars:
+      RG: 
+        sh: terraform output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform output -raw AKS_CLUSTER_NAME
+      CMD: '{{default .CLI_ARGS}}'
+
+  down:
+    desc: Destroys all Azure resources and cleans up Terraform
+    cmds:
+    - az group list --tag Application="{{.TAG}}" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info || true

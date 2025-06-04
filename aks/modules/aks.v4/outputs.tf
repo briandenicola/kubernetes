@@ -32,3 +32,13 @@ output "VNET_ID" {
     value = azurerm_virtual_network.this.id
     sensitive = false
 }
+
+output "VNET_NAME" {
+    value = azurerm_virtual_network.this.name
+    sensitive = false
+}
+
+output "VNET_CIDR" {
+    value = local.vnet_cidr
+    sensitive = false
+}

@@ -3,31 +3,31 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
   target_resource_id         = azurerm_kubernetes_cluster.this.id
   log_analytics_workspace_id = var.azurerm_log_analytics_workspace_id
 
-  enabled_log  {
+  enabled_log {
     category = "kube-apiserver"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "kube-audit"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "kube-audit-admin"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "kube-controller-manager"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "kube-scheduler"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "cluster-autoscaler"
   }
 
-  enabled_log  {
+  enabled_log {
     category = "guard"
   }
 
