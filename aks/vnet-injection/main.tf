@@ -12,5 +12,5 @@ locals {
   resource_name        = "${random_pet.this.id}-${random_id.this.dec}"
   authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   environment_type     = "dev"
-  k8s_version          = "1.31"
+  k8s_version          = "1.32"
 }
