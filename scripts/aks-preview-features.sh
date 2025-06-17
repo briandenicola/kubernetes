@@ -28,6 +28,7 @@ az extension update --name aks-preview
 #DisableSSHPreview
 
 features=(
+    "AzureMonitorAppMonitoringPreview"
     "EnableAPIServerVnetIntegrationPreview"
     "EnableAzureDiskCSIDriverV2"
     "EnableMultipleStandardLoadBalancers"
