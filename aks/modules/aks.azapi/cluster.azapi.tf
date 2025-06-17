@@ -107,9 +107,6 @@ resource "azapi_resource" "aks" {
         }
         azureKeyvaultSecretsProvider = {
           enabled = true
-        }
-        azureKeyvaultSecretsProvider = {
-          enabled = true
           config = {
               enableSecretRotation = "true"
               rotationPollInterval = "2m"
