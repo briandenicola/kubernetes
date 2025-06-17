@@ -3,7 +3,7 @@ version: '3'
 vars:
   SKU: "Standard_D4ads_v5"
   COUNT: 2
-  TAGS: "Node Autoprovisioner Demo"
+  TAGS: "Node Autoprovisioning Demo"
 
 tasks:
   up:

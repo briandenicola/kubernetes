@@ -13,7 +13,7 @@ resource "tls_private_key" "rsa" {
 }
 
 resource "azapi_resource" "aks" {
-  type      = "Microsoft.ContainerService/managedClusters@2023-09-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2025-02-02-preview"
   name      = local.aks_name
   location  = azurerm_resource_group.this.location
   parent_id = azurerm_resource_group.this.id
@@ -62,6 +62,14 @@ resource "azapi_resource" "aks" {
             logAnalyticsWorkspaceResourceID = azurerm_log_analytics_workspace.this.id
           }
         }
+
+        azureKeyvaultSecretsProvider = {
+          enabled = true
+          config = {
+              enableSecretRotation = "true"
+              rotationPollInterval = "2m"
+          }       
+        }        
       }
 
       agentPoolProfiles = [
@@ -72,15 +80,26 @@ resource "azapi_resource" "aks" {
           vmSize            = var.vm_size
           vnetSubnetID      = azurerm_subnet.nodes.id
           count             = var.node_count
+          maxCount          = var.node_count + 3
+          minCount          = 1
+          enableAutoScaling = true
           maxPods           = 250
           osDiskSizeGB      = 110
-          osSKU             = "Mariner"
+          osSKU             = "AzureLinux"
           type              = "VirtualMachineScaleSets"
           osType            = "Linux"
 
           upgradeSettings = {
             maxSurge = "33%"
+            drainTimeoutInMinutes     = 10
+            nodeSoakDurationInMinutes = 1
+            undrainableNodeBehavior   = "Cordon"
           }
+
+          securityProfile = {
+            sshAccess = "Disabled"
+          }
+
         }
       ]
 
@@ -97,21 +116,25 @@ resource "azapi_resource" "aks" {
       }
 
       azureMonitorProfile = {
-        logs = {
-          appMonitoring = {
-            enabled     = true
-          }
-          containerInsights = {
+        containerInsights = {
             enabled                         = true
             logAnalyticsWorkspaceResourceId = azurerm_log_analytics_workspace.this.id
           }
         }
         metrics = {
-          appMonitoringOpenTelemetryMetrics = {
+          enabled = true
+        }
+        appMonitoring = {
+          autoInstrumentation = {
             enabled = true
           }
-          enabled   = true
-        }
+          openTelemetryLogs = {
+            enabled = true
+          }
+          openTelemetryMetrics = {
+            enabled = true
+          }
+        }        
       }
 
       identityProfile = {
@@ -131,13 +154,20 @@ resource "azapi_resource" "aks" {
         loadBalancerSku   = "Standard"
         podCidr           = "100.${random_integer.pod_cidr.id}.0.0/16"
         serviceCidr       = "100.${random_integer.services_cidr.id}.0.0/16"
-        monitoring        = {
-          enabled         = true
+        advancedNetworking = {
+          enabled = true,
+          observability = {
+            enabled = true
+          }
+          security = {
+            enabled = true
+          }
         }
       }
 
       nodeProvisioningProfile = {
-        mode    = "Auto"
+        defaultNodePools = "Auto"
+        mode             = "Auto"
       }
 
       oidcIssuerProfile = {
