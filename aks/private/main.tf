@@ -21,7 +21,7 @@ locals {
   nodes_subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 3)
   compute_subnet_cidir  = cidrsubnet(local.vnet_cidr, 8, 4)
 
-  jump_vm_sku           = "Standard_B1ms"
+  jump_vm_sku           = "Standard_B2s_v2"
   jump_vm_zone          = contains(local.non_az_regions, local.location) ? null : random_integer.vm_zone.result
 
   authorized_ip_ranges = ["${azurerm_public_ip.this.ip_address}/32", "${azurerm_public_ip_prefix.this.ip_prefix}", "${chomp(data.http.myip.response_body)}/32"]

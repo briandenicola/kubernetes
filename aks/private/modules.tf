@@ -47,7 +47,7 @@ module "jumpbox" {
     resource_group_name = azurerm_resource_group.this["vm"].name
     location            = azurerm_resource_group.this["vm"].location
     zone                = local.jump_vm_zone
-    sku                 = "Standard_B1s"
+    sku                 = "Standard_B2s_v2"
     admin = {
       username     = "manager"
       ssh_key_path = "~/.ssh/id_rsa.pub"
