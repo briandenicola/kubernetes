@@ -18,5 +18,5 @@ locals {
   os_sku               = "AzureLinux"
   environment_type     = "dev"
   k8s_version          = "1.31"
-  istio_version        = "asm-1-24"
+  istio_version        = ["asm-1-24", "asm-1-25"]
 }

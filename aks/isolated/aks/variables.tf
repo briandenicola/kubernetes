@@ -8,7 +8,7 @@ variable "aks_cluster" {
     })
     version = string
     istio = object({
-      version = string
+      version = list(string)
     })
     nodes = object({
       sku   = string

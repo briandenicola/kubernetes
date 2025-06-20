@@ -2,7 +2,7 @@ terraform {
   required_providers {
     azapi = {
       source  = "Azure/azapi"
-      version = "~> 1"
+      version = "~> 2"
     }
     tls = {
       source  = "hashicorp/tls"

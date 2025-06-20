@@ -16,7 +16,7 @@ resource "azapi_resource" "aks" {
     identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
   }
 
-  body = jsonencode({
+  body = {
     sku = {
       name = "Base"
       tier = "Standard"
@@ -156,6 +156,7 @@ resource "azapi_resource" "aks" {
 
       serviceMeshProfile = {
         istio = {
+
           components = {
             ingressGateways = [
               {
@@ -164,11 +165,12 @@ resource "azapi_resource" "aks" {
               }
             ]
           }
+          revisions = var.aks_cluster.istio.version
         }
         mode = "Istio"
       }
     }
-  })
+  }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "aks" {

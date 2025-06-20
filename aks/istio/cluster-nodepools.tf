@@ -23,6 +23,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "app_node_pool" {
   max_count             = var.node_count + 2
   
   upgrade_settings {
-    max_surge = "25%"
+    max_surge = "33%"
   }
 }
