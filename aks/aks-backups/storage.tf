@@ -5,11 +5,11 @@ resource "azurerm_storage_account" "this" {
   account_tier              = "Standard"
   account_replication_type  = "LRS"
   account_kind              = "StorageV2"
-  enable_https_traffic_only = true
+  https_traffic_only_enabled = true
   min_tls_version           = "TLS1_2"
 }
 
 resource "azurerm_storage_container" "this" {
   name                  = local.container_name
-  storage_account_name  = azurerm_storage_account.this.name
+  storage_account_id = azurerm_storage_account.this.id
 }

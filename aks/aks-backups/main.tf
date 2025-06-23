@@ -14,6 +14,7 @@ locals {
   storage_account_name       = "${replace(local.resource_name, "-", "")}sa"
   data_protection_vault_name = "${local.resource_name}-dpv"
   container_name             = "backups"
+  environment_type           = "dev"
 }
 
 resource "azurerm_resource_group" "this" {
