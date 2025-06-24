@@ -5,6 +5,7 @@ vars:
   COUNT: 5
   TAG:  Azure Container Storage Demo
   DEFAULT_REGION: canadaeast
+  JUMPBOX: true
   
 tasks:
   up:
@@ -21,7 +22,11 @@ tasks:
   plan:
     desc: Compile required Terraform states and plan for deployment 
     cmds:
-    - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    - terraform plan 
+        -var "region={{.REGION}}" 
+        -var "vm_size={{.SKU}}" 
+        -var "node_count={{.COUNT}}"  
+        -var "deploy_jumpbox={{.JUMPBOX}}"
     vars: 
       REGION: '{{default "" .CLI_ARGS}}'
 
@@ -33,6 +38,7 @@ tasks:
       -var "vm_size={{.SKU}}"
       -var "node_count={{.COUNT}}" 
       -var "tags={{.TAG}}"
+      -var "deploy_jumpbox={{.JUMPBOX}}"
 
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'

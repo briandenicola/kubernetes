@@ -26,3 +26,10 @@ variable "tags" {
   description = "Tags to apply for this resource"
   default     = "Azure Container Storage Demo"
 }
+
+variable "deploy_jumpbox" {
+  description = "Deploy a jumpbox VM to the cluster"
+  type        = bool
+  default     = false
+  
+}
