@@ -9,7 +9,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     azurerm_user_assigned_identity.aks_kubelet_identity,
     azurerm_role_assignment.aks_role_assignemnt_network,
     azurerm_role_assignment.aks_role_assignemnt_msi,
-    azurerm_nat_gateway.this
+    azurerm_nat_gateway.this,
+    azurerm_subnet_nat_gateway_association.nodes,
+    azurerm_subnet_nat_gateway_association.pe,
+    azurerm_subnet_nat_gateway_association.this,
+    azurerm_private_dns_zone.aks_private_zone,
+    azurerm_private_dns_zone_virtual_network_link.aks_private_zone,
   ]
 
   lifecycle {
