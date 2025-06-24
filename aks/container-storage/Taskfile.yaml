@@ -3,10 +3,12 @@ version: '3'
 vars:
   SKU: "Standard_D4s_v5"
   COUNT: 5
+  TAG:  Azure Container Storage Demo
+  DEFAULT_REGION: canadaeast
   
 tasks:
   up:
-    desc: Creates a Azure Container Storage Demo environment 
+    desc: Creates a {{.TAG}} environment 
     cmds:
     - terraform workspace new {{.REGION}} || true
     - terraform workspace select {{.REGION}}
@@ -14,21 +16,26 @@ tasks:
     - task: apply
     - task: creds
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   plan:
-    desc: Plans a complete AKS + Container Storage Environment
+    desc: Compile required Terraform states and plan for deployment 
     cmds:
     - terraform plan -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default "" .CLI_ARGS}}'
 
   apply:
-    desc: Creates a complete AKS + Container Storage Environment 
+    desc: Creates the Environment 
     cmds:
-    - terraform apply -auto-approve -var "region={{.REGION}}" -var "vm_size={{.SKU}}" -var "node_count={{.COUNT}}" -compact-warnings
+    - terraform apply -auto-approve 
+      -var "region={{.REGION}}"
+      -var "vm_size={{.SKU}}"
+      -var "node_count={{.COUNT}}" 
+      -var "tags={{.TAG}}"
+
     vars: 
-      REGION: '{{default "southcentralus" .CLI_ARGS}}'
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   creds:
     desc: Gets AKS credential file
@@ -44,5 +51,5 @@ tasks:
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
-    - az group list --tag Application="Azure Container Storage Demo" --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
+    - az group list --tag Application={{.TAG}} --query "[].name" -o tsv | xargs -ot -n 1 az group delete -y --verbose --no-wait -n  || true
     - rm -rf terraform.tfstate.d .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info

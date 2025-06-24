@@ -8,7 +8,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     azurerm_user_assigned_identity.aks_identity,
     azurerm_user_assigned_identity.aks_kubelet_identity,
     azurerm_role_assignment.aks_role_assignemnt_network,
-    azurerm_role_assignment.aks_role_assignemnt_msi
+    azurerm_role_assignment.aks_role_assignemnt_msi,
+    azurerm_nat_gateway.this
   ]
 
   lifecycle {
@@ -68,7 +69,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     vm_size             = var.vm_size
     zones               = local.zones
     os_disk_size_gb     = 127
-    vnet_subnet_id      = var.azurerm_subnet_nodes_id
+    vnet_subnet_id      = azurerm_subnet.nodes.id
     os_sku              = var.vm_os
     type                = "VirtualMachineScaleSets"
     auto_scaling_enabled = true
@@ -119,7 +120,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   oms_agent {
-    log_analytics_workspace_id      = var.azurerm_log_analytics_workspace_id
+    log_analytics_workspace_id      = var.log_analytics_workspace_id
     msi_auth_for_monitoring_enabled = false
   }
 
@@ -127,7 +128,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   microsoft_defender {
-    log_analytics_workspace_id = var.azurerm_log_analytics_workspace_id
+    log_analytics_workspace_id = var.log_analytics_workspace_id
   }
 
   key_vault_secrets_provider {

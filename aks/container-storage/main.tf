@@ -13,5 +13,5 @@ locals {
   authorized_ip_ranges = [ "${chomp(data.http.myip.response_body)}/32" ]
   app_path             = "./aks/container-storage/cluster-config"
   flux_repository      = "https://github.com/briandenicola/kubernetes"
-  tags                 = "Azure Container Storage Demo"
+  sdlc_environment     = "Dev"
 }

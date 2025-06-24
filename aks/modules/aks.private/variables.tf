@@ -26,11 +26,6 @@ variable "node_count" {
   default     = 1
 }
 
-variable "authorized_ip_ranges" {
-  description = "Authorized IP ranges for accessing the cluster"
-  default     = null
-}
-
 variable "zones" {
   description = "The zones to deploy the cluster to"
   type        = list(string)
@@ -49,14 +44,12 @@ variable "kubernetes_version" {
   description = "The version of Kubernetes to deploy"
 }
 
-variable "azurerm_log_analytics_workspace_id" {
+variable "log_analytics_workspace_id" {
   description = "The resource id for the log analytics workspace"
 }
 
-variable "azurerm_subnet_nodes_id" {
-  description = "The resource id for the subnet where the AKS nodes will be deployed to" 
-}
-
-variable "azurerm_virtual_network_id" {
-  description = "The resource id for the virtual network where the AKS cluster will be deployed to"
+variable node_labels {
+  description = "Labels to apply to the default node pool"
+  type        = map(string)
+  default     = {}
 }

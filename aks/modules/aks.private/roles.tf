@@ -1,5 +1,5 @@
 resource "azurerm_role_assignment" "aks_role_assignemnt_network" {
-  scope                            = var.azurerm_virtual_network_id
+  scope                            = azurerm_virtual_network.this.id
   role_definition_name             = "Network Contributor"
   principal_id                     = azurerm_user_assigned_identity.aks_identity.principal_id
   skip_service_principal_aad_check = true
