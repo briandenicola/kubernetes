@@ -11,7 +11,7 @@ locals {
   location             = var.region
   resource_name        = "${random_pet.this.id}-${random_id.this.dec}"
   vm_name              = "${local.resource_name}-jumpbox"
-  vnet_name            = "${local.resource_name}-vnet"
+  vnet_name            = "${local.resource_name}-network"
   jumpbox_subnet_name  = "compute"
   authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   app_path             = "./aks/container-storage/cluster-config"
