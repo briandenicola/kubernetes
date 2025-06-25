@@ -15,7 +15,6 @@ locals {
   nodes_subnet_cidir   = cidrsubnet(local.vnet_cidr, 8, 3)
   alb_subnet_cidir     = cidrsubnet(local.vnet_cidr, 8, 4)
   compute_subnet_cidir = cidrsubnet(local.vnet_cidr, 8, 10)
-  kubernetes_version   = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 1]
 }
 
 resource "azurerm_resource_group" "this" {

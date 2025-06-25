@@ -38,7 +38,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   local_account_disabled       = false
   open_service_mesh_enabled    = false
   run_command_enabled          = false
-  kubernetes_version           = local.kubernetes_version
+  kubernetes_version           = var.kubernetes_version
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
   automatic_upgrade_channel    = "patch"

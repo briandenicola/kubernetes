@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster_extension" "backups" {
   depends_on = [
     #data.azurerm_kubernetes_cluster.this,
-    azurerm_storage_account.this
+    azurerm_storage_account.this,
     module.cluster
   ]
 
