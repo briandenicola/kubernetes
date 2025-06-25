@@ -29,6 +29,7 @@ module "cluster" {
   node_count                 = var.node_count
   zones                      = local.zones
   log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
+  authorized_ip_ranges       = local.authorized_ip_ranges
   node_labels = {
     "acstor.azure.com/io-engine"                = "acstor"
     "acstor.azure.com/accept-ephemeral-storage" = true
