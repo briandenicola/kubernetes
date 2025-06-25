@@ -1,9 +1,3 @@
-data "azurerm_resource_group" "aks_nodepool_rg" {
-  depends_on = [ 
-    module.cluster
-  ]
-  name = module.cluster.AKS_NODE_RG_NAME
-}
 
 resource "azurerm_role_assignment" "container_storage_role" {
   depends_on = [

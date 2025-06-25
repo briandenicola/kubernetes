@@ -1,6 +1,6 @@
 module "azure_monitor" {
   source                   = "../modules/observability"
-  region                   = var.region
+  region                   = local.location
   resource_name            = local.resource_name
   tags                     = var.tags
   sdlc_environment         = local.sdlc_environment

@@ -19,17 +19,6 @@ tasks:
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
-  plan:
-    desc: Compile required Terraform states and plan for deployment 
-    cmds:
-    - terraform plan 
-        -var "region={{.REGION}}" 
-        -var "vm_size={{.SKU}}" 
-        -var "node_count={{.COUNT}}"  
-        -var "deploy_jumpbox={{.JUMPBOX}}"
-    vars: 
-      REGION: '{{default "" .CLI_ARGS}}'
-
   apply:
     desc: Creates the Environment 
     cmds:
@@ -39,7 +28,6 @@ tasks:
       -var "node_count={{.COUNT}}" 
       -var "tags={{.TAG}}"
       -var "deploy_jumpbox={{.JUMPBOX}}"
-
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 

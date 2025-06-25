@@ -1,6 +1,6 @@
 # module "cluster" {
 #   source               = "../modules/aks.v3"
-#   region               = var.region
+#   region               = local.location
 #   authorized_ip_ranges = local.authorized_ip_ranges
 #   resource_name        = local.resource_name
 #   public_key_openssh   = tls_private_key.rsa.public_key_openssh
@@ -18,7 +18,7 @@
 
 module "cluster" {
   source                     = "../modules/aks.private"
-  region                     = var.region
+  region                     = local.location
   resource_name              = local.resource_name
   public_key_openssh         = tls_private_key.rsa.public_key_openssh
   tags                       = var.tags

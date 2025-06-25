@@ -11,6 +11,6 @@ locals {
   app_path             = "./aks/container-storage/cluster-config"
   flux_repository      = "https://github.com/briandenicola/kubernetes"
   sdlc_environment     = "Dev"
-  zones                = contains(local.non_az_regions, var.region) ? null :  [ random_integer.zone.result ]
-  jump_vm_zone          = contains(local.non_az_regions, var.region) ? null : random_integer.zone.result
+  zones                = contains(local.non_az_regions, var.region) ? null : [random_integer.zone.result]
+  jump_vm_zone         = contains(local.non_az_regions, var.region) ? null : random_integer.zone.result
 }
