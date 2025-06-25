@@ -30,6 +30,19 @@ tasks:
       -var "deploy_jumpbox={{.JUMPBOX}}"
     vars: 
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
+  
+
+  refresh:
+    desc: Creates the Environment 
+    cmds:
+    - terraform refresh
+      -var "region={{.REGION}}"
+      -var "vm_size={{.SKU}}"
+      -var "node_count={{.COUNT}}" 
+      -var "tags={{.TAG}}"
+      -var "deploy_jumpbox={{.JUMPBOX}}"
+    vars: 
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}'
 
   creds:
     desc: Gets AKS credential file
