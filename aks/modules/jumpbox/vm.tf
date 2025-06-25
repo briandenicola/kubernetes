@@ -1,5 +1,5 @@
 locals {
-    jump_vm_zone          = contains(local.non_az_regions, local.location) ? null : var.vm.zone
+  jump_vm_zone          = contains(local.non_az_regions, local.location) ? null : var.vm.zone
 }
 
 resource "azurerm_user_assigned_identity" "this" {

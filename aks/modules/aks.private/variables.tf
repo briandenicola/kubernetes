@@ -53,3 +53,9 @@ variable node_labels {
   type        = map(string)
   default     = {}
 }
+
+variable "authorized_ip_ranges" {
+  description = "Authorized IP ranges for accessing the environment"
+  default     = null
+  type        = list(string)
+}
