@@ -19,3 +19,36 @@ resource "azurerm_role_assignment" "cluster_admin_role" {
   role_definition_name             = "Azure Kubernetes Service RBAC Cluster Admin"
   principal_id                     = module.vm[0].VM_PRINCIPAL_ID
 }
+
+resource "azurerm_role_assignment" "cluster_admin_creds" {
+  count = var.deploy_jumpbox ? 1 : 0
+  depends_on = [
+    module.cluster,
+    module.vm
+  ]
+  scope                            = module.cluster.AKS_CLUSTER_ID
+  role_definition_name             = "Azure Kubernetes Service Cluster User Role"
+  principal_id                     = module.vm[0].VM_PRINCIPAL_ID
+}
+
+
+resource "azurerm_role_assignment" "vm_rg_reader" {
+  count = var.deploy_jumpbox ? 1 : 0
+  depends_on = [
+    module.cluster,
+    module.vm
+  ]
+  scope                            = module.vm[0].VM_RESOURCE_GROUP_ID
+  role_definition_name             = "Reader"
+  principal_id                     = module.vm[0].VM_PRINCIPAL_ID
+}
+resource "azurerm_role_assignment" "aks_rg_reader" {
+  count = var.deploy_jumpbox ? 1 : 0
+  depends_on = [
+    module.cluster,
+    module.vm
+  ]
+  scope                            = data.azurerm_resource_group.aks_rg.id
+  role_definition_name             = "Reader"
+  principal_id                     = module.vm[0].VM_PRINCIPAL_ID
+}

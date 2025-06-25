@@ -34,9 +34,17 @@ data "azurerm_kubernetes_cluster" "this" {
   name = module.cluster.AKS_CLUSTER_NAME
   resource_group_name = module.cluster.AKS_RESOURCE_GROUP
 }
+
 data "azurerm_resource_group" "aks_nodepool_rg" {
   depends_on = [ 
     module.cluster
   ]
   name = module.cluster.AKS_NODE_RG_NAME
+}
+
+data "azurerm_resource_group" "aks_rg" {
+  depends_on = [ 
+    module.cluster
+  ]
+  name = module.cluster.AKS_RESOURCE_GROUP
 }
