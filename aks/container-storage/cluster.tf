@@ -33,20 +33,21 @@ module "cluster" {
 
 
 resource "azurerm_kubernetes_cluster_node_pool" "acstor" {
-  depends_on            = [
+  depends_on = [
     module.cluster
   ]
 
-  name                  = "acstor"
-  kubernetes_cluster_id = module.cluster.AKS_CLUSTER_ID
-  vm_size               = var.vm_size
-  zones                 = local.zones
-  os_disk_size_gb       = 127
-  os_sku                = "AzureLinux"
-  auto_scaling_enabled  = true
-  min_count             = 1
-  max_count             = var.node_count * 2
-  node_count            = var.node_count
+  name                        = "acstor"
+  kubernetes_cluster_id       = module.cluster.AKS_CLUSTER_ID
+  vm_size                     = var.vm_size
+  zones                       = local.zones
+  os_disk_size_gb             = 127
+  os_sku                      = "AzureLinux"
+  auto_scaling_enabled        = true
+  min_count                   = 1
+  max_count                   = var.node_count * 2
+  node_count                  = var.node_count
+  temporary_name_for_rotation = "acsrotation"
 
   node_labels = {
     "acstor.azure.com/io-engine"                = "acstor"
