@@ -1,10 +1,11 @@
 resource "azurerm_kubernetes_cluster_extension" "flux" {
   depends_on = [
-    data.azurerm_kubernetes_cluster.this
+    #data.azurerm_kubernetes_cluster.this
+    module.cluster
   ]
 
   name              = "flux"
-  cluster_id        = data.azurerm_kubernetes_cluster.this.id
+  cluster_id        = module.cluster.AKS_CLUSTER_ID #data.azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.flux"
 }
 
@@ -14,7 +15,7 @@ resource "azurerm_kubernetes_flux_configuration" "flux_config" {
   ]
 
   name       = "aks-flux-extension"
-  cluster_id = data.azurerm_kubernetes_cluster.this.id
+  cluster_id = module.cluster.AKS_CLUSTER_ID #data.azurerm_kubernetes_cluster.this.id
   namespace  = "flux-system"
   scope      = "cluster"
 

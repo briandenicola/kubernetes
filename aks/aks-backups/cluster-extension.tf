@@ -1,11 +1,12 @@
 resource "azurerm_kubernetes_cluster_extension" "backups" {
   depends_on = [
-    data.azurerm_kubernetes_cluster.this,
+    #data.azurerm_kubernetes_cluster.this,
     azurerm_storage_account.this
+    module.cluster
   ]
 
   name              = "azure-aks-backup"
-  cluster_id        = data.azurerm_kubernetes_cluster.this.id
+  cluster_id        = module.cluster.AKS_CLUSTER_ID #data.azurerm_kubernetes_cluster.this.id
   extension_type    = "microsoft.dataprotection.kubernetes"
   release_namespace = "dataprotection-microsoft"
   release_train     = "stable"

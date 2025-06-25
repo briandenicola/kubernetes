@@ -14,8 +14,8 @@ module "cluster" {
   azurerm_log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
 }
 
-data "azurerm_kubernetes_cluster" "this" {
-  depends_on          = [module.cluster]
-  name                = module.cluster.AKS_CLUSTER_NAME
-  resource_group_name = module.cluster.AKS_RESOURCE_GROUP
-}
+# data "azurerm_kubernetes_cluster" "this" {
+#   depends_on          = [module.cluster]
+#   name                = module.cluster.AKS_CLUSTER_NAME
+#   resource_group_name = module.cluster.AKS_RESOURCE_GROUP
+# }

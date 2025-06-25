@@ -24,12 +24,30 @@ module "cluster" {
   tags                       = var.tags
   kubernetes_version         = "1.32"
   sdlc_environment           = local.sdlc_environment
-  vm_size                    = var.vm_size
   vm_os                      = "AzureLinux"
   node_count                 = var.node_count
   zones                      = local.zones
   log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
-  authorized_ip_ranges       = local.authorized_ip_ranges
+  authorized_ip_ranges       = local.authorized_ip_ranges #for Azure Jumpbox VM NSG Rules
+}
+
+
+resource "azurerm_kubernetes_cluster_node_pool" "acstor" {
+  depends_on            = [
+    module.cluster
+  ]
+
+  name                  = "acstor"
+  kubernetes_cluster_id = module.cluster.AKS_CLUSTER_ID
+  vm_size               = var.vm_size
+  zones                 = local.zones
+  os_disk_size_gb       = 127
+  os_sku                = "AzureLinux"
+  auto_scaling_enabled  = true
+  min_count             = 1
+  max_count             = var.node_count * 2
+  node_count            = var.node_count
+
   node_labels = {
     "acstor.azure.com/io-engine"                = "acstor"
     "acstor.azure.com/accept-ephemeral-storage" = true

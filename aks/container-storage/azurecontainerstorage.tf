@@ -1,6 +1,7 @@
 resource "azurerm_kubernetes_cluster_extension" "storage" {
   depends_on = [
-    module.cluster
+    module.cluster,
+    azurerm_kubernetes_cluster_node_pool.acstor
   ]
 
   name              = "azurecontainerstorage"

@@ -1,7 +1,7 @@
 version: '3'
 
 env: 
-  TAG: "Network Isolated AKS Demo"
+  TAG: "Private AKS with Encrypted ETCD and disks demo"
   DEFAULT_REGION: southcentralus
 
 vars:

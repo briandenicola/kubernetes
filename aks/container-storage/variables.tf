@@ -30,6 +30,5 @@ variable "tags" {
 variable "deploy_jumpbox" {
   description = "Deploy a jumpbox VM to the cluster"
   type        = bool
-  default     = false
-  
+  default     = false 
 }
