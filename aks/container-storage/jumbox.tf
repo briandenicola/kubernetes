@@ -8,7 +8,7 @@ module "vm" {
     location            = local.location
     resource_group_name = "${local.resource_name}-jumpbox_rg"
     tags                = var.tags
-    zone                = 3
+    zone                = local.jump_vm_zone
     sku                 = "Standard_B2s_v2"
     admin = {
       username     = "manager"

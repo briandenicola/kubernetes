@@ -1,3 +1,7 @@
+locals {
+    jump_vm_zone          = contains(local.non_az_regions, local.location) ? null : var.vm.zone
+}
+
 resource "azurerm_user_assigned_identity" "this" {
   name                = "${var.vm.name}-identity"
   resource_group_name = azurerm_resource_group.this.name
@@ -21,7 +25,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   name                = "${var.vm.name}-linux"
   resource_group_name = azurerm_resource_group.this.name
   location            = var.vm.location
-  zone                = var.vm.zone
+  zone                = local.jump_vm_zone
   size                = var.vm.sku
   admin_username      = var.vm.admin.username
   network_interface_ids = [

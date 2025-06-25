@@ -24,10 +24,10 @@ module "cluster" {
   tags                       = var.tags
   kubernetes_version         = "1.32"
   sdlc_environment           = local.sdlc_environment
-  vm_size = var.vm_size
+  vm_size                    = var.vm_size
   vm_os                      = "AzureLinux"
   node_count                 = var.node_count
-  zones                      = ["3"]
+  zones                      = local.zones
   log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
   node_labels = {
     "acstor.azure.com/io-engine"                = "acstor"
