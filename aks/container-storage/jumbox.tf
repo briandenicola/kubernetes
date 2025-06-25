@@ -1,5 +1,5 @@
 module "vm" {
-  count = var.deploy_jumpbox ? 1 : 0
+  count  = var.deploy_jumpbox ? 1 : 0
   source = "../modules/jumpbox"
 
   resource_name = local.resource_name
