@@ -15,7 +15,7 @@ resource "azurerm_role_assignment" "cluster_id_role_contributor" {
 }
 
 resource "azurerm_role_assignment" "dvp_role_aks_reader" {
-  scope                            = data.azurerm_kubernetes_cluster.this.id
+  scope                            = module.cluster.AKS_CLUSTER_ID #data.azurerm_kubernetes_cluster.this.id
   role_definition_name             = "Reader"
   principal_id                     = azurerm_data_protection_backup_vault.this.identity.0.principal_id
   skip_service_principal_aad_check = true

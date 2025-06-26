@@ -10,7 +10,7 @@ resource "random_pet" "this" {
 locals {
   location                   = var.region
   resource_name              = "${random_pet.this.id}-${random_id.this.dec}"
-  authorized_ip_ranges       = "${chomp(data.http.myip.response_body)}/32"
+  authorized_ip_ranges       = ["${chomp(data.http.myip.response_body)}/32"]
   storage_account_name       = "${replace(local.resource_name, "-", "")}sa"
   data_protection_vault_name = "${local.resource_name}-dpv"
   container_name             = "backups"
