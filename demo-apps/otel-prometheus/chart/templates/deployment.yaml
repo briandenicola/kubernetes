@@ -1,3 +1,23 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-demo-svc
+  namespace: {{ .Values.NAMESPACE }}
+  annotations:
+   service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  selector:
+    app: prometheus-demo
+  ports:
+  - port: 80
+    targetPort: {{ .Values.SERVICE_PORT }}
+    name: web
+  - port: 9090
+    targetPort: 9090
+    name: metrics
+  type: LoadBalancer
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,7 +47,7 @@ spec:
       serviceAccountName: {{ .Values.WORKLOAD_ID.NAME }}
       containers:
       - name: prometheus-demo
-        image: {{ print .Values.ACR.NAME "/otel-demo/8.0-ubuntu-jammy:" .Values.GIT_COMMIT_VERSION }}
+        image: {{ print .Values.ACR.NAME "/otel-demo/" .Values.CONTAINER_NAME ":" .Values.GIT_COMMIT_VERSION }}
         imagePullPolicy: Always
         ports:
         - containerPort: {{ .Values.SERVICE_PORT }}
@@ -41,8 +61,8 @@ spec:
             cpu: "2"
           requests:
             memory: "64Mi"
-            cpu: "0.25"          
-{{- if .Values.DEPLOY_ON.WINDOWS -}}         
+            cpu: "0.25"                   
+{{- if .Values.DEPLOY_ON.WINDOWS }}         
       nodeSelector:
         kubernetes.io/os: windows
       tolerations:
@@ -51,22 +71,3 @@ spec:
         value: applications
         effect: NoSchedule 
 {{- end }}  
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: prometheus-demo-svc
-  namespace: {{ .Values.NAMESPACE }}
-  annotations:
-   service.beta.kubernetes.io/azure-load-balancer-internal: "true"
-spec:
-  selector:
-    app: prometheus-demo
-  ports:
-  - port: 80
-    targetPort: {{ .Values.SERVICE_PORT }}
-    name: web
-  - port: 9090
-    targetPort: 9090
-    name: metrics
-  type: LoadBalancer

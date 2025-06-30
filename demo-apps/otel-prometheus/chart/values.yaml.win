@@ -1,5 +1,6 @@
 NAMESPACE                               : "prometheus-demo"
-GIT_COMMIT_VERSION                      : "26a16616"
+GIT_COMMIT_VERSION                      : "6e9ab2714bcdf92c7c928a51d60c1816334e0828"
+CONTAINER_NAME                          : "8.0-win2022-nano"
 SERVICE_PORT                            : 5000
 
 ACR:
@@ -12,6 +13,5 @@ WORKLOAD_ID:
 
 APP_INSIGHTS:
   CONNECTION_STRING                     : ""
-
 DEPLOY_ON:
-  WINDOWS                               : false
+  WINDOWS                               : true
