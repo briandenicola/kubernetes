@@ -103,3 +103,9 @@ variable "cni_plugin_mode" {
 variable "enable_addons" {
   default = false 
 }
+
+variable "network_policy_engine" {
+  description = "The network policy engine to use"
+  default     = "cilium"
+  
+}

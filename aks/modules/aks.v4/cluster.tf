@@ -100,8 +100,8 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_plugin      = "azure"
     network_plugin_mode = "overlay"
     load_balancer_sku   = "standard"
-    network_data_plane  = "cilium"
-    network_policy      = "cilium"
+    network_data_plane  = var.network_policy_engine
+    network_policy      = var.network_policy_engine
     outbound_type       = "userAssignedNATGateway"
   }
 
