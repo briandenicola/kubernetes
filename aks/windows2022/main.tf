@@ -19,6 +19,7 @@ locals {
   authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
   environment_type     = "dev"
   k8s_version          = "1.32"
+  zones                = var.region == "northcentralus" || var.region == "canadaeast" ? null : ["3"]
 }
 
 # resource "azurerm_resource_group" "this" {

@@ -8,6 +8,7 @@ module "aks_cluster" {
   resource_name                      = local.resource_name
   public_key_openssh                 = tls_private_key.rsa.public_key_openssh
   tags                               = var.tags
+  zones                              = local.zones
   kubernetes_version                 = local.k8s_version
   sdlc_environment                   = local.environment_type
   vm_sku                             = var.vm_size

@@ -1,7 +1,3 @@
-locals {
-  zones = var.region == "northcentralus" || var.region == "canadaeast" ? null : var.zones
-}
-
 resource "azurerm_kubernetes_cluster_node_pool" "windows_node_pool" {
   depends_on = [
     data.azurerm_kubernetes_cluster.this
