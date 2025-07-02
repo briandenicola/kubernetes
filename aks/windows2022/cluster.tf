@@ -14,6 +14,6 @@ module "aks_cluster" {
   vm_os                              = "AzureLinux"
   network_policy_engine              = "azure"
   node_count                         = var.node_count
-  enable_mesh                        = false
+  enable_mesh                        = true
   azurerm_log_analytics_workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
 }
