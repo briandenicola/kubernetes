@@ -13,9 +13,9 @@ resource "azurerm_container_registry" "this" {
 }
 
 resource "azurerm_container_registry_cache_rule" "mcr_cache_rule" {
-  name                  = "mrc-cache-rule"
+  name                  = "aks-managed-mcr"
   container_registry_id = azurerm_container_registry.this.id
-  target_repo           = "*"
+  target_repo           = "aks-managed-repository/*"
   source_repo           = "mcr.microsoft.com/*"
 }
 

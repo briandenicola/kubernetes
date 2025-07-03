@@ -6,7 +6,7 @@ resource "azapi_resource" "aks" {
     azurerm_role_assignment.aks_role_assignemnt_network
   ]
 
-  type      = "Microsoft.ContainerService/managedClusters@2024-06-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2025-03-02-preview"
   name      = local.aks_name
   location  = var.aks_cluster.location
   parent_id = var.aks_cluster.resource_group.id
@@ -74,7 +74,7 @@ resource "azapi_resource" "aks" {
         osDiskSizeGB      = 127
         vnetSubnetID      = var.aks_cluster.vnet.node_subnet.id
         osType            = "Linux"
-        osSKU             = "AzureLinux"
+        osSKU             = var.aks_cluster.nodes.os
         type              = "VirtualMachineScaleSets"
         maxPods           = 110
         enableAutoScaling = false

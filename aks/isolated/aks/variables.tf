@@ -13,6 +13,7 @@ variable "aks_cluster" {
     nodes = object({
       sku   = string
       count = number
+      os    = string
     })
     vnet = object({
       id = string

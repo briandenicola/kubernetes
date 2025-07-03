@@ -19,6 +19,7 @@ module "aks" {
     nodes = {
       sku   = var.node_sku
       count = var.node_count
+      os    = "Ubuntu"
     }
     vnet = {
       id = azurerm_virtual_network.this.id
