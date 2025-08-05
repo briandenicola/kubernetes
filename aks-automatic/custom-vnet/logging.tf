@@ -1,16 +1,16 @@
 resource "azurerm_log_analytics_workspace" "this" {
   name                = "${local.resource_name}-logs"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = azurerm_resource_group.monitoring.name
+  location            = azurerm_resource_group.monitoring.location
   sku                 = "PerGB2018"
   daily_quota_gb      = 0.5
-  
+
 }
 
 resource "azurerm_log_analytics_solution" "this" {
   solution_name         = "ContainerInsights"
-  location              = azurerm_resource_group.this.location
-  resource_group_name   = azurerm_resource_group.this.name
+  resource_group_name   = azurerm_resource_group.monitoring.name
+  location              = azurerm_resource_group.monitoring.location
   workspace_resource_id = azurerm_log_analytics_workspace.this.id
   workspace_name        = azurerm_log_analytics_workspace.this.name
 

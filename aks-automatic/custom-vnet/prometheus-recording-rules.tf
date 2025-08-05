@@ -5,8 +5,8 @@ resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_node_recordin
   ]
 
   name                = "${local.resource_name}-NodeRecordingRuleGroup"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = azurerm_resource_group.monitoring.name
+  location            = azurerm_resource_group.monitoring.location
   cluster_name        = local.aks_name
   interval            = "PT1M"
   rule_group_enabled  = true
@@ -65,8 +65,8 @@ resource "azurerm_monitor_alert_prometheus_rule_group" "prometheus_kubernetes_ru
   ]
 
   name                = "${local.resource_name}-KubernetesRecordingRuleGroup"
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
+  resource_group_name = azurerm_resource_group.monitoring.name
+  location            = azurerm_resource_group.monitoring.location
   cluster_name        = local.aks_name
   interval            = "PT1M"
   scopes              = [azurerm_monitor_workspace.this.id]

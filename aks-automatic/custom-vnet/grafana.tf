@@ -4,8 +4,8 @@ resource "azurerm_dashboard_grafana" "this" {
   ]
 
   name                              = "${local.resource_name}-grafana"
-  resource_group_name               = azurerm_resource_group.this.name
-  location                          = azurerm_resource_group.this.location
+  resource_group_name               = azurerm_resource_group.monitoring.name
+  location                          = azurerm_resource_group.monitoring.location
   sku                               = "Standard"
   zone_redundancy_enabled           = true
   api_key_enabled                   = true

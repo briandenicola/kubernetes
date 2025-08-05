@@ -6,8 +6,8 @@ resource "azapi_resource" "aks" {
 
   type      = "Microsoft.ContainerService/managedClusters@2025-02-02-preview"
   name      = local.aks_name
-  location  = azurerm_resource_group.this.location
-  parent_id = azurerm_resource_group.this.id
+  location  = azurerm_resource_group.aks.location
+  parent_id = azurerm_resource_group.aks.id
 
   identity {
     type         = "UserAssigned"

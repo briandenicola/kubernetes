@@ -1,5 +1,5 @@
 output "RESOURCE_GROUP" {
-  value     = azurerm_resource_group.this.name
+  value     = azurerm_resource_group.aks.name
   sensitive = false
 }
 
