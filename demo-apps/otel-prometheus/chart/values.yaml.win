@@ -4,14 +4,14 @@ CONTAINER_NAME                          : "8.0-win2022-nano"
 SERVICE_PORT                            : 5000
 
 ACR:
-  NAME                                  : "bjd145"
+  NAME                                  : "bjdcas.azurecr.io"
 
 WORKLOAD_ID:
-  NAME                                  : ""
-  CLIENT_ID                             : ""
-  TENANT_ID                             : ""
+  NAME                                  : "cub-52117-app-identity"
+  CLIENT_ID                             : "5a6934ef-a532-49d7-86f9-1e6aefb46ed3"
+  TENANT_ID                             : "16b3c013-d300-468d-ac64-7eda0820b6d3"
 
 APP_INSIGHTS:
-  CONNECTION_STRING                     : ""
+  CONNECTION_STRING                     : "InstrumentationKey=1c050619-dab0-4add-bb5c-68cc129132c4;IngestionEndpoint=https://southcentralus-3.in.applicationinsights.azure.com/;LiveEndpoint=https://southcentralus.livediagnostics.monitor.azure.com/;ApplicationId=90e6ecaf-5d7e-447a-a1bc-af71017ffd8b"
 DEPLOY_ON:
   WINDOWS                               : true
