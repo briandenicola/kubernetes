@@ -5,6 +5,10 @@ resource "azapi_resource" "aks" {
     azurerm_subnet.nodes,
     azurerm_subnet_nat_gateway_association.nodes,
     azurerm_subnet_nat_gateway_association.pe,
+    azurerm_user_assigned_identity.aks_identity,
+    azurerm_user_assigned_identity.aks_kubelet_identity,
+    azurerm_role_assignment.aks_role_assignemnt_msi,
+    azurerm_role_assignment.aks_role_assignemnt_network
   ]
 
   type      = "Microsoft.ContainerService/managedClusters@2025-08-02-preview"
@@ -69,7 +73,7 @@ resource "azapi_resource" "aks" {
             enabled = true
             advancedNetworkPolicies = "L7"
             transitEncryption = {
-              type = "WireGuard"
+              type = "wireguard"
             }
           }
         }

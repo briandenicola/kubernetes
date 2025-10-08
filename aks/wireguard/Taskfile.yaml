@@ -55,6 +55,11 @@ tasks:
       AKS: 
         sh: terraform output -raw AKS_CLUSTER_NAME
 
+  validate:
+    desc: Validate installations 
+    cmds:
+    - kubectl -n kube-system exec -ti ds/cilium -- cilium-dbg encrypt status
+    
   down:
     desc: Destroys all Azure resources and cleans up Terraform
     cmds:
