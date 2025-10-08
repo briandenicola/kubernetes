@@ -7,7 +7,7 @@ resource "azapi_resource" "aks" {
     azurerm_subnet_nat_gateway_association.pe,
   ]
 
-  type      = "Microsoft.ContainerService/managedClusters@2025-02-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2025-08-02-preview"
   name      = var.aks_cluster.name
   location  = local.location
   parent_id = azurerm_resource_group.this.id
