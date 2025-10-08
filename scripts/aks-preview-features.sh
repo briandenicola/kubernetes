@@ -26,6 +26,7 @@ az extension update --name aks-preview
 #AKS-Dapr
 #AKS-AzurePolicyExternalData
 #DisableSSHPreview
+#TrustedAccessPreview
 
 features=(
     "AzureMonitorAppMonitoringPreview"
@@ -34,7 +35,6 @@ features=(
     "EnableMultipleStandardLoadBalancers"
     "AKSNodelessPreview"
     "CiliumDataplanePreview"
-    "TrustedAccessPreview"
     "KubeletDisk"
     "KataVMIsolationPreview"
     "KataCcIsolationPreview"
@@ -51,6 +51,7 @@ features=(
     "NetworkIsolatedClusterPreview"
     "AzureMonitorAppMonitoringPreview"
     "AdvancedNetworkingWireGuardPreview"
+    "ManagedNamespacePreview"
 )
 
 for feature in ${features[*]}
