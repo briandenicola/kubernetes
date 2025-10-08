@@ -42,7 +42,6 @@ features=(
     "EnableCloudControllerManager"
     "EnableImageIntegrityPreview"
     "KubeProxyConfigurationPreview"
-    "NodeAutoProvisioningPreview"
     "NRGLockdownPreview"
     "IstioNativeSidecarModePreview"
     "SafeguardsPreview"
@@ -51,6 +50,7 @@ features=(
     "AzureLinuxV3Preview"
     "NetworkIsolatedClusterPreview"
     "AzureMonitorAppMonitoringPreview"
+    "AdvancedNetworkingWireGuardPreview"
 )
 
 for feature in ${features[*]}
