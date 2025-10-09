@@ -1,0 +1,3 @@
+[submodule "aro/aro-managed-identity"]
+	path = aro/aro-managed-identity
+	url = https://github.com/dcasati/aro-managed-identity
