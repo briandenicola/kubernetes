@@ -22,3 +22,19 @@ resource "azurerm_subnet" "worker_subnet" {
   address_prefixes     = [local.worker_subnet_cidir]
   service_endpoints    = ["Microsoft.ContainerRegistry"]
 }
+
+resource "azurerm_network_security_group" "this" {
+  name                = "${local.resource_name}-default-nsg"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+# resource "azurerm_subnet_network_security_group_association" "worker_subnet" {
+#   subnet_id                 = azurerm_subnet.worker_subnet.id
+#   network_security_group_id = azurerm_network_security_group.this.id
+# }
+
+# resource "azurerm_subnet_network_security_group_association" "master_subnet" {
+#   subnet_id                 = azurerm_subnet.master_subnet.id
+#   network_security_group_id = azurerm_network_security_group.this.id
+# }

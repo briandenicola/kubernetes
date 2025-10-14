@@ -15,3 +15,11 @@ variable "domain" {
   description = "Domain name"
   type        = string
 }
+
+variable "aro_client_secret" {
+  description = "The client secret of the SPN used by ARO"
+}
+
+variable "aro_client_id" {
+  description = "The client ID of the SPN used by ARO"
+}

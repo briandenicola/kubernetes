@@ -14,10 +14,10 @@ resource "random_integer" "vnet_cidr" {
 
 resource "random_integer" "services_cidr" {
   min = 64
-  max = 90
+  max = 64
 }
 
 resource "random_integer" "pod_cidr" {
-  min = 91
-  max = 127
+  min = 128
+  max = 128
 }
