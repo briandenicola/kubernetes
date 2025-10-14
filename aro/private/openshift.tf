@@ -9,7 +9,7 @@ resource "azurerm_redhat_openshift_cluster" "this" {
   resource_group_name = azurerm_resource_group.this.name
 
   service_principal {
-    client_id     = var.aro_client_id #azuread_application.this.client_id
+    client_id     = var.aro_client_id     #azuread_application.this.client_id
     client_secret = var.aro_client_secret #azuread_service_principal_password.this.value
   }
 

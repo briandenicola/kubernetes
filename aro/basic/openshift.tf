@@ -7,22 +7,19 @@ resource "azurerm_redhat_openshift_cluster" "this" {
   name                = local.aro_name
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
-
-  service_principal {
-    client_id     = var.aro_client_id     #azuread_application.this.client_id
-    client_secret = var.aro_client_secret #azuread_application_password.this.value
-  }
-
-  main_profile {
-    vm_size   = local.main_vm_size
-    subnet_id = azurerm_subnet.master_subnet.id
-  }
-
+  
   cluster_profile {
     domain                      = var.domain
     version                     = local.aro_version
-    fips_enabled                = false
     managed_resource_group_name = local.aro_managed_resource_group
+  }
+
+  api_server_profile {
+    visibility = "Public"
+  }
+
+  ingress_profile {
+    visibility = "Public"
   }
 
   network_profile {
@@ -30,12 +27,9 @@ resource "azurerm_redhat_openshift_cluster" "this" {
     service_cidr = "192.168.${random_integer.services_cidr.id}.0/18"
   }
 
-  api_server_profile {
-    visibility = local.visibility
-  }
-
-  ingress_profile {
-    visibility = local.visibility
+  main_profile {
+    vm_size   = local.main_vm_size
+    subnet_id = azurerm_subnet.master_subnet.id
   }
 
   worker_profile {
@@ -43,5 +37,10 @@ resource "azurerm_redhat_openshift_cluster" "this" {
     disk_size_gb = local.worker_os_disk_size_gb
     node_count   = local.vm_node_count
     subnet_id    = azurerm_subnet.worker_subnet.id
+  }
+
+  service_principal {
+    client_id     = var.aro_client_id     #azuread_application.this.client_id
+    client_secret = var.aro_client_secret #azuread_application_password.this.value
   }
 }
