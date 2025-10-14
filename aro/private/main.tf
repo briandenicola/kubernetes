@@ -3,7 +3,7 @@ locals {
   location                   = var.region
   resource_name              = "${random_pet.this.id}-${random_id.this.dec}"
   aro_name                   = replace("${local.resource_name}-aro", "-", "")
-  aro_version                = "4.16.48" # 4.15.27 is the latest version as of 2025. `az aro get-versions --location canadaeast`
+  aro_version                = "4.16.48" #the latest version as of 2025. `az aro get-versions --location canadaeast`
   vnet_cidr                  = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   master_subnet_cidir        = cidrsubnet(local.vnet_cidr, 8, 2)
   worker_subnet_cidir        = cidrsubnet(local.vnet_cidr, 7, 2)

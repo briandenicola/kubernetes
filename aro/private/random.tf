@@ -14,20 +14,10 @@ resource "random_integer" "vnet_cidr" {
 
 resource "random_integer" "services_cidr" {
   min = 64
-  max = 90
+  max = 64
 }
 
 resource "random_integer" "pod_cidr" {
-  min = 91
-  max = 127
-}
-
-resource "random_password" "password" {
-  length           = 30
-  special          = true
-  override_special = "!@#^&*()_+"
-  min_lower        = 1
-  min_numeric      = 2
-  min_special      = 1
-  min_upper        = 1
+  min = 128
+  max = 128
 }
