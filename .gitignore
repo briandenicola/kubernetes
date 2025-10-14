@@ -285,3 +285,5 @@ paket-files/
 __pycache__/
 *.pyc
 .venv/*
+aro/private/.env
+aro/basic/.env
