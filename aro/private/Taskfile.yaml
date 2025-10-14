@@ -1,9 +1,13 @@
 version: '3'
 
-env:
+dotenv: 
+  - .env
+
+vars:
   TITLE: Private Azure Redhat OpenShift demo
   DEFAULT_REGION: canadaeast
   DEFAULT_DOMAIN: bjdazure.tech
+   
 
 tasks:
   default:
@@ -34,6 +38,8 @@ tasks:
       -var "region={{.REGION}}" 
       -var "domain={{.DEFAULT_DOMAIN}}"
       -var "aro_rp_aad_sp_object_id={{.ARO_RP_SPN}}" 
+      -var "aro_client_secret={{.SPN_CLIENT_SECRET}}"
+      -var "aro_client_id={{.SPN_CLIENT_ID}}"
     vars:
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
       ARO_RP_SPN:
