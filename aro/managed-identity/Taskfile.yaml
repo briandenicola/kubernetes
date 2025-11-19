@@ -6,7 +6,7 @@ dotenv:
 vars:
   TITLE: Private Azure Redhat OpenShift demo
   DEFAULT_REGION: canadaeast
-  DEFAULT_DOMAIN: bjdazure.tech
+  DEFAULT_DOMAIN: bjdse
   CLUSTER_VERSION: 4.16
    
 

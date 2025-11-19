@@ -25,8 +25,8 @@ variable "cluster_version" {
 }
 
 variable "fips_enabled" {
-  default = false
+  default     = false
   description = "Enable FIPS validated modules"
-  type        = bool 
+  type        = bool
 }
 
