@@ -1,0 +1,64 @@
+version: '3'
+
+dotenv: 
+  - .env
+
+vars:
+  TITLE: Private Azure Redhat OpenShift demo
+  DEFAULT_REGION: canadaeast
+  DEFAULT_DOMAIN: bjdazure.tech
+  CLUSTER_VERSION: 4.16
+   
+
+tasks:
+  default:
+    cmds:
+    - task --list
+    
+  init: 
+    desc: Registers ARO Provider 
+    cmds: 
+    - az provider register --namespace 'Microsoft.RedHatOpenShift' --wait
+
+  up:
+    desc: Creates {{.TITLE}} environment
+    cmds:
+    - terraform workspace new {{.REGION}} || true
+    - terraform workspace select {{.REGION}}
+    - terraform init
+    - task: apply
+    - task: creds
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
+
+  apply:
+    desc: Applies Terraform configuration
+    cmds:
+    - terraform apply -auto-approve -compact-warnings
+      -var "tags={{.TITLE}}" 
+      -var "region={{.REGION}}" 
+      -var "domain={{.DEFAULT_DOMAIN}}"
+      -var "cluster_version={{.CLUSTER_VERSION}}"
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
+      ARO_RP_SPN:
+        sh: az ad sp list --display-name "Azure Red Hat OpenShift RP" --query [0].id -o tsv
+
+  creds:
+    desc: Get ARO Credentials
+    cmds:
+    - az aro list-credentials --name {{.ARO_NAME}} --resource-group {{.RG}}
+    vars:
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP  
+      ARO_NAME: 
+        sh: terraform output -raw ARO_NAME  
+
+  down:
+    desc: Destorys Azure infrastructure and cleans up terraform state files
+    cmds:
+    - rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info terraform.tfstate.d || true
+    - az group delete -n {{.RG}} --yes --no-wait || true
+    vars:
+      RG: 
+        sh: terraform output -raw RESOURCE_GROUP
