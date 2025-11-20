@@ -30,9 +30,9 @@ resource "azapi_resource" "aro_cluster" {
   ignore_null_property    = true
 
   timeouts {
-    create = "40m"
-    update = "90m"
-    delete = "90m"
+    create = "60m"
+    update = "60m"
+    delete = "60m"
   }
 
   body = {
