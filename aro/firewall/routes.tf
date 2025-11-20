@@ -12,7 +12,7 @@ resource "azurerm_route_table" "this" {
   }
 }
 
-resource "azurerm_subnet_route_table_association" "woker_nodes" {
+resource "azurerm_subnet_route_table_association" "worker_node_pool" {
   subnet_id             = azurerm_subnet.worker_subnet.id
   route_table_id        = azurerm_route_table.this.id
 }

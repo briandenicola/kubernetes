@@ -26,6 +26,10 @@ resource "time_sleep" "wait_for_rbac" {
     azurerm_role_assignment.file_network_nsg,
     azurerm_role_assignment.aro_operator_nsg,
     azurerm_role_assignment.aro_rp_nsg,
+    azurerm_role_assignment.cloud_network_route_table,
+    azurerm_role_assignment.machine_api_route_table,
+    azurerm_role_assignment.aro_rp_route_table,
+    azurerm_role_assignment.aro_operator_route_table,
   ]
 
   create_duration = "30s"

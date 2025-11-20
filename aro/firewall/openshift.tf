@@ -3,6 +3,10 @@ resource "azapi_resource" "aro_cluster" {
     azurerm_resource_group.this,
     azurerm_subnet_network_security_group_association.master_subnet,
     azurerm_subnet_network_security_group_association.worker_subnet,
+    azurerm_firewall.this,
+    azurerm_firewall_policy_rule_collection_group.this,
+    azurerm_subnet_route_table_association.system_node_pool,
+    azurerm_subnet_route_table_association.worker_node_pool,
     time_sleep.wait_for_rbac  
   ]
 
@@ -24,10 +28,16 @@ resource "azapi_resource" "aro_cluster" {
     ]
   }
 
-  timeouts {
-    create = "40m"
-  }
+  ignore_casing           = true
+  ignore_missing_property = true
+  ignore_null_property    = true
 
+  timeouts {
+    create = "60m"
+    update = "60m"
+    delete = "60m"
+  }
+  
   body = {
     properties = {
       clusterProfile = {

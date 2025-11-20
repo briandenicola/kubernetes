@@ -4,7 +4,7 @@ dotenv:
   - .env
 
 vars:
-  TITLE: Private Azure Redhat OpenShift demo
+  TITLE: Private Azure Redhat OpenShift with User Define Routes demo
   DEFAULT_REGION: canadaeast
   DEFAULT_DOMAIN: bjdazure.tech
   CLUSTER_VERSION: 4.18.26

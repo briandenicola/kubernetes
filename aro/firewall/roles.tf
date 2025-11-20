@@ -17,6 +17,12 @@ resource "azurerm_role_assignment" "ccm_nsg" {
   principal_id         = azurerm_user_assigned_identity.cloud_controller_manager.principal_id
 }
 
+resource "azurerm_role_assignment" "ccm_route_table" {
+  scope                = azurerm_route_table.this.id
+  role_definition_name = "Azure Red Hat OpenShift Cloud Controller Manager"
+  principal_id         = azurerm_user_assigned_identity.cloud_controller_manager.principal_id
+}
+
 resource "azurerm_role_assignment" "ingress_master_subnet" {
   scope                = azurerm_subnet.master_subnet.id
   role_definition_name = "Azure Red Hat OpenShift Cluster Ingress Operator"
@@ -47,6 +53,11 @@ resource "azurerm_role_assignment" "machine_api_nsg" {
   principal_id         = azurerm_user_assigned_identity.machine_api.principal_id
 }
 
+resource "azurerm_role_assignment" "machine_api_route_table" {
+  scope                = azurerm_route_table.this.id
+  role_definition_name = "Azure Red Hat OpenShift Machine API Operator"
+  principal_id         = azurerm_user_assigned_identity.machine_api.principal_id
+}
 
 resource "azurerm_role_assignment" "cloud_network_vnet" {
   scope                = azurerm_virtual_network.this.id
@@ -60,6 +71,12 @@ resource "azurerm_role_assignment" "cloud_network_nsg" {
   principal_id         = azurerm_user_assigned_identity.cloud_network_config.principal_id
 }
 
+resource "azurerm_role_assignment" "cloud_network_route_table" {
+  scope                = azurerm_route_table.this.id
+  role_definition_name = "Azure Red Hat OpenShift Network Operator"
+  principal_id         = azurerm_user_assigned_identity.machine_api.principal_id
+}
+
 resource "azurerm_role_assignment" "file_csi_vnet" {
   scope                = azurerm_virtual_network.this.id
   role_definition_name = "Azure Red Hat OpenShift File Storage Operator"
@@ -68,6 +85,12 @@ resource "azurerm_role_assignment" "file_csi_vnet" {
 
 resource "azurerm_role_assignment" "file_network_nsg" {
   scope                = azurerm_network_security_group.this.id
+  role_definition_name = "Azure Red Hat OpenShift File Storage Operator"
+  principal_id         = azurerm_user_assigned_identity.file_csi_driver.principal_id
+}
+
+resource "azurerm_role_assignment" "file_network_route_table" {
+  scope                = azurerm_route_table.this.id
   role_definition_name = "Azure Red Hat OpenShift File Storage Operator"
   principal_id         = azurerm_user_assigned_identity.file_csi_driver.principal_id
 }
@@ -96,6 +119,13 @@ resource "azurerm_role_assignment" "aro_operator_nsg" {
   principal_id         = azurerm_user_assigned_identity.operator.principal_id
 }
 
+resource "azurerm_role_assignment" "aro_operator_route_table" {
+  scope                = azurerm_route_table.this.id
+  role_definition_name = "Azure Red Hat OpenShift Service Operator"
+  principal_id         = azurerm_user_assigned_identity.operator.principal_id
+}
+
+
 resource "azurerm_role_assignment" "aro_rp_vnet" {
   scope                = azurerm_virtual_network.this.id
   role_definition_name = "Network Contributor"
@@ -104,6 +134,12 @@ resource "azurerm_role_assignment" "aro_rp_vnet" {
 
 resource "azurerm_role_assignment" "aro_rp_nsg" {
   scope                = azurerm_network_security_group.this.id
+  role_definition_name = "Network Contributor"
+  principal_id         = data.azuread_service_principal.aro_resource_provider.object_id
+}
+
+resource "azurerm_role_assignment" "aro_rp_route_table" {
+  scope                = azurerm_route_table.this.id
   role_definition_name = "Network Contributor"
   principal_id         = data.azuread_service_principal.aro_resource_provider.object_id
 }

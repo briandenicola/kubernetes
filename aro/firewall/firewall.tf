@@ -41,37 +41,6 @@ resource "azurerm_firewall_policy_rule_collection_group" "this" {
     priority = 500
     action   = "Allow"
     rule {
-      name = "docker"
-      protocols {
-        type = "Https"
-        port = 443
-      }
-      source_addresses = [
-        "*"
-      ]
-      destination_fqdns = [
-        "production.cloudflare.docker.com",
-        "hub.docker.com", 
-        "*.docker.io",
-        "download.docker.com"
-      ]
-    }
-    rule {
-      name = "container_registry"
-      protocols {
-        type = "Https"
-        port = 443
-      }
-      source_addresses = [
-        "*"
-      ]
-      destination_fqdns = [
-        "bjdcsa.azurecr.io",
-        "bjdcsa.centralus.data.azurecr.io",
-        "bjdcsa.southcentralus.data.azurecr.io"
-      ]
-    }
-    rule {
       name = "azure-management"
       protocols {
         type = "Https"
@@ -82,10 +51,36 @@ resource "azurerm_firewall_policy_rule_collection_group" "this" {
       ]
       destination_fqdns = [
         "management.microsoft.com",
-        "mcr.microsoft.com",
-        "*.data.mcr.microsoft.com",
         "login.microsoftonline.com"
       ]
     }
+
+    rule {
+      name = "redhat-openshift"
+      protocols {
+        type = "Https"
+        port = 443
+      }
+      source_addresses = [
+        "*"
+      ]
+      destination_fqdns = [
+        "registry.redhat.io",
+        "quay.io",
+        "cdn.quay.io",
+        "cdn01.quay.io",
+        "cdn02.quay.io",
+        "cdn03.quay.io",
+        "cdn04.quay.io",
+        "cdn05.quay.io",
+        "cdn06.quay.io",
+        "access.redhat.com",
+        "registry.access.redhat.com",
+        "registry.connect.redhat.com",
+        "api.openshift.com",
+        "mirror.openshift.com"
+      ]
+    }
+
   }
 }
