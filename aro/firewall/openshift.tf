@@ -3,14 +3,13 @@ resource "azapi_resource" "aro_cluster" {
     azurerm_resource_group.this,
     azurerm_subnet_network_security_group_association.master_subnet,
     azurerm_subnet_network_security_group_association.worker_subnet,
-    time_sleep.wait_for_rbac
+    time_sleep.wait_for_rbac  
   ]
 
   lifecycle {
     ignore_changes = [
-      body.properties.clusterProfile.resourceGroupId,
-      body.properties.networkProfile.loadBalancerProfile
-    ]
+      body.clusterProfile.resourceGroupId
+    ]  
   }
 
   type      = "Microsoft.RedHatOpenShift/openShiftClusters@2024-08-12-preview"
@@ -25,14 +24,8 @@ resource "azapi_resource" "aro_cluster" {
     ]
   }
 
-  ignore_casing           = true
-  ignore_missing_property = true
-  ignore_null_property    = true
-
   timeouts {
     create = "40m"
-    update = "90m"
-    delete = "90m"
   }
 
   body = {
@@ -51,8 +44,8 @@ resource "azapi_resource" "aro_cluster" {
       networkProfile = {
         podCidr          = "100.${random_integer.pod_cidr.id}.0.0/16"
         serviceCidr      = "100.${random_integer.services_cidr.id}.0.0/16"
-        outboundType     = "Loadbalancer"
-        preconfiguredNSG = "Enabled"
+        outboundType     = "UserDefinedRouting"
+        preconfiguredNSG = "Enabled"      
       }
 
       masterProfile = {
@@ -80,7 +73,7 @@ resource "azapi_resource" "aro_cluster" {
 
       ingressProfiles = [{
         name       = "default"
-        visibility = var.cluster_type
+        visibility =  var.cluster_type
       }]
 
       platformWorkloadIdentityProfile = {
@@ -113,7 +106,6 @@ resource "azapi_resource" "aro_cluster" {
       }
     }
   }
-
 
   response_export_values = [
     "properties.clusterProfile.oidcIssuer",

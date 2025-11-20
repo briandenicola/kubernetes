@@ -5,6 +5,13 @@ resource "azurerm_virtual_network" "this" {
   resource_group_name = azurerm_resource_group.this.name
 }
 
+resource "azurerm_subnet" "firewall" {
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = [local.fw_subnet_cidir]
+}
+
 resource "azurerm_subnet" "master_subnet" {
   name                                          = "system_node_pool"
   resource_group_name                           = azurerm_resource_group.this.name
