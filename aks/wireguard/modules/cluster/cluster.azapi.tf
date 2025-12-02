@@ -5,13 +5,14 @@ resource "azapi_resource" "aks" {
     azurerm_subnet.nodes,
     azurerm_subnet_nat_gateway_association.nodes,
     azurerm_subnet_nat_gateway_association.pe,
+    azurerm_subnet_nat_gateway_association.this,
     azurerm_user_assigned_identity.aks_identity,
     azurerm_user_assigned_identity.aks_kubelet_identity,
     azurerm_role_assignment.aks_role_assignemnt_msi,
     azurerm_role_assignment.aks_role_assignemnt_network
   ]
 
-  type      = "Microsoft.ContainerService/managedClusters@2025-09-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2025-07-02-preview"
   name      = var.aks_cluster.name
   location  = local.location
   parent_id = azurerm_resource_group.this.id
@@ -69,9 +70,12 @@ resource "azapi_resource" "aks" {
           observability = {
             enabled = true
           }
+          performance = {
+            accelerationMode = "None"
+          }          
           security = {
             enabled = true
-            advancedNetworkPolicies = "L7"
+            advancedNetworkPolicies = "FQDN"
             transitEncryption = {
               type = "WireGuard"
             }
@@ -90,7 +94,7 @@ resource "azapi_resource" "aks" {
         osDiskSizeGB      = 127
         vnetSubnetID      = azurerm_subnet.nodes.id
         osType            = "Linux"
-        osSKU             = "AzureLinux"
+        osSKU             = var.aks_cluster.nodes.os
         type              = "VirtualMachineScaleSets"
         maxPods           = 250
         enableAutoScaling = true

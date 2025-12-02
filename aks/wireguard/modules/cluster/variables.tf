@@ -34,6 +34,7 @@ variable "aks_cluster" {
     nodes = object({
       sku   = string
       count = number
+      os    = string
     })
     logs = object({
       workspace_id = string

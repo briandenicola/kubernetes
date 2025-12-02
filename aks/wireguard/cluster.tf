@@ -1,5 +1,5 @@
 module "cluster" {
-  source = "../modules/aks.azapi"
+  source = "./modules/cluster"
 
   region           = var.region
   resource_name    = local.resource_name
@@ -19,6 +19,7 @@ module "cluster" {
     nodes = {
       sku   = var.vm_size
       count = var.node_count
+      os    = "Ubuntu"
     }
     logs = {
       workspace_id = module.azure_monitor.LOG_ANALYTICS_WORKSPACE_ID
