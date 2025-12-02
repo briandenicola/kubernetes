@@ -11,7 +11,7 @@ resource "azapi_resource" "aks" {
     azurerm_role_assignment.aks_role_assignemnt_network
   ]
 
-  type      = "Microsoft.ContainerService/managedClusters@2025-08-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2025-09-02-preview"
   name      = var.aks_cluster.name
   location  = local.location
   parent_id = azurerm_resource_group.this.id
@@ -73,7 +73,7 @@ resource "azapi_resource" "aks" {
             enabled = true
             advancedNetworkPolicies = "L7"
             transitEncryption = {
-              type = "wireguard"
+              type = "WireGuard"
             }
           }
         }
