@@ -3,8 +3,8 @@ data "azurerm_kubernetes_service_versions" "current" {
 }
 
 locals {
-  zones = var.region == "northcentralus" || var.region == "canadaeast" ? null : var.zones
-  authorized_ip_ranges = "${concat(var.authorized_ip_ranges, ["${azurerm_public_ip.this.ip_address}/32", "${azurerm_public_ip_prefix.this.ip_prefix}"])}"
+  zones                = var.region == "northcentralus" || var.region == "canadaeast" ? null : var.zones
+  authorized_ip_ranges = concat(var.authorized_ip_ranges, ["${azurerm_public_ip.this.ip_address}/32", "${azurerm_public_ip_prefix.this.ip_prefix}"])
 }
 
 resource "azurerm_kubernetes_cluster" "this" {
@@ -42,8 +42,8 @@ resource "azurerm_kubernetes_cluster" "this" {
   image_cleaner_enabled        = true
   image_cleaner_interval_hours = 48
 
-  automatic_upgrade_channel    = "patch"
-  node_os_upgrade_channel      = "SecurityPatch"
+  automatic_upgrade_channel = "patch"
+  node_os_upgrade_channel   = "SecurityPatch"
 
   api_server_access_profile {
     authorized_ip_ranges = local.authorized_ip_ranges
@@ -103,6 +103,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     network_data_plane  = var.network_policy_engine
     network_policy      = var.network_policy_engine
     outbound_type       = "userAssignedNATGateway"
+    advanced_networking {
+      observability_enabled = true
+      security_enabled      = true
+    }
   }
 
   dynamic "service_mesh_profile" {
