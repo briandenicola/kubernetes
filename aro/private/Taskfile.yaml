@@ -4,9 +4,10 @@ dotenv:
   - .env
 
 vars:
-  TITLE: Private Azure Redhat OpenShift demo
+  TITLE: Private Managed Identity-based Azure Redhat OpenShift with UDR support
   DEFAULT_REGION: canadaeast
   DEFAULT_DOMAIN: bjdazure.tech
+  CLUSTER_VERSION: 4.18.26
    
 
 tasks:
@@ -14,11 +15,6 @@ tasks:
     cmds:
     - task --list
     
-  init: 
-    desc: Registers ARO Provider 
-    cmds: 
-    - az provider register --namespace 'Microsoft.RedHatOpenShift' --wait
-
   up:
     desc: Creates {{.TITLE}} environment
     cmds:
@@ -33,17 +29,25 @@ tasks:
   apply:
     desc: Applies Terraform configuration
     cmds:
-    - unset ARM_CLIENT_ID; unset ARM_CLIENT_SECRET; terraform apply -auto-approve -compact-warnings
+    - terraform apply -auto-approve -compact-warnings
       -var "tags={{.TITLE}}" 
       -var "region={{.REGION}}" 
       -var "domain={{.DEFAULT_DOMAIN}}"
-      -var "aro_rp_aad_sp_object_id={{.ARO_RP_SPN}}" 
-      -var "aro_client_secret={{.SPN_CLIENT_SECRET}}"
-      -var "aro_client_id={{.SPN_CLIENT_ID}}"
+      -var "cluster_version={{.CLUSTER_VERSION}}"
+      -var "host_encryption_enabled=false"
     vars:
       REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
-      ARO_RP_SPN:
-        sh: az ad sp list --display-name "Azure Red Hat OpenShift RP" --query [0].id -o tsv
+
+  refresh:
+    desc: Refresh a Terraform configuration and outputs
+    cmds:
+    - terraform refresh
+      -var "tags={{.TITLE}}" 
+      -var "region={{.REGION}}" 
+      -var "domain={{.DEFAULT_DOMAIN}}"
+      -var "cluster_version={{.CLUSTER_VERSION}}"
+    vars:
+      REGION: '{{default .DEFAULT_REGION .CLI_ARGS}}' 
 
   creds:
     desc: Get ARO Credentials

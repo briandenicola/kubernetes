@@ -9,15 +9,15 @@ resource "random_pet" "this" {
 
 resource "random_integer" "vnet_cidr" {
   min = 10
-  max = 250
+  max = 25
 }
 
 resource "random_integer" "services_cidr" {
-  min = 64
-  max = 64
+  min = 65
+  max = 87
 }
 
 resource "random_integer" "pod_cidr" {
-  min = 128
-  max = 128
+  min = 127
+  max = 192
 }
