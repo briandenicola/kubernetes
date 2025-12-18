@@ -114,10 +114,11 @@ resource "azapi_resource" "aro_cluster" {
     }
   }
 
-
   response_export_values = [
     "properties.clusterProfile.oidcIssuer",
     "properties.consoleProfile.url",
-    "properties.apiserverProfile.url"
+    "properties.apiserverProfile.ip",
+    "properties.apiserverProfile.url",
+    "properties.ingressProfiles[0].ip"
   ]
 }
