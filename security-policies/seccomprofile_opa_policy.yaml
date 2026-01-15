@@ -1,0 +1,28 @@
+
+apiVersion: mutations.gatekeeper.sh/v1
+kind: Assign
+metadata:
+  name: set-seccomp-runtime-default-on-deployments
+  annotations:
+    description: "Inject seccompProfile.type=RuntimeDefault at pod template level for Deployments when missing."
+spec:
+  match:
+    scope: Namespaced
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]
+    excludedNamespaces:
+      - kube-system
+      - gatekeeper-system
+  applyTo:
+    - groups: ["apps"]
+      versions: ["v1"]
+      kinds: ["Deployment"]
+  location: "spec.template.spec.securityContext.seccompProfile"
+  parameters:
+    pathTests:
+      - subPath: "spec.template.spec.securityContext.seccompProfile"
+        condition: MustNotExist
+    assign:
+      value:
+        type: "RuntimeDefault"

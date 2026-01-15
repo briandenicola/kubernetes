@@ -1,0 +1,98 @@
+
+{
+  "properties": {
+    "displayName": "Kubernetes - Inject seccompProfile RuntimeDefault on Deployments when missing",
+    "policyType": "Custom",
+    "mode": "Microsoft.Kubernetes.Data",
+    "description": "Injects seccompProfile.type=RuntimeDefault into pod templates of Deployments if not present using Gatekeeper Mutation.",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "Kubernetes"
+    },
+    "parameters": {
+      "excludedNamespaces": {
+        "type": "Array",
+        "metadata": {
+          "displayName": "Namespaces to exclude"
+        },
+        "defaultValue": [
+          "kube-system",
+          "gatekeeper-system"
+        ]
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "in": [
+              "Microsoft.Kubernetes/connectedClusters",
+              "Microsoft.ContainerService/managedClusters"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "mutate",
+        "details": {
+          "mutations": [
+            {
+              "apiVersion": "mutations.gatekeeper.sh/v1",
+              "kind": "Assign",
+              "metadata": {
+                "name": "set-seccomp-runtime-default-on-deployments",
+                "annotations": {
+                  "description": "Inject seccompProfile.type=RuntimeDefault at pod template level for Deployments when missing."
+                }
+              },
+              "spec": {
+                "match": {
+                  "scope": "Namespaced",
+                  "kinds": [
+                    {
+                      "apiGroups": [
+                        "apps"
+                      ],
+                      "kinds": [
+                        "Deployment"
+                      ]
+                    }
+                  ],
+                  "excludedNamespaces": "[parameters('excludedNamespaces')]"
+                },
+                "applyTo": [
+                  {
+                    "groups": [
+                      "apps"
+                    ],
+                    "versions": [
+                      "v1"
+                    ],
+                    "kinds": [
+                      "Deployment"
+                    ]
+                  }
+                ],
+                "location": "spec.template.spec.securityContext.seccompProfile",
+                "parameters": {
+                  "pathTests": [
+                    {
+                      "subPath": "spec.template.spec.securityContext.seccompProfile",
+                      "condition": "MustNotExist"
+                    }
+                  ],
+                  "assign": {
+                    "value": {
+                      "type": "RuntimeDefault"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
