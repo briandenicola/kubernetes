@@ -25,6 +25,5 @@ output "ARO_OIDC_ISSUER_URL" {
 }
 
 output "ARO_CONSOLE_IP" {
-  value       = azapi_resource.aro_cluster.output.properties.ingressProfiles[0].ip
+  value = azapi_resource.aro_cluster.output.properties.ingressProfiles
 }
-

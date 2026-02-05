@@ -119,6 +119,6 @@ resource "azapi_resource" "aro_cluster" {
     "properties.consoleProfile.url",
     "properties.apiserverProfile.ip",
     "properties.apiserverProfile.url",
-    "properties.ingressProfiles[0].ip"
+    "properties.ingressProfiles"
   ]
 }
