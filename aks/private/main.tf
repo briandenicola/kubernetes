@@ -12,7 +12,7 @@ locals {
   vm_name               = "${local.resource_name}-vm"
 
 
-  kubernetes_version    = "1.32" 
+  kubernetes_version = "1.35" 
 
   vnet_cidr             = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
   pe_subnet_cidir       = cidrsubnet(local.vnet_cidr, 8, 1)

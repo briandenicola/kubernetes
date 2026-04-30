@@ -5,7 +5,7 @@ module "cluster" {
   resource_name                      = local.resource_name
   public_key_openssh                 = tls_private_key.rsa.public_key_openssh
   tags                               = var.tags
-  kubernetes_version                 = "1.32"
+  kubernetes_version = "1.35"
   sdlc_environment                   = local.environment_type
   vm_sku                             = var.vm_size
   vm_os                              = "Ubuntu"

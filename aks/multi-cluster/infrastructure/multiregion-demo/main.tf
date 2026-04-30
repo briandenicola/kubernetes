@@ -12,5 +12,5 @@ locals {
   authorized_ip_ranges = [ "${chomp(data.http.myip.response_body)}/32" ]
   fleet_name           = "${local.resource_name}-fleet"
   sdlc_environment     = "Production"
-  kubernetes_version   = "1.31"
+  kubernetes_version = "1.35"
 }

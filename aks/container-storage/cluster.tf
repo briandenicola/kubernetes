@@ -5,7 +5,7 @@
 #   resource_name        = local.resource_name
 #   public_key_openssh   = tls_private_key.rsa.public_key_openssh
 #   tags                 = local.tags
-#   kubernetes_version   = "1.31"
+#   kubernetes_version = "1.35"
 #   sdlc_environment     = "dev"
 #   vm_sku               = var.vm_size
 #   vm_os                = "Ubuntu"
@@ -22,7 +22,7 @@ module "cluster" {
   resource_name              = local.resource_name
   public_key_openssh         = tls_private_key.rsa.public_key_openssh
   tags                       = var.tags
-  kubernetes_version         = "1.32"
+  kubernetes_version = "1.35"
   sdlc_environment           = local.sdlc_environment
   vm_os                      = "AzureLinux"
   node_count                 = var.node_count
